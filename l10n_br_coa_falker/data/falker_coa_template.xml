@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="falker_coa_template" model="account.chart.template">
+        <field name="name">Falker: Plano de contas</field>
+        <field name="code_digits">14</field>
+        <field name="cash_account_code_prefix">1.1.01.01.</field>
+        <field name="bank_account_code_prefix">1.1.01.03.</field>
+        <field name="transfer_account_code_prefix">1.1.01.03.</field>
+        <field name="currency_id" ref="base.BRL" />
+        <field name="parent_id" ref="l10n_br_coa.l10n_br_coa_template" />
+        <field name="use_anglo_saxon" eval="0" />
+    </record>
+
+</odoo>
