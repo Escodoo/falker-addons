@@ -207,11 +207,11 @@ account_template_falker_3_1_02_01_0008,3.1.02.01.0008,(-) Demais Impostos e Cont
 account_template_falker_3_1_02_02_0001,3.1.02.02.0001,ISSQ,,account.data_account_type_revenue,,falker_coa_template
 account_template_falker_3_1_02_02_0002,3.1.02.02.0002,PIS S/SERVIÇOS,,account.data_account_type_revenue,,falker_coa_template
 account_template_falker_3_1_02_02_0003,3.1.02.02.0003,COFINS S/SERVIÇOS,,account.data_account_type_revenue,,falker_coa_template
-account_template_falker_3_1_02_01_0001,3.1.02.01.0001,Variações Cambiais Ativas,,account.data_account_type_direct_costs,,falker_coa_template
-account_template_falker_3_1_02_01_0002,3.1.02.01.0002,Receitas de Juros sobre o Capital Próprio,,account.data_account_type_direct_costs,,falker_coa_template
-account_template_falker_3_1_02_01_0003,3.1.02.01.0003,Ganhos na Alienação de Participações não Integrantes do Ativo Permanente,,account.data_account_type_direct_costs,,falker_coa_template
-account_template_falker_3_1_02_01_0004,3.1.02.01.0004,Amortização de Deságio nas Aquisições de Investimentos Avaliados pelo Patrimônio Líquido,,account.data_account_type_direct_costs,,falker_coa_template
-account_template_falker_3_1_02_01_0005,3.1.02.01.0005,Reversão dos Saldos das Provisões Operacionais,,account.data_account_type_direct_costs,,falker_coa_template
+account_template_falker_3_1_02_03_0001,3.1.02.03.0001,Variações Cambiais Ativas,,account.data_account_type_direct_costs,,falker_coa_template
+account_template_falker_3_1_02_03_0002,3.1.02.03.0002,Receitas de Juros sobre o Capital Próprio,,account.data_account_type_direct_costs,,falker_coa_template
+account_template_falker_3_1_02_03_0003,3.1.02.03.0003,Ganhos na Alienação de Participações não Integrantes do Ativo Permanente,,account.data_account_type_direct_costs,,falker_coa_template
+account_template_falker_3_1_02_02_0004,3.1.02.02.0004,Amortização de Deságio nas Aquisições de Investimentos Avaliados pelo Patrimônio Líquido,,account.data_account_type_direct_costs,,falker_coa_template
+account_template_falker_3_1_02_02_0005,3.1.02.02.0005,Reversão dos Saldos das Provisões Operacionais,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_1_02_01_0099,3.1.02.01.0099,Outras Receitas Operacionais,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_3_01_01_0001,3.3.01.01.0001,Receitas de Alienações de Bens e Direitos do Ativo Imobilizado,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_3_01_01_0002,3.3.01.01.0002,Ganhos de Capital com Ativo Imobilizado,,account.data_account_type_direct_costs,,falker_coa_template
@@ -224,7 +224,7 @@ account_template_falker_3_3_01_01_0008,3.3.01.01.0008,Outras Receitas Financeira
 account_template_falker_3_3_01_01_0009,3.3.01.01.0009,Receita de Subvenção Econômica recebida,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_3_01_01_0099,3.3.01.01.0099,Outras Receitas Não Operacionais,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_4_01_01_0001,3.4.01.01.0001,Insumos,,account.data_account_type_direct_costs,,falker_coa_template
-account_template_falker_3_4_01_01_0001,3.4.01.01.0001,COMPRAS P/COMERCIALIZAÇÃO,,account.data_account_type_direct_costs,,falker_coa_template
+account_template_falker_3_4_01_02_0001,3.4.01.02.0001,COMPRAS P/COMERCIALIZAÇÃO,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_4_01_01_0002,3.4.01.01.0002,COMPRAS P/INDUSTRIALIZAÇÃO,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_4_01_01_0003,3.4.01.01.0003,FRETES S/COMPRAS,,account.data_account_type_direct_costs,,falker_coa_template
 account_template_falker_3_4_01_01_0004,3.4.01.01.0004,SERVIÇOS DE TERCEIROS,,account.data_account_type_direct_costs,,falker_coa_template
@@ -375,23 +375,23 @@ account_template_falker_3_4_02_16_0005,3.4.02.16.0005,Manutenção e despesas de
 account_template_falker_3_4_02_17_0001,3.4.02.17.0001,Consultoria Fiscal,,account.data_account_type_expenses,,falker_coa_template
 account_template_falker_3_4_02_17_0002,3.4.02.17.0002,Consultoria Empresarial,,account.data_account_type_expenses,,falker_coa_template
 account_template_falker_3_4_02_17_0003,3.4.02.17.0003,Consultoria de Venda,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_01_0001,3.4.02.01.0001,Variações Cambiais Passivas,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_01_0002,3.4.02.01.0002,Juros sobre o Capital Próprio,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_01_0003,3.4.02.01.0003,Prejuízos na Alienação de Participações Não Integrantes do Ativo Permanente,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_01_0004,3.4.02.01.0004,Resultados Negativos em Participações Societárias,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_01_0005,3.4.02.01.0005,Amortização de Ágio nas Aquisições de Investimentos Avaliados pelo Patrimônio Líquido,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_01_0006,3.4.02.01.0006,Arredondamento por Diferenças de Moeda,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_01_0099,3.4.02.01.0099,Outras Despesas Operacionais,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0001,3.4.02.03.0001,DESP.BANCÁRIAS,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0002,3.4.02.03.0002,JUROS PAGOS,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0003,3.4.02.03.0003,DESC.CONCEDIDO,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0004,3.4.02.03.0004,VARIAÇÕES PASSIVAS,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0005,3.4.02.03.0005,JUROS S/PARCELAMENTOS,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0006,3.4.02.03.0006,MULTAS FISCAIS DEDUTÍVEIS,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0007,3.4.02.03.0007,TAXA CARTÃO CRÉDITO VENDAS,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0008,3.4.02.03.0008,DESP.C/OP.DE DESCONTO,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0009,3.4.02.03.0009,IOF,,account.data_account_type_expenses,,falker_coa_template
-account_template_falker_3_4_02_03_0010,3.4.02.03.0010,MULTAS/MORA,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_05_0001,3.4.02.05.0001,Variações Cambiais Passivas,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_05_0002,3.4.02.05.0002,Juros sobre o Capital Próprio,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_05_0003,3.4.02.05.0003,Prejuízos na Alienação de Participações Não Integrantes do Ativo Permanente,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_05_0004,3.4.02.05.0004,Resultados Negativos em Participações Societárias,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_05_0005,3.4.02.05.0005,Amortização de Ágio nas Aquisições de Investimentos Avaliados pelo Patrimônio Líquido,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_05_0006,3.4.02.05.0006,Arredondamento por Diferenças de Moeda,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0099,3.4.02.04.0099,Outras Despesas Operacionais,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0001,3.4.02.04.0001,DESP.BANCÁRIAS,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0002,3.4.02.04.0002,JUROS PAGOS,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0003,3.4.02.04.0003,DESC.CONCEDIDO,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0004,3.4.02.04.0004,VARIAÇÕES PASSIVAS,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0005,3.4.02.04.0005,JUROS S/PARCELAMENTOS,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0006,3.4.02.04.0006,MULTAS FISCAIS DEDUTÍVEIS,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0007,3.4.02.04.0007,TAXA CARTÃO CRÉDITO VENDAS,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0008,3.4.02.04.0008,DESP.C/OP.DE DESCONTO,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0009,3.4.02.04.0009,IOF,,account.data_account_type_expenses,,falker_coa_template
+account_template_falker_3_4_02_04_0010,3.4.02.04.0010,MULTAS/MORA,,account.data_account_type_expenses,,falker_coa_template
 account_template_falker_3_4_05_01_0001,3.4.05.01.0001,PREJ.ALIEN.IMOB,,account.data_account_type_expenses,,falker_coa_template
 account_template_falker_3_4_05_01_0002,3.4.05.01.0002,BAIXAS DO IMOBILIZADO,,account.data_account_type_expenses,,falker_coa_template
 account_template_falker_3_4_05_01_0003,3.4.05.01.0003,PERDAS EVENTUAIS,,account.data_account_type_expenses,,falker_coa_template
