@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- TODO: A linha pylint é necessária na versão 7.0.2
+      na versão v9.0.0 pode ser removida -->
+    <!-- pylint:disable=duplicate-xml-record-id -->
+    <!-- oca-hooks:disable=xml-duplicate-record-id -->
+
+    <record id="falker_coa_template" model="account.chart.template">
+        <field
+            name="property_account_receivable_id"
+            ref="account_template_falker_1_1_04_01_0001"
+        />
+        <field
+            name="property_account_payable_id"
+            ref="account_template_falker_2_1_01_01_0001"
+        />
+        <field
+            name="property_account_expense_categ_id"
+            ref="account_template_falker_3_4_02_01_0099"
+        />
+        <field
+            name="property_account_income_categ_id"
+            ref="account_template_falker_3_1_01_01_0002"
+        />
+    </record>
+
+    <data noupdate="1">
+        <function model="account.chart.template" name="try_loading">
+            <value eval="[ref('l10n_br_coa_falker.falker_coa_template')]" />
+        </function>
+    </data>
+
+</odoo>
