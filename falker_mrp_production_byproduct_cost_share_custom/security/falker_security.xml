@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2025 - TODAY, Kaynnan Lemes <kaynnan.lemes@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="group_falker_cost_info" model="res.groups">
+        <field name="name">Falker - Cost Info</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+
+</odoo>

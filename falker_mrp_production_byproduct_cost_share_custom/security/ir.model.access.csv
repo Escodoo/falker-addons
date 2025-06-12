@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_falker_cost_info_product_template,Falker Cost - product.template,model_product_template,group_falker_cost_info,1,0,0,0
+access_falker_cost_info_product_product,Falker Cost - product.product,model_product_product,group_falker_cost_info,1,0,0,0
+access_falker_cost_info_mrp_bom,Falker Cost - mrp.bom,model_mrp_bom,group_falker_cost_info,1,0,0,0
