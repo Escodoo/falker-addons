@@ -1,0 +1,25 @@
+<odoo>
+  <data>
+
+    <!-- Herda a view de formulário da linha de pedido de venda -->
+    <record id="view_order_form_sale_lock_price" model="ir.ui.view">
+      <field name="name">sale.order.line.lock.price</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+
+        <!-- Torna price_unit somente leitura -->
+        <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <!-- Torna o valor fiscal (price_tax) somente leitura -->
+        <xpath expr="//field[@name='order_line']/form//field[@name='price_tax']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+      </field>
+    </record>
+
+  </data>
+</odoo>
