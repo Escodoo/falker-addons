@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_order_form_fiscal_price_control" model="ir.ui.view">
+        <field name="name">sale.order.form.fiscal.price.control</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="l10n_br_sale.l10n_br_sale_order_form" />
+        <field name="arch" type="xml">
+            <data>
+                <!-- Make price_unit read-only -->
+                <xpath
+                    expr="//field[@name='order_line']/form//field[@name='price_unit']"
+                    position="attributes"
+                >
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <!-- Make fiscal_price read-only -->
+                <xpath
+                    expr="//field[@name='order_line']/form//field[@name='fiscal_price']"
+                    position="attributes"
+                >
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>
