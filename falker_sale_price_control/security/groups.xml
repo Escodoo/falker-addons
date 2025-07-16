@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Group that allows change price on sale order -->
+    <record id="group_price_editor" model="res.groups">
+        <field name="name">FALKER - Editor de Preços</field>
+        <field name="category_id" ref="base.module_category_sales" />
+    </record>
+</odoo>

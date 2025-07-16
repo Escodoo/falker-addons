@@ -5,23 +5,39 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="l10n_br_sale.l10n_br_sale_order_form" />
         <field name="arch" type="xml">
-            <data>
-                <!-- Make price_unit read-only -->
-                <xpath
-                    expr="//field[@name='order_line']/form//field[@name='price_unit']"
-                    position="attributes"
-                >
-                    <attribute name="readonly">1</attribute>
-                </xpath>
+            <!-- price_unit can be edited only by authorized group -->
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='price_unit']"
+                position="attributes"
+            >
+                <attribute
+                    name="groups"
+                >falker_sale_price_control.group_price_editor</attribute>
+            </xpath>
 
-                <!-- Make fiscal_price read-only -->
-                <xpath
-                    expr="//field[@name='order_line']/form//field[@name='fiscal_price']"
-                    position="attributes"
-                >
-                    <attribute name="readonly">1</attribute>
-                </xpath>
-            </data>
+            <!-- price_unit is readonly for non-authorized users -->
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='price_unit']"
+                position="after"
+            >
+                <field
+                    name="price_unit"
+                    readonly="1"
+                    groups="!falker_sale_price_control.group_price_editor"
+                />
+            </xpath>
+
+            <!-- fiscal_price is readonly for non-authorized users -->
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='fiscal_price']"
+                position="after"
+            >
+                <field
+                    name="fiscal_price"
+                    readonly="1"
+                    groups="!falker_sale_price_control.group_price_editor"
+                />
+            </xpath>
         </field>
     </record>
 </odoo>
