@@ -19,6 +19,11 @@ msgid "Display Name"
 msgstr ""
 
 #. module: falker_sale_price_control
+#: model:res.groups,name:falker_sale_price_control.group_price_editor
+msgid "FALKER - Editor de Preços"
+msgstr ""
+
+#. module: falker_sale_price_control
 #: model:ir.model.fields,field_description:falker_sale_price_control.field_sale_order_line__id
 msgid "ID"
 msgstr ""
