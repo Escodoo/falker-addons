@@ -3,10 +3,11 @@
 
 {
     "name": "Falker - Plano de Contas",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Accounting",
     "license": "AGPL-3",
     "author": "Escodoo, Odoo Community Association (OCA)",
+    "maintainers": ["kaynnan"],
     "website": "https://github.com/Escodoo/falker-addons",
     "depends": ["l10n_br_coa"],
     "data": [
