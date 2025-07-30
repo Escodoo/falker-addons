@@ -1,0 +1,401 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mautic_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-06 17:41+0000\n"
+"PO-Revision-Date: 2025-08-06 17:41+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_access_token
+msgid "Access Token"
+msgstr "Token de Acesso"
+
+#. module: mautic_connector
+#: model:ir.model,name:mautic_connector.model_account_asset_profile
+msgid "Asset profile"
+msgstr "Perfil de Ativo"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_auth_code
+msgid "Auth Code"
+msgstr "Código de Autenticação"
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
+msgid "Authenticate"
+msgstr "Autenticar"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_auth_base_url
+msgid "Authorization URL"
+msgstr "URL de Autorização"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_client_id
+msgid "Client ID"
+msgstr "ID do Cliente"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_client_secret
+msgid "Client Secret"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model,name:mautic_connector.model_res_company
+msgid "Companies"
+msgstr "Empresas"
+
+#. module: mautic_connector
+#: model:ir.model.fields.selection,name:mautic_connector.selection__mautic_sync_log__sync_type__company
+msgid "Company"
+msgstr "Empresa"
+
+#. module: mautic_connector
+#: model:ir.actions.server,name:mautic_connector.export_partner_to_mautic_company
+msgid "Company Export to mautic"
+msgstr "Exportação da Empresa para o Mautic"
+
+#. module: mautic_connector
+#: model:ir.model,name:mautic_connector.model_res_partner
+#: model:ir.model.fields.selection,name:mautic_connector.selection__mautic_sync_log__sync_type__contact
+msgid "Contact"
+msgstr "Contato"
+
+#. module: mautic_connector
+#: model:ir.actions.server,name:mautic_connector.export_partner_to_mautic
+msgid "Contact Export to mautic"
+msgstr "Exportação de Contato para o Mautic"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__create_uid
+msgid "Created by"
+msgstr "Criado por"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__create_date
+msgid "Created on"
+msgstr "Criado em"
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
+msgid "Credentials"
+msgstr "Credenciais"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__log_detail
+msgid "Details"
+msgstr "Detalhes"
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.view_mautic_sync_log_form
+msgid "Detalhes do Log"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_account_asset_profile__display_name
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__display_name
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__display_name
+#: model:ir.model.fields,field_description:mautic_connector.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nome Exibido"
+
+#. module: mautic_connector
+#: model:ir.model.fields.selection,name:mautic_connector.selection__mautic_sync_log__state__done
+msgid "Done"
+msgstr "Concluído"
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Erro ao buscar dados de contatos do Mautic. Verifique os logs."
+msgstr ""
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Erro ao buscar dados de empresas do Mautic. Verifique os logs."
+msgstr ""
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Erro inesperado ao importar contatos. Verifique os logs."
+msgstr ""
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Erro inesperado ao importar empresas. Verifique os logs."
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields.selection,name:mautic_connector.selection__mautic_sync_log__state__error
+msgid "Error"
+msgstr "Erro"
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "Error communicating with Mautic: %s"
+msgstr ""
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "Error exporting company: unexpected response from Mautic."
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__execution_time
+msgid "Execution Date"
+msgstr "Data Execução"
+
+#. module: mautic_connector
+#: model:ir.actions.server,name:mautic_connector.cron_export_company_to_mautic_ir_actions_server
+#: model:ir.cron,cron_name:mautic_connector.cron_export_company_to_mautic
+#: model:ir.cron,name:mautic_connector.cron_export_company_to_mautic
+msgid "Export Company to Mautic"
+msgstr "Exportar Empresa para o Mautic"
+
+#. module: mautic_connector
+#: model:ir.actions.server,name:mautic_connector.ir_cron_export_contacts_to_mautic_ir_actions_server
+#: model:ir.cron,cron_name:mautic_connector.ir_cron_export_contacts_to_mautic
+#: model:ir.cron,name:mautic_connector.ir_cron_export_contacts_to_mautic
+msgid "Export contacts to Mautic"
+msgstr "Exportar contatos para o Mautic"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__error_count
+msgid "Failures"
+msgstr "Falhas"
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_company.py:0
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Fill up the correct information...!!"
+msgstr "Preencha as informações corretas...!!"
+
+#. module: mautic_connector
+#: model:ir.ui.menu,name:mautic_connector.menu_mautic_sync_log
+msgid "Histórico de Logs"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_account_asset_profile__id
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__id
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__id
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__x_mautic_id
+#: model:ir.model.fields,field_description:mautic_connector.field_res_partner__id
+#: model:ir.model.fields,field_description:mautic_connector.field_res_partner__x_mautic_id
+#: model:ir.model.fields,field_description:mautic_connector.field_res_users__x_mautic_id
+msgid "ID"
+msgstr ""
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
+msgid "Import Companies"
+msgstr "Importar Empresas"
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
+msgid "Import Contacts"
+msgstr "Importar Contatos"
+
+#. module: mautic_connector
+#: model:ir.actions.server,name:mautic_connector.ir_cron_import_mautic_companies_ir_actions_server
+#: model:ir.cron,cron_name:mautic_connector.ir_cron_import_mautic_companies
+#: model:ir.cron,name:mautic_connector.ir_cron_import_mautic_companies
+msgid "Import Mautic Companies"
+msgstr "Importar Empresas do Mautic"
+
+#. module: mautic_connector
+#: model:ir.actions.server,name:mautic_connector.ir_cron_import_mautic_contacts_ir_actions_server
+#: model:ir.cron,cron_name:mautic_connector.ir_cron_import_mautic_contacts
+#: model:ir.cron,name:mautic_connector.ir_cron_import_mautic_contacts
+msgid "Import Mautic Contacts"
+msgstr "Importar Contatos do Mautic"
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_company.py:0
+#: code:addons/mautic_connector/models/res_company.py:0
+#: code:addons/mautic_connector/models/res_partner.py:0
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "Importação concluída"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_account_asset_profile____last_update
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log____last_update
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company____last_update
+#: model:ir.model.fields,field_description:mautic_connector.field_res_partner____last_update
+msgid "Last Modified on"
+msgstr "Última atualização em"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__write_uid
+msgid "Last Updated by"
+msgstr "Última Atualização por"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__write_date
+msgid "Last Updated on"
+msgstr "Última Atualização em"
+
+#. module: mautic_connector
+#: model:ir.ui.menu,name:mautic_connector.menu_mautic_logs
+msgid "Logs"
+msgstr ""
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.view_mautic_sync_log_tree
+msgid "Logs de Sincronização"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.ui.menu,name:mautic_connector.menu_mautic_root
+#: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
+msgid "Mautic"
+msgstr ""
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
+msgid "Mautic Configuration"
+msgstr "Configuração do Mautic"
+
+#. module: mautic_connector
+#: model:ir.model.fields.selection,name:mautic_connector.selection__mautic_sync_log__state__partial
+msgid "Partial"
+msgstr "Parcial"
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "Please select only one contact at a time."
+msgstr ""
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "Please select only one record at a time."
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_request_token_url
+msgid "Redirect URL"
+msgstr "URL de Redirecionamento"
+
+#. module: mautic_connector
+#: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
+msgid "Refresh Token"
+msgstr "Token de Atualização"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__state
+msgid "State"
+msgstr "Estado"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__success_count
+msgid "Successes"
+msgstr "Sucessos"
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__sync_type
+msgid "Sync Type"
+msgstr "Tipo de Sincronização"
+
+#. module: mautic_connector
+#: model:ir.model,name:mautic_connector.model_mautic_sync_log
+msgid "Synchronization Log with Mautic"
+msgstr "Log de Sincronização com o Mautic"
+
+#. module: mautic_connector
+#: model:ir.actions.act_window,name:mautic_connector.action_mautic_sync_log
+msgid "Synchronization Logs"
+msgstr "Logs de Sincronização"
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "The associated company does not have an access token for Mautic."
+msgstr "A empresa associada não possui um token de acesso para o Mautic."
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "The company does not have a Mautic access token configured."
+msgstr "A empresa não possui um token de acesso do Mautic configurado."
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "This contact has already been exported to Mautic."
+msgstr "Este contato já foi exportado para o Mautic."
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "This record is not a company."
+msgstr "Este registro não é uma empresa."
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__total_processed
+msgid "Total Processed"
+msgstr "Total Processados"
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_company.py:0
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Total: %s | Sucesso: %s"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__api_url
+msgid "URL da API"
+msgstr ""
+
+#. module: mautic_connector
+#: code:addons/mautic_connector/models/res_partner.py:0
+#, python-format
+msgid "Unexpected response from Mautic when exporting contact."
+msgstr "Resposta inesperada do Mautic ao exportar o contato."
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__x_company_id
+#: model:ir.model.fields,field_description:mautic_connector.field_res_partner__x_company_id
+#: model:ir.model.fields,field_description:mautic_connector.field_res_users__x_company_id
+msgid "x_company_id"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__x_mautic_exported
+#: model:ir.model.fields,field_description:mautic_connector.field_res_partner__x_mautic_exported
+#: model:ir.model.fields,field_description:mautic_connector.field_res_users__x_mautic_exported
+msgid "x_is_exported"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__x_is_updated
+#: model:ir.model.fields,field_description:mautic_connector.field_res_partner__x_is_updated
+#: model:ir.model.fields,field_description:mautic_connector.field_res_users__x_is_updated
+msgid "x_is_updated"
+msgstr ""
+
+#. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_account_asset_profile__x_type_id
+msgid "x_type_id"
+msgstr ""
