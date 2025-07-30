@@ -1,0 +1,54 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* falker_currency_rate_update_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-30 16:39+0000\n"
+"PO-Revision-Date: 2025-07-30 16:39+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: falker_currency_rate_update_custom
+#: model:ir.actions.act_window,name:falker_currency_rate_update_custom.action_currency_rate_custom
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_bank_statement_line__currency_rate_id
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move__currency_rate_id
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_payment__currency_rate_id
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_sale_order__currency_rate_id
+#: model:ir.ui.menu,name:falker_currency_rate_update_custom.menu_currency_rate_custom
+msgid "Currency Rate"
+msgstr "Taxa de câmbio"
+
+#. module: falker_currency_rate_update_custom
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move__display_name
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_sale_order__display_name
+msgid "Display Name"
+msgstr "Nome exibido"
+
+#. module: falker_currency_rate_update_custom
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move__id
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_sale_order__id
+msgid "ID"
+msgstr ""
+
+#. module: falker_currency_rate_update_custom
+#: model:ir.model,name:falker_currency_rate_update_custom.model_account_move
+msgid "Journal Entry"
+msgstr "Lançamento de Diário"
+
+#. module: falker_currency_rate_update_custom
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move____last_update
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_sale_order____last_update
+msgid "Last Modified on"
+msgstr "Última modificação em"
+
+#. module: falker_currency_rate_update_custom
+#: model:ir.model,name:falker_currency_rate_update_custom.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venda"
