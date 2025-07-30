@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_currency_rate_tree_custom" model="ir.ui.view">
+        <field name="name">res.currency.rate.tree.custom</field>
+        <field name="model">res.currency.rate</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="currency_id" />
+                <field name="rate" />
+                <field name="name" />
+                <field name="company_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_currency_rate_custom" model="ir.actions.act_window">
+        <field name="name">Currency Rate</field>
+        <field name="res_model">res.currency.rate</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <menuitem
+        id="menu_currency_rate_custom"
+        parent="account.account_account_menu"
+        action="action_currency_rate_custom"
+        sequence="40"
+    />
+</odoo>
