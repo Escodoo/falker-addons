@@ -1,0 +1,50 @@
+<odoo>
+  <record id="view_mautic_sync_log_tree" model="ir.ui.view">
+    <field name="name">mautic.sync.log.tree</field>
+    <field name="model">mautic.sync.log</field>
+    <field name="arch" type="xml">
+      <tree string="Logs de Sincronização">
+        <field name="execution_time" />
+        <field name="sync_type" />
+        <field name="total_processed" />
+        <field name="success_count" />
+        <field name="error_count" />
+        <field name="state" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_mautic_sync_log_form" model="ir.ui.view">
+    <field name="name">mautic.sync.log.form</field>
+    <field name="model">mautic.sync.log</field>
+    <field name="arch" type="xml">
+      <form string="Detalhes do Log">
+        <group>
+          <field name="execution_time" />
+          <field name="sync_type" />
+          <field name="total_processed" />
+          <field name="success_count" />
+          <field name="error_count" />
+          <field name="state" />
+          <field name="log_detail" />
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_mautic_sync_log" model="ir.actions.act_window">
+    <field name="name">Synchronization Logs</field>
+    <field name="res_model">mautic.sync.log</field>
+    <field name="view_mode">tree,form</field>
+    <field name="view_id" ref="view_mautic_sync_log_tree" />
+  </record>
+
+  <menuitem id="menu_mautic_root" name="Mautic" sequence="10" />
+  <menuitem id="menu_mautic_logs" name="Logs" parent="menu_mautic_root" sequence="20" />
+  <menuitem
+        id="menu_mautic_sync_log"
+        name="Histórico de Logs"
+        parent="menu_mautic_logs"
+        action="action_mautic_sync_log"
+    />
+</odoo>
