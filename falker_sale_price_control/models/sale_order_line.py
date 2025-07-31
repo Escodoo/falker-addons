@@ -7,14 +7,13 @@ class SaleOrderLine(models.Model):
     fiscal_price = fields.Float(
         string="Preço Fiscal",
         compute="_compute_fiscal_price",
-        store=True,
     )
 
     @api.depends("price_unit", "fiscal_tax_ids", "product_id", "order_id.pricelist_id")
     def _compute_fiscal_price(self):
         for line in self:
             if hasattr(super(), "_compute_fiscal_price"):
-                super(SaleOrderLine, line)._compute_fiscal_price()
+                return super(SaleOrderLine, line)._compute_fiscal_price()
             else:
                 line.fiscal_price = line.price_unit
 
@@ -44,7 +43,7 @@ class SaleOrderLine(models.Model):
                     if order.pricelist_id:
                         price = order.pricelist_id.with_context(
                             uom=product.uom_id.id, date=order.date_order
-                        ).get_product_price(product, quantity, order.partner_id)
+                        )._get_product_price(product, quantity)
 
                         vals["price_unit"] = price
                         vals["fiscal_price"] = price
@@ -60,9 +59,7 @@ class SaleOrderLine(models.Model):
 
         return self.order_id.pricelist_id.with_context(
             uom=self.product_uom.id, date=self.order_id.date_order
-        ).get_product_price(
-            self.product_id, self.product_uom_qty, self.order_id.partner_id
-        )
+        )._get_product_price(self.product_id, self.product_uom_qty)
 
     @api.onchange("product_id", "product_uom_qty")
     def _onchange_product_quantity(self):
@@ -75,5 +72,5 @@ class SaleOrderLine(models.Model):
 
         # Onchange original from Odoo
         if hasattr(super(), "product_id_change"):
-            super().product_id_change()
+            return super().product_id_change()
         self._compute_tax_id()

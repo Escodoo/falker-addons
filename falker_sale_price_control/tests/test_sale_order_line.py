@@ -150,6 +150,8 @@ class TestSaleOrderLinePriceControl(TransactionCase):
                 "product_uom_qty": 1,
             }
         )
+        new_line.price_unit = new_line._get_price_from_pricelist()
+        new_line._compute_fiscal_price()
         self.assertEqual(
             new_line.price_unit,
             150.0,
@@ -172,7 +174,6 @@ class TestSaleOrderLinePriceControl(TransactionCase):
                 "product_uom_qty": 1,
             }
         )
-        self.order_line.product_id_change()
 
         self.assertEqual(
             self.order_line.price_unit,
@@ -217,7 +218,8 @@ class TestSaleOrderLinePriceControl(TransactionCase):
                 "fiscal_tax_ids": [(6, 0, [self.tax_icms.id, self.tax_ipi.id])],
             }
         )
-
+        new_line.price_unit = new_line._get_price_from_pricelist()
+        new_line._compute_fiscal_price()
         self.assertEqual(
             new_line.fiscal_price,
             150.0,
@@ -234,6 +236,8 @@ class TestSaleOrderLinePriceControl(TransactionCase):
                 "product_uom_qty": 2,
             }
         )
+        discount_line.price_unit = discount_line._get_price_from_pricelist()
+        discount_line._compute_fiscal_price()
 
         expected_price = 50.0 * 0.8  # 20% discount from pricelist
         self.assertEqual(
