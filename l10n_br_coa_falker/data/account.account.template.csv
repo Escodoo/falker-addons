@@ -1,0 +1,405 @@
+id,code,name,note,account_type,reconcile,chart_template_id:id
+account_template_falker_1_1_01_01_0001,1.1.01.01.0001,CAIXA,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_02_0001,1.1.01.02.0001,BANCO BRASIL C/C 29554-X,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_02_0002,1.1.01.02.0002,BANCO SANTANDER S.A.,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_02_0003,1.1.01.02.0003,CAIXA ECONÔMICA FEDERAL C/C 1205-7,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0001,1.1.01.03.0001,BB APLICAÇÃO FINANCEIRA BB RF REF DI PLUS,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0002,1.1.01.03.0002,BB APLICAÇÃO RF LP SELIC,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0003,1.1.01.03.0003,BB APLICAÇÃO TAX-R RF SIMPLES,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0004,1.1.01.03.0004,BB RENDE FACIL,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0005,1.1.01.03.0005,BB RF EMPRESA AGIL,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0006,1.1.01.03.0006,BB RF LP EMPRESA,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0007,1.1.01.03.0007,CAIXA FI OURO MULTIMERCADO LP,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0008,1.1.01.03.0008,CAIXA FIC GIRO MPE RF DI LP,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0009,1.1.01.03.0009,SANTANDER APLICAÇÃO AG 3304 C130030809,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0010,1.1.01.03.0010,SANTANDER APLICAÇÃO FIC TIT PUB RF DEF DI,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0011,1.1.01.03.0011,Banco do Brasil - CP Automático 5745-2/29554-x,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0012,1.1.01.03.0012,Caixa Econômica Federal - Sigma - 1592/1205-7,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0013,1.1.01.03.0013,Santander - Fundo VAULT,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0014,1.1.01.03.0014,Banco do Brasil - PROF - RF LP Estrategia Ativa - 5745-2/29554-x,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0015,1.1.01.03.0015,Banco do Brasil - COMP - BB RF LP Selic - 5745-2/29554-x,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0016,1.1.01.03.0016,Santander - Fundo Automático Contamax,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0017,1.1.01.03.0017,Caixa Econômica Federal - Fundo Multimercado,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0018,1.1.01.03.0018,Banco do Brasil - PROF - BB RF LP Empresa,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_0019,1.1.01.03.0019,Caixa Econômica Federal - Fundo automático FIC Giro MPE DI,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_03_9000,1.1.01.03.9000,Transferencia Interbancária,,asset_non_current,1,falker_coa_template
+account_template_falker_1_1_01_04_0001,1.1.01.04.0001,Cheques em cobrança,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_05_0001,1.1.01.05.0001,BANCO BRASIL C/C 104677-2 Tecmonres - CP,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_05_0002,1.1.01.05.0002,BANCO BRASIL C/C 129554-3 - Finep Rota 2030,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_05_0003,1.1.01.05.0003,BANCO BRASIL C/C 4677-9 FINEP TECMONRES,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_06_0001,1.1.01.06.0001,BB APLICAÇÃO FINANCEIRA BB 104677-2,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_06_0002,1.1.01.06.0002,BB APLICAÇÃO FINANCEIRA BB 4677-9 FINEP,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_06_0003,1.1.01.06.0003,FINEP - ROTA2030 Fundo BB,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_06_0004,1.1.01.06.0004,Tecmonres FINEP - Fundo BB,,asset_cash,,falker_coa_template
+account_template_falker_1_1_01_06_0005,1.1.01.06.0005,Tecmonres CP - Fundo BB,,asset_cash,,falker_coa_template
+account_template_falker_1_1_04_01_0001,1.1.04.01.0001,CLIENTES BRASIL,,asset_receivable,1,falker_coa_template
+account_template_falker_1_1_04_02_0001,1.1.04.02.0001,CLIENTES EXTERIOR,,asset_receivable,1,falker_coa_template
+account_template_falker_1_1_04_03_0001,1.1.04.03.0001,CARTÃO CIELO,,asset_cash,,falker_coa_template
+account_template_falker_1_1_04_03_0002,1.1.04.03.0002,CARTÃO GETNET VISA,,asset_cash,,falker_coa_template
+account_template_falker_1_1_04_03_0003,1.1.04.03.0003,Cielo - Cartão BNDES,,asset_cash,,falker_coa_template
+account_template_falker_1_1_04_03_0004,1.1.04.03.0004,UOL PagSeguro,,asset_cash,,falker_coa_template
+account_template_falker_1_1_04_03_0005,1.1.04.03.0005,MercadoPago,,asset_cash,,falker_coa_template
+account_template_falker_1_1_04_03_0006,1.1.04.03.0006,PayPal,,asset_cash,,falker_coa_template
+account_template_falker_1_1_05_01_0001,1.1.05.01.0001,CREDITO DE LEI DE INFORMATICA A COMPENSAR,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_05_01_0002,1.1.05.01.0002,CSSL A RECUPERAR,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_05_01_0003,1.1.05.01.0003,ICMS A RECUPERAR,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_05_01_0004,1.1.05.01.0004,IPI A RECUPERAR,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_05_01_0005,1.1.05.01.0005,IR S/APLICAÇÃO FINANCEIRA A RECUPERAR,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_05_01_0006,1.1.05.01.0006,IRPJ A RECUPERAR,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_05_01_0007,1.1.05.01.0007,ISS A RECUPERAR,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_01_0001,1.1.06.01.0001,ADIANTAMENTO DE FÉRIAS,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_01_0002,1.1.06.01.0002,ADIANTAMENTO SALARIO,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_02_0001,1.1.06.02.0001,ADIANTAMENTO A FORNECEDORES,,asset_prepayments,,falker_coa_template
+account_template_falker_1_1_06_03_0001,1.1.06.03.0001,ADIANTAMENTO DE VIAGENS,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_03_0003,1.1.06.03.0003,Banco do Brasil - Pré-Pago - Visa Electron - RC896700030892029,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_04_0001,1.1.06.04.0001,Valores Mobiliários - Mercado de Capitais Interno,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_04_0002,1.1.06.04.0002,Valores Mobiliários - Mercado de Capitais Externo,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_05_0001,1.1.06.05.0001,Valores Mobiliários - Aplicações de Subvenções,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_06_0001,1.1.06.06.0001,Valores Mobiliários - Aplicações de Doações,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_07_0001,1.1.06.07.0001,Valores Mobiliários - Aplicações de Outros Recursos Sujeitos a Restrições,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_08_0001,1.1.06.08.0001,Tecnova Pessoal - Banco do Brasil CC 95568-x/3798-2,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_08_0002,1.1.06.08.0002,Tecnova PJ - Banco do Brasil CC 95617-1/3798-2,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_06_08_0003,1.1.06.08.0003,Tecnova Contrapartida - Banco do Brasil CC 95518-3/3798-2,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_01_0001,1.1.07.01.0001,ESTOQUE DE INSUMOS,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_01_0002,1.1.07.01.0002,ESTOQUE DE PRODUTOS ACABADOS,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_01_0003,1.1.07.01.0003,Produtos em Elaboração,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_01_0006,1.1.07.01.0006,Materiais de Embalagem,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_01_0007,1.1.07.01.0007,Estoque de Terceiro,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_01_0008,1.1.07.01.0008,Estoque em Poder de Terceiro,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_01_0009,1.1.07.01.0009,( - ) Transitória - Recebimento Físico/Fiscal,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_02_0001,1.1.07.02.0001,Importação em Andamento,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_03_0001,1.1.07.03.0001,Compras para Entrega Futura,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_05_0001,1.1.07.05.0001,Estoques Destinados à Doação,,asset_non_current,,falker_coa_template
+account_template_falker_1_1_07_06_0001,1.1.07.06.0001,Outras,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_01_0001,1.3.01.01.0001,Título de Capitalização - Fiança Imobiliária - Sul América,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_01_0002,1.3.01.01.0002,Título de Capitalização - Ourocap - Banco do Brasil,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_01_0003,1.3.01.01.0003,Título Previdência Caixa Federal,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_01_0004,1.3.01.01.0004,Título de Capitalização - Fiança Imobiliária - Icatu,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_01_0005,1.3.01.01.0005,Consórcio,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_05_0001,1.3.01.05.0001,Créditos Fiscais CSLL - Diferenças Temporárias e Base de Cálculo Negativa,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_05_0002,1.3.01.05.0002,Créditos Fiscais IRPJ - Diferenças Temporárias e Prejuízos Fiscais,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_06_0001,1.3.01.06.0001,Valores Mobiliários,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_06_0002,1.3.01.06.0002,Depósitos Judiciais,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_06_0003,1.3.01.06.0003,Créditos por Contribuições e Doações,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_07_0001,1.3.01.07.0001,( - ) Provisões para Créditos de Liquidação Duvidosa,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_07_0002,1.3.01.07.0002,( - ) Provisões para Ajuste ao Valor Provável de Realização,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_07_0099,1.3.01.07.0099,( - ) Outras Contas Retificadoras,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_08_0001,1.3.01.08.0001,( - ) Duplicatas Descontadas - Banco A (criar uma conta para cada conta bancária),,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_09_0001,1.3.01.09.0001,ICMS sobre Imobilizado,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_09_0002,1.3.01.09.0002,PIS sobre Imobilizado,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_01_09_0003,1.3.01.09.0003,COFINS sobre Imobilizado,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_02_01_0001,1.3.02.01.0001,Maquinas e equipamentos,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_01_0002,1.3.02.01.0002,móveis e utensílios,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_01_0003,1.3.02.01.0003,computadores e periféricos,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_01_0004,1.3.02.01.0004,veículos,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_01_0005,1.3.02.01.0005,Instalações e benfeitorias,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_01_0007,1.3.02.01.0007,Programas e sistemas,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_01_0008,1.3.02.01.0008,terrenos,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_02_0001,1.3.02.02.0001,construções em andamento,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0001,1.3.02.04.0001,( - ) Edificações e Benfeitorias em Imóveis Próprios,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0002,1.3.02.04.0002,( - ) Edificações e Benfeitorias em Imóveis de Terceiros,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0003,1.3.02.04.0003,( - ) Instalações,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0004,1.3.02.04.0004,( - ) Máquinas,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0005,1.3.02.04.0005,( - ) Equipamentos,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0006,1.3.02.04.0006,( - ) Veículos,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0007,1.3.02.04.0007,"( - ) Móveis, Utensílios e Instalações Comerciais",,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_04_0099,1.3.02.04.0099,( - ) Outros,,asset_fixed,,falker_coa_template
+account_template_falker_1_3_02_05_0001,1.3.02.05.0001,Benfeioria de imóvel próprio,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_01_0001,1.3.04.01.0001,TITULO DE CAPIT.ICATU-CAUÇÃO DE ALUGUEL,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0001,1.3.04.02.0001,(-) DEDUÇÃO DE ACERTO DE CONTAS,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0002,1.3.04.02.0002,(-) DESPESAS C/FUNCIONÁRIOS,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0003,1.3.04.02.0003,(-) FRETE PROJETO FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0005,1.3.04.02.0005,DESPESAS FINANCEIRAS-FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0006,1.3.04.02.0006,EQUIPAMENTO E MATERIAL PERMANENTE,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0007,1.3.04.02.0007,MATERIAL DE CONSUMO-FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0008,1.3.04.02.0008,RECEITAS FINANCEIRAS-FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_02_0009,1.3.04.02.0009,SERVIÇOS PESSOAS JURÍDICAS FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0001,1.3.04.03.0001,(-) DEDUÇÃO DE ACERTO DE CONTAS,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0002,1.3.04.03.0002,(-) DESPESAS C/FUNCIONÁRIOS,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0003,1.3.04.03.0003,(-) FRETE PROJETO FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0004,1.3.04.03.0004,DESPESAS FINANCEIRAS-FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0005,1.3.04.03.0005,EQUIPAMENTO E MATERIAL PERMANENTE,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0006,1.3.04.03.0006,MATERIAL DE CONSUMO-FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0007,1.3.04.03.0007,RECEITAS FINANCEIRAS-FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_1_3_04_03_0008,1.3.04.03.0008,SERVIÇOS PESSOAS JURÍDICAS FINEP,,asset_non_current,,falker_coa_template
+account_template_falker_2_1_01_01_0001,2.1.01.01.0001,FORNECEDORES,,liability_payable,1,falker_coa_template
+account_template_falker_2_1_01_02_0001,2.1.01.02.0001,(-) JUROS DO EMPRÉSTIMO SANTANDER-FINANC.,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_02_0002,2.1.01.02.0002,(-) JUROS EMPREST.SANTANDER-FINANC.SAVEIRO,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_02_0003,2.1.01.02.0003,CEF EMPRÉSTIMO CCB PRONAMPE-CP,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_02_0004,2.1.01.02.0004,EMPRÉSTIMO BB FCO,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_02_0005,2.1.01.02.0005,EMPRÉSTIMO SANTANDER-FINANC.VEÍCULO-CP,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_02_0006,2.1.01.02.0006,EMPRÉSTIMO SANTANDER-FINANCIAMENTO SAVEIRO,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0001,2.1.01.03.0001,COFINS A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0002,2.1.01.03.0002,CRF A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0003,2.1.01.03.0003,CSLL A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0004,2.1.01.03.0004,ICMS A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0005,2.1.01.03.0005,INSS RETIDO A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0006,2.1.01.03.0006,IPI RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0007,2.1.01.03.0007,IRPJ A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0008,2.1.01.03.0008,IRRF S/ SALÁRIOS,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0009,2.1.01.03.0009,IRRF S/ALUGUEL,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0010,2.1.01.03.0010,IRRF S/SERVIÇOS,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0011,2.1.01.03.0011,ISS A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0012,2.1.01.03.0012,ISSQN RETIDO A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_03_0013,2.1.01.03.0013,PIS A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_04_0001,2.1.01.04.0001,CONTR.SINDICAL A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_04_0002,2.1.01.04.0002,FGTS A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_04_0003,2.1.01.04.0003,INSS A RECOLHER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_04_0004,2.1.01.04.0004,PENSÃO ALIMENTÍCIA A PAGAR,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_04_0005,2.1.01.04.0005,RESCISÕES A PAGAR,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_04_0006,2.1.01.04.0006,SALÁRIOS A PAGAR,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_05_0001,2.1.01.05.0001,PROVISÃO DE 13º SALÁRIO,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_05_0002,2.1.01.05.0002,PROVISÃO DE FÉRIAS,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_05_0003,2.1.01.05.0003,PROVISÃO FGTS S/ 13º SAL,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_05_0004,2.1.01.05.0004,PROVISÃO FGTS S/ FÉRIAS,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_05_0005,2.1.01.05.0005,PROVISÃO INSS S/ 13º SAL,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_05_0006,2.1.01.05.0006,PROVISÃO INSS S/ FÉRIAS,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0001,2.1.01.06.0001,CARTÃO CREDITO BB AGRO ELO 106.178.531,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0002,2.1.01.06.0002,CARTÃO CRÉDITO BB EMPRESARIAL VISA,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0003,2.1.01.06.0003,CARTÃO CREDITO MASTERCARD SANTANDER,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0004,2.1.01.06.0004,CARTÃO CREDITO VISA ITAUCARD,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0005,2.1.01.06.0005,Cartão de Crédito – MASTER BB – Marcio A.M. da Silva,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0006,2.1.01.06.0006,Cartão Clara,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0007,2.1.01.06.0007,Cartão BB Kelly,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_06_0008,2.1.01.06.0008,Cartão BB Andreoli,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_07_0001,2.1.01.07.0001,ADIANTAMENTO DE CLIENTE-EXPORTAÇÃO,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_07_0002,2.1.01.07.0002,ADIANTAMENTO DE CLIENTES,,asset_prepayments,,falker_coa_template
+account_template_falker_2_1_01_07_0003,2.1.01.07.0003,venda entrega futura,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_08_0001,2.1.01.08.0001,PARCELAMENTO SIMPLES NACIONAL CP,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_08_0002,2.1.01.08.0002,PARCELAMENTO SIMPLES NACIONAL PERT,,liability_current,,falker_coa_template
+account_template_falker_2_1_01_08_0003,2.1.01.08.0003,(-) JUROS PARCELAMENTO SIMPLES CP,,liability_current,,falker_coa_template
+account_template_falker_2_2_05_01_0001,2.2.05.01.0001,EMPREST.SANTANDER-FINANC.SAVEIRO,,liability_current,,falker_coa_template
+account_template_falker_2_2_05_01_0002,2.2.05.01.0002,(-)JUROS,,liability_current,,falker_coa_template
+account_template_falker_2_2_05_01_0003,2.2.05.01.0003,SANTANDER-FINANC.VEIC.,,liability_current,,falker_coa_template
+account_template_falker_2_2_05_01_0004,2.2.05.01.0004,(-)JUROS EMPRÉSTIMO,,liability_current,,falker_coa_template
+account_template_falker_2_2_09_01_0001,2.2.09.01.0001,Projeto TECNOVA,,liability_current,,falker_coa_template
+account_template_falker_2_2_09_01_0002,2.2.09.01.0002,Projeto FINEP Rota 2030 Planap,,liability_current,,falker_coa_template
+account_template_falker_2_2_09_01_0003,2.2.09.01.0003,Projeto FINEP Mineração Tecmonres,,liability_current,,falker_coa_template
+account_template_falker_2_2_09_02_0001,2.2.09.02.0001,CREDITO PROJETO FINEP ROTA 2030,,liability_current,,falker_coa_template
+account_template_falker_2_2_09_02_0002,2.2.09.02.0002,CREDITO PROJETO FINEP MINERAÇÃO,,liability_current,,falker_coa_template
+account_template_falker_2_2_09_02_0003,2.2.09.02.0003,CREDITO PROJETO FINEP XXX,,liability_current,,falker_coa_template
+account_template_falker_2_2_10_01_0001,2.2.10.01.0001,Receitas Diferidas,,liability_current,,falker_coa_template
+account_template_falker_2_2_10_02_0001,2.2.10.02.0001,( - ) Custos Correspondentes às Receitas Diferidas,,liability_current,,falker_coa_template
+account_template_falker_2_4_01_01_0001,2.4.01.01.0001,CAPITAL INTEGRALIZADO,,liability_current,,falker_coa_template
+account_template_falker_2_4_01_03_0001,2.4.01.03.0001,capital a integralizar,,liability_current,,falker_coa_template
+account_template_falker_2_4_03_01_0001,2.4.03.01.0001,RESERVAS DE LUCROS,,equity,,falker_coa_template
+account_template_falker_2_4_03_02_0001,2.4.03.02.0001,LUCROS OU PREJUÍZOS ACUMULADOS,,equity,,falker_coa_template
+account_template_falker_2_4_03_02_0002,2.4.03.02.0002,(-) DISTRIBUIÇÃO DE LUCROS,,equity,,falker_coa_template
+account_template_falker_2_4_03_03_0001,2.4.03.03.0001,RESULTADO DO EXERCÍCIO,,equity,,falker_coa_template
+account_template_falker_2_4_03_03_0002,2.4.03.03.0002,RESULTADO DO EXERCÍCIO em curso,,equity_unaffected,,falker_coa_template
+account_template_falker_2_4_03_03_0003,2.4.03.03.0003,ajuste do exercício anterior,,equity,,falker_coa_template
+account_template_falker_3_1_01_01_0001,3.1.01.01.0001,Vendas de Mercadorias para Exportação,,income,,falker_coa_template
+account_template_falker_3_1_01_01_0002,3.1.01.01.0002,Vendas de Mercadorias para Mercado Interno,,income,,falker_coa_template
+account_template_falker_3_1_01_01_0003,3.1.01.01.0003,Vendas de Produtos de Fabricação Própria para Exportação,,income,,falker_coa_template
+account_template_falker_3_1_01_01_0004,3.1.01.01.0004,Vendas de Produtos de Fabricação Própria para Mercado Interno,,income,,falker_coa_template
+account_template_falker_3_1_01_01_0007,3.1.01.01.0007,Locação de Bens Móveis e Imóveis,,income,,falker_coa_template
+account_template_falker_3_1_01_01_0099,3.1.01.01.0099,Outras,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_1_01_02_0001,3.1.01.02.0001,Serviço prestado Brasil,,income,,falker_coa_template
+account_template_falker_3_1_01_02_0002,3.1.01.02.0002,Serviço prestado no exterior,,income,,falker_coa_template
+account_template_falker_3_1_02_01_0001,3.1.02.01.0001,"(-) Vendas Canceladas, Devoluções e Descontos Incondicionais",,income,,falker_coa_template
+account_template_falker_3_1_02_01_0002,3.1.02.01.0002,(-) ICMS,,income,,falker_coa_template
+account_template_falker_3_1_02_01_0003,3.1.02.01.0003,(-) IPI,,income,,falker_coa_template
+account_template_falker_3_1_02_01_0004,3.1.02.01.0004,(-) PIS/PASEP,,income,,falker_coa_template
+account_template_falker_3_1_02_01_0005,3.1.02.01.0005,(-) COFINS,,income,,falker_coa_template
+account_template_falker_3_1_02_01_0006,3.1.02.01.0006,(-) ISS,,income,,falker_coa_template
+account_template_falker_3_1_02_01_0007,3.1.02.01.0007,(-) Simples,,income,,falker_coa_template
+account_template_falker_3_1_02_01_0008,3.1.02.01.0008,(-) Demais Impostos e Contribuições Incidentes sobre Vendas de Mercadorias e Produtos,,income,,falker_coa_template
+account_template_falker_3_1_02_02_0001,3.1.02.02.0001,ISSQ,,income,,falker_coa_template
+account_template_falker_3_1_02_02_0002,3.1.02.02.0002,PIS S/SERVIÇOS,,income,,falker_coa_template
+account_template_falker_3_1_02_02_0003,3.1.02.02.0003,COFINS S/SERVIÇOS,,income,,falker_coa_template
+account_template_falker_3_1_02_03_0001,3.1.02.03.0001,Variações Cambiais Ativas,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_1_02_03_0002,3.1.02.03.0002,Receitas de Juros sobre o Capital Próprio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_1_02_03_0003,3.1.02.03.0003,Ganhos na Alienação de Participações não Integrantes do Ativo Permanente,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_1_02_02_0004,3.1.02.02.0004,Amortização de Deságio nas Aquisições de Investimentos Avaliados pelo Patrimônio Líquido,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_1_02_02_0005,3.1.02.02.0005,Reversão dos Saldos das Provisões Operacionais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_1_02_01_0099,3.1.02.01.0099,Outras Receitas Operacionais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0001,3.3.01.01.0001,Receitas de Alienações de Bens e Direitos do Ativo Imobilizado,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0002,3.3.01.01.0002,Ganhos de Capital com Ativo Imobilizado,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0003,3.3.01.01.0003,Ganhos com Alienação de Bens,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0004,3.3.01.01.0004,Indenização de Seguros,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0005,3.3.01.01.0005,Recuperação de Despesas,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0006,3.3.01.01.0006,Descontos Obtidos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0007,3.3.01.01.0007,Juros Recebidos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0008,3.3.01.01.0008,Outras Receitas Financeiras,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0009,3.3.01.01.0009,Receita de Subvenção Econômica recebida,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_3_01_01_0099,3.3.01.01.0099,Outras Receitas Não Operacionais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0001,3.4.01.01.0001,Insumos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_02_0001,3.4.01.02.0001,COMPRAS P/COMERCIALIZAÇÃO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0002,3.4.01.01.0002,COMPRAS P/INDUSTRIALIZAÇÃO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0003,3.4.01.01.0003,FRETES S/COMPRAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0004,3.4.01.01.0004,SERVIÇOS DE TERCEIROS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0005,3.4.01.01.0005,ESTOQUE INICIAL,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0006,3.4.01.01.0006,(-) ICMS S/COMPRAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0007,3.4.01.01.0007,(-) DEVOLUÇÕES DE COMPRAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0008,3.4.01.01.0008,(-) ESTOQUE FINAL,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0009,3.4.01.01.0009,(-) PIS S/COMPRAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0010,3.4.01.01.0010,(-) COFINS S/ COMPRAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0011,3.4.01.01.0011,MATERIAL DE CONSUMO/AUXILIAR,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0012,3.4.01.01.0012,SERVIÇOS DE INDUSTRIALIZAÇÃO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0013,3.4.01.01.0013,MATERIAL DE EMBALAGEM,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0014,3.4.01.01.0014,DESPESAS C/IMPORTAÇÃO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0015,3.4.01.01.0015,(-) CRÉDITO DA LEI DE INFORMÁTICA,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_01_01_0016,3.4.01.01.0016,(-) IPI S/ COMPRAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0001,3.4.02.01.0001,Salário - Marketing,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0002,3.4.02.01.0002,Salário Comercial - Kit,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0003,3.4.02.01.0003,Salário Comercial - Instrumentos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0004,3.4.02.01.0004,Salário Comercial - EPOP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0005,3.4.02.01.0005,Salário Comercial - EXP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0006,3.4.02.01.0006,Salário Comercial - Lançamento,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0007,3.4.02.01.0007,Salário Comercial - Pós-Venda,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0008,3.4.02.01.0008,Salário Comercial - Apoio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0009,3.4.02.01.0009,Salário Produção - Apoio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0010,3.4.02.01.0010,Salário Produção - Eletrônica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0011,3.4.02.01.0011,Salário Produção - Mecânica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0012,3.4.02.01.0012,Salário PDI - Eletrônica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0013,3.4.02.01.0013,Salário PDI - Mecânica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0014,3.4.02.01.0014,Salário Administrativo,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0015,3.4.02.01.0015,Salário PDI - FINEP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0016,3.4.02.01.0016,Vale Refeição,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0017,3.4.02.01.0017,Vale Transporte - Comercial,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0018,3.4.02.01.0018,Vale Transporte - Produção,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0019,3.4.02.01.0019,Vale Transporte - PDI,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0020,3.4.02.01.0020,Vale Transporte - Administrativo,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0021,3.4.02.01.0021,Vale Transporte - Marketing,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0022,3.4.02.01.0022,Treinamento - Comercial,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0023,3.4.02.01.0023,Treinamento - Produção,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0024,3.4.02.01.0024,Treinamento - PDI,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0025,3.4.02.01.0025,Treinamento - Administrativo,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0026,3.4.02.01.0026,Treinamento - Marketing,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0027,3.4.02.01.0027,Gastos de RH,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0028,3.4.02.01.0028,Rescisão - Comercial,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0029,3.4.02.01.0029,Rescisão - Produção,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0030,3.4.02.01.0030,Rescisão - PDI,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0031,3.4.02.01.0031,Rescisão - Administrativo,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0032,3.4.02.01.0032,Rescisão - Marketing,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0033,3.4.02.01.0033,Impostos sobre Folha,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0034,3.4.02.01.0034,"Assist. Médica, Odontológica e Farmacêutica a Empregados",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0035,3.4.02.01.0035,Premiações – Brindes,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0036,3.4.02.01.0036,Eventos e Comemorações,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_01_0099,3.4.02.01.0099,Outras Despesas RH,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0001,3.4.02.02.0001,INSS - Marketing,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0002,3.4.02.02.0002,INSS Comercial - Kit,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0003,3.4.02.02.0003,INSS Comercial - Instrumentos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0004,3.4.02.02.0004,INSS Comercial - EPOP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0005,3.4.02.02.0005,INSS Comercial - EXP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0006,3.4.02.02.0006,INSS Comercial - Lançamento,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0007,3.4.02.02.0007,INSS Comercial - Pós-Venda,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0008,3.4.02.02.0008,INSS Comercial - Apoio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0009,3.4.02.02.0009,INSS Produção - Apoio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0010,3.4.02.02.0010,INSS Produção - Eletrônica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0011,3.4.02.02.0011,INSS Produção - Mecânica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0012,3.4.02.02.0012,INSS PDI - Eletrônica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0013,3.4.02.02.0013,INSS PDI - Mecânica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0014,3.4.02.02.0014,INSS Administrativo,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0015,3.4.02.02.0015,INSS PDI - FINEP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0016,3.4.02.02.0016,FGTS - Marketing,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0017,3.4.02.02.0017,FGTS Comercial - Kit,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0018,3.4.02.02.0018,FGTS Comercial - Instrumentos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0019,3.4.02.02.0019,FGTS Comercial - EPOP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0020,3.4.02.02.0020,FGTS Comercial - EXP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0021,3.4.02.02.0021,FGTS Comercial - Lançamento,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0022,3.4.02.02.0022,FGTS Comercial - Pós-Venda,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0023,3.4.02.02.0023,FGTS Comercial - Apoio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0024,3.4.02.02.0024,FGTS Produção - Apoio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0025,3.4.02.02.0025,FGTS Produção - Eletrônica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0026,3.4.02.02.0026,FGTS Produção - Mecânica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0027,3.4.02.02.0027,FGTS PDI - Eletrônica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0028,3.4.02.02.0028,FGTS PDI - Mecânica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0029,3.4.02.02.0029,FGTS Administrativo,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_02_0030,3.4.02.02.0030,FGTS PDI - FINEP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0001,3.4.02.03.0001,Aluguel + taxas,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0002,3.4.02.03.0002,Contabilidade,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0003,3.4.02.03.0003,IPTU Sede,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0004,3.4.02.03.0004,Telefone / Internet / Datacenter,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0005,3.4.02.03.0005,Energia Elétrica,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0006,3.4.02.03.0006,Segurança,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0007,3.4.02.03.0007,Outros serviços manutenção sede,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0008,3.4.02.03.0008,Limpeza,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0009,3.4.02.03.0009,Água,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_03_0099,3.4.02.03.0099,Outras Despesas Estruturais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_06_0003,3.4.02.06.0003,Fretes de Venda,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_06_0004,3.4.02.06.0004,Viagens e custos de Instalações,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_06_0006,3.4.02.06.0006,Viagens Internacionais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_06_0007,3.4.02.06.0007,Visita a clientes/apresentações /relacionamento,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_06_0008,3.4.02.06.0008,Despesas de exportação,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_06_0099,3.4.02.06.0099,Outras Despesas de Comercialização,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0001,3.4.02.07.0001,PIS/Pasep,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0002,3.4.02.07.0002,Cofins,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0003,3.4.02.07.0003,Impostos e Taxas Diversas,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0004,3.4.02.07.0004,IOF,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0005,3.4.02.07.0005,IPTU,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0006,3.4.02.07.0006,IPVA,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0007,3.4.02.07.0007,IRPJ s/Aplicações Financeiras,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0008,3.4.02.07.0008,Multas Fiscais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_07_0099,3.4.02.07.0099,"Demais Impostos, Taxas e Contribuições, Exceto IR e CSLL",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_08_0001,3.4.02.08.0001,"Publicidade (anúncios, adwords, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_08_0002,3.4.02.08.0002,"Serviços assessoria (imprensa, consultoria divulgação, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_08_0004,3.4.02.08.0004,Feiras/Eventos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_08_0005,3.4.02.08.0005,"Serviços design (material gráfico, site, apresentações, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_08_0006,3.4.02.08.0006,"Materiais diversos (uniformes, brindes, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_08_0007,3.4.02.08.0007,Materiais impressos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_08_0099,3.4.02.08.0099,Outras despesas de Marketing,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_09_0001,3.4.02.09.0001,Viagens,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_09_0099,3.4.02.09.0099,Outros,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_10_0001,3.4.02.10.0001,Projetos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_10_0002,3.4.02.10.0002,Materiais de Uso e consumo para Pesquisa e Desenvolvimento,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_11_0001,3.4.02.11.0001,Despesas Ambientais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_11_0002,3.4.02.11.0002,Compra de EPIs,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_11_0003,3.4.02.11.0003,Manutenção Equipamentos Produção,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_11_0004,3.4.02.11.0004,Visita fornecedore,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_12_0001,3.4.02.12.0001,Depreciação,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_12_0002,3.4.02.12.0002,Amortização,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_13_0001,3.4.02.13.0001,Perdas em Operações de Crédito,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_14_0001,3.4.02.14.0001,Software Comercial,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_14_0002,3.4.02.14.0002,Software Produção,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_14_0003,3.4.02.14.0003,Software PDI,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_14_0004,3.4.02.14.0004,Manut. TI / Informática,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_14_0005,3.4.02.14.0005,Software Mkt,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_14_0006,3.4.02.14.0006,Software Adm,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0001,3.4.02.15.0001,Seguro Venda,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0002,3.4.02.15.0002,"Taxas bancárias (boletos, taxas manut./cadastro, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0003,3.4.02.15.0003,"Fretes administrativos (correios, motoboy, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0004,3.4.02.15.0004,"Taxas não bancárias em geral (Cielo, Serasa, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0005,3.4.02.15.0005,Contribuição Patronal,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0006,3.4.02.15.0006,Seguro de Veículo,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0007,3.4.02.15.0007,Seguro do Imóvel,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0008,3.4.02.15.0008,Outros Seguros,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0009,3.4.02.15.0009,Abinee,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0010,3.4.02.15.0010,AsBraAP,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_15_0011,3.4.02.15.0011,Outras Associações,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_16_0001,3.4.02.16.0001,"Materiais gerais (limpeza, cozinha, manutenção, etc.)",,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_16_0002,3.4.02.16.0002,Material de escritório,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_16_0003,3.4.02.16.0003,Despesas de Cartório,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_16_0004,3.4.02.16.0004,Livros,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_16_0005,3.4.02.16.0005,Manutenção e despesas de veículos,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_17_0001,3.4.02.17.0001,Consultoria Fiscal,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_17_0002,3.4.02.17.0002,Consultoria Empresarial,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_17_0003,3.4.02.17.0003,Consultoria de Venda,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_05_0001,3.4.02.05.0001,Variações Cambiais Passivas,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_05_0002,3.4.02.05.0002,Juros sobre o Capital Próprio,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_05_0003,3.4.02.05.0003,Prejuízos na Alienação de Participações Não Integrantes do Ativo Permanente,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_05_0004,3.4.02.05.0004,Resultados Negativos em Participações Societárias,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_05_0005,3.4.02.05.0005,Amortização de Ágio nas Aquisições de Investimentos Avaliados pelo Patrimônio Líquido,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_05_0006,3.4.02.05.0006,Arredondamento por Diferenças de Moeda,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0099,3.4.02.04.0099,Outras Despesas Operacionais,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0001,3.4.02.04.0001,DESP.BANCÁRIAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0002,3.4.02.04.0002,JUROS PAGOS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0003,3.4.02.04.0003,DESC.CONCEDIDO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0004,3.4.02.04.0004,VARIAÇÕES PASSIVAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0005,3.4.02.04.0005,JUROS S/PARCELAMENTOS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0006,3.4.02.04.0006,MULTAS FISCAIS DEDUTÍVEIS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0007,3.4.02.04.0007,TAXA CARTÃO CRÉDITO VENDAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0008,3.4.02.04.0008,DESP.C/OP.DE DESCONTO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0009,3.4.02.04.0009,IOF,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_02_04_0010,3.4.02.04.0010,MULTAS/MORA,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_05_01_0001,3.4.05.01.0001,PREJ.ALIEN.IMOB,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_05_01_0002,3.4.05.01.0002,BAIXAS DO IMOBILIZADO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_05_01_0003,3.4.05.01.0003,PERDAS EVENTUAIS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_05_01_0004,3.4.05.01.0004,APROPRIAÇÕES INDÉBITAS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_05_02_0001,3.4.05.02.0001,MULTAS DE TRÂNSITO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_05_02_0002,3.4.05.02.0002,AUTO DE INFRAÇÃO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_4_05_02_0003,3.4.05.02.0003,MULTAS NÃO DEDUTIVEIS,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_5_01_01_0001,3.5.01.01.0001,PROV.P/CONTRIB.SOCIAL,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_5_01_01_0002,3.5.01.01.0002,PROV.P/IMP.RENDA,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_5_01_01_0003,3.5.01.01.0003,LUCRO DO EXERCÍCIO,,expense_direct_cost,,falker_coa_template
+account_template_falker_3_5_01_01_0004,3.5.01.01.0004,PREJUÍZO DO EXERCÍCIO,,expense_direct_cost,,falker_coa_template

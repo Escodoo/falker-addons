@@ -1,0 +1,988 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="falker_group_1" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1</field>
+        <field name="name">ATIVO</field>
+    </record>
+
+    <record id="falker_group_1_1" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1</field>
+        <field name="name">ATIVO CIRCULANTE</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1" />
+    </record>
+
+    <record id="falker_group_1_1_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.01</field>
+        <field name="name">DISPONIBILIDADES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1" />
+    </record>
+
+    <record id="falker_group_1_1_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.01.01</field>
+        <field name="name">CAIXA GERAL</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_01" />
+    </record>
+
+    <record id="falker_group_1_1_01_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.01.02</field>
+        <field name="name">BANCOS CONTA MOVIMENTO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_01" />
+    </record>
+
+    <record id="falker_group_1_1_01_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.01.03</field>
+        <field name="name">APLICAÇÕES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_01" />
+    </record>
+
+    <record id="falker_group_1_1_01_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.01.04</field>
+        <field name="name">CHEQUES EM COBRANÇA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_01" />
+    </record>
+
+    <record id="falker_group_1_1_01_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.01.05</field>
+        <field name="name">BANCOS CONTA MOVIMENTO DESTINAÇÃO ESPECÍFICA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_01" />
+    </record>
+
+    <record id="falker_group_1_1_01_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.01.06</field>
+        <field name="name">APLICAÇÕES DESTINAÇÃO ESPECÍFICA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_01" />
+    </record>
+
+    <record id="falker_group_1_1_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.04</field>
+        <field name="name">DUPLICATAS A RECEBER</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1" />
+    </record>
+
+    <record id="falker_group_1_1_04_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.04.01</field>
+        <field name="name">CLIENTES BRASIL</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_04" />
+    </record>
+
+    <record id="falker_group_1_1_04_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.04.02</field>
+        <field name="name">CLIENTES EXTERIOR</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_04" />
+    </record>
+
+    <record id="falker_group_1_1_04_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.04.03</field>
+        <field name="name">CARTÕES DE CRÉDITO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_04" />
+    </record>
+
+    <record id="falker_group_1_1_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.05</field>
+        <field name="name">CRÉDITOS DIVERSOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1" />
+    </record>
+
+    <record id="falker_group_1_1_05_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.05.01</field>
+        <field name="name">IMPOSTOS A RECUPERAR</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_05" />
+    </record>
+
+    <record id="falker_group_1_1_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06</field>
+        <field name="name">ADIANTAMENTOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1" />
+    </record>
+
+    <record id="falker_group_1_1_06_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.01</field>
+        <field name="name">ADIANTAMENTOS DIVERSOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_06_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.02</field>
+        <field name="name">ADIANTAMENTOS A FORNECEDORES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_06_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.03</field>
+        <field name="name">OUTROS ADIANTAMENTOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_06_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.04</field>
+        <field name="name">TÍTULOS E VALORES MOBILIÁRIOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_06_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.05</field>
+        <field name="name">VALORES MOBILIÁRIOS - APLICAÇÕES DE SUBVENÇÕES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_06_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.06</field>
+        <field name="name">VALORES MOBILIÁRIOS - APLICAÇÕES DE DOAÇÕES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_06_07" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.07</field>
+        <field
+            name="name"
+        >VALORES MOBILIÁRIOS - APLICAÇÕES DE OUTROS RECURSOS SUJEITOS A RESTRIÇÕES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_06_08" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.06.08</field>
+        <field name="name">CONTAS BANCÁRIAS - SUBVENÇÃO ECONÔMICA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_06" />
+    </record>
+
+    <record id="falker_group_1_1_07" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.07</field>
+        <field name="name">ESTOQUE</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1" />
+    </record>
+
+    <record id="falker_group_1_1_07_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.07.01</field>
+        <field name="name">ESTOQUE DE MERCADORIAS, PRODUTOS E INSUMOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_07" />
+    </record>
+
+    <record id="falker_group_1_1_07_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.07.02</field>
+        <field name="name">ESTOQUES DE IMPORTAÇÃO EM ANDAMENTO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_07" />
+    </record>
+
+    <record id="falker_group_1_1_07_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.07.03</field>
+        <field name="name">COMPRAS PARA ENTREGA FUTURA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_07" />
+    </record>
+
+    <record id="falker_group_1_1_07_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.07.05</field>
+        <field name="name">ESTOQUES DESTINADOS À DOAÇÃO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_07" />
+    </record>
+
+    <record id="falker_group_1_1_07_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.1.07.06</field>
+        <field name="name">OUTRAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_1_07" />
+    </record>
+
+    <record id="falker_group_1_2" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.2</field>
+        <field name="name">ATIVO REALIZÁVEL A LONGO PRAZO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1" />
+    </record>
+
+    <record id="falker_group_1_2_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.2.01</field>
+        <field name="name">CRÉDITO SÓCIOS/DIRETORES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_2" />
+    </record>
+
+    <record id="falker_group_1_2_01_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.2.01.02</field>
+        <field name="name">MARCIO ALBUQUERQUE MOREIRA DA SILVA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_2_01" />
+    </record>
+
+    <record id="falker_group_1_2_01_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.2.01.03</field>
+        <field name="name">PATRICIA HELENA FILTER</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_2_01" />
+    </record>
+
+    <record id="falker_group_1_3" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3</field>
+        <field name="name">ATIVO NÃO CIRCULANTE</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1" />
+    </record>
+
+    <record id="falker_group_1_3_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01</field>
+        <field name="name">INVESTIMENTOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3" />
+    </record>
+
+    <record id="falker_group_1_3_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.01</field>
+        <field name="name">INVESTIMENTOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.02</field>
+        <field name="name">Participação em outras empresas</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.03</field>
+        <field name="name">Clientes Nacionais - Longo Prazo</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.04</field>
+        <field name="name">Clientes Estrangeiros - Longo Prazo</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.05</field>
+        <field name="name">CRÉDITOS FISCAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.06</field>
+        <field name="name">OUTRAS CONTAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_07" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.07</field>
+        <field name="name">( - ) CONTAS RETIFICADORAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_08" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.08</field>
+        <field name="name">( - ) DUPLICATAS DESCONTADAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_01_09" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.01.09</field>
+        <field name="name">IMPOSTOS E CONTRIBUIÇÕES A RECUPERAR</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_01" />
+    </record>
+
+    <record id="falker_group_1_3_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.02</field>
+        <field name="name">Imobilizado</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3" />
+    </record>
+
+    <record id="falker_group_1_3_02_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.02.01</field>
+        <field name="name">Bens imóveis</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_02" />
+    </record>
+
+    <record id="falker_group_1_3_02_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.02.02</field>
+        <field name="name">Imobilizados em andamento</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_02" />
+    </record>
+
+    <record id="falker_group_1_3_02_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.02.04</field>
+        <field name="name">Depreciações</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_02" />
+    </record>
+
+    <record id="falker_group_1_3_02_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.02.05</field>
+        <field name="name">Ativo permanentes</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_02" />
+    </record>
+
+    <record id="falker_group_1_3_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.03</field>
+        <field name="name">INTANGÍVEL</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3" />
+    </record>
+
+    <record id="falker_group_1_3_03_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.03.01</field>
+        <field name="name">MARCAS E PATENTES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_03" />
+    </record>
+
+    <record id="falker_group_1_3_03_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.03.02</field>
+        <field name="name">PROPRIEDADE INTELECTUAL</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_03" />
+    </record>
+
+    <record id="falker_group_1_3_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.04</field>
+        <field name="name">OUTROS CRÉDITOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3" />
+    </record>
+
+    <record id="falker_group_1_3_04_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.04.01</field>
+        <field name="name">OUTROS CRÉDITOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_04" />
+    </record>
+
+    <record id="falker_group_1_3_04_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.04.02</field>
+        <field name="name">PROJETO FINEP - xxxxx</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_04" />
+    </record>
+
+    <record id="falker_group_1_3_04_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">1.3.04.03</field>
+        <field name="name">PROJETO FINEP - yyyyy</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_1_3_04" />
+    </record>
+
+    <record id="falker_group_2" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2</field>
+        <field name="name">PASSIVO</field>
+    </record>
+
+    <record id="falker_group_2_1" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1</field>
+        <field name="name">CIRCULANTE</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2" />
+    </record>
+
+    <record id="falker_group_2_1_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01</field>
+        <field name="name">DÉBITOS DE FUNCIONAMENTO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1" />
+    </record>
+
+    <record id="falker_group_2_1_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.01</field>
+        <field name="name">FORNECEDORES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.02</field>
+        <field name="name">EMPRÉSTIMOS E FINANCIAMENTOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.03</field>
+        <field name="name">OBRIGAÇÕES FISCAIS E PARCELAMENTOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.04</field>
+        <field name="name">OBRIGAÇÕES SOCIAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.05</field>
+        <field name="name">PROVISÕES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.06</field>
+        <field name="name">TÍTULOS A PAGAR</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_07" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.07</field>
+        <field name="name">ADIANTAMENTO DE CLIENTES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_08" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.08</field>
+        <field name="name">PARCELAMENTOS A CURTO PRAZO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_09" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.09</field>
+        <field name="name">OUTRAS CONTAS A PAGAR</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_11" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.11</field>
+        <field name="name">Financiamentos a Curto Prazo - Exterior</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_12" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.12</field>
+        <field name="name">Financiamentos a Curto Prazo - Outros</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_13" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.13</field>
+        <field
+            name="name"
+        >Arrendamento Mercantil (Financeiro) a Curto Prazo - Sistema Financeiro
+            Nacional</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_1_01_14" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.1.01.14</field>
+        <field
+            name="name"
+        >Arrendamento Mercantil (Financeiro) a Curto Prazo - Exterior</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_1_01" />
+    </record>
+
+    <record id="falker_group_2_2" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2</field>
+        <field name="name">PASSIVO NÃO CIRCULANTE</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2" />
+    </record>
+
+    <record id="falker_group_2_2_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.01</field>
+        <field name="name">OBRIGAÇÕES TRIBUTÁRIAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2" />
+    </record>
+
+    <record id="falker_group_2_2_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.01.01</field>
+        <field name="name">PARCELAMENTO SIMPLES NACIONAL LP</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_01" />
+    </record>
+
+    <record id="falker_group_2_2_01_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.01.02</field>
+        <field name="name">PARCELAMENTO SIMPLES NACIONAL PERT</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_01" />
+    </record>
+
+    <record id="falker_group_2_2_01_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.01.03</field>
+        <field name="name">(-) JUROS DO PARCEL.SIMPLES NACIONAL LP</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_01" />
+    </record>
+
+    <record id="falker_group_2_2_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.05</field>
+        <field name="name">EMPRÉSTIMOS E FINANCIAMENTOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2" />
+    </record>
+
+    <record id="falker_group_2_2_05_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.05.01</field>
+        <field name="name">EMPRÉSTIMOS A LONGO PRAZO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_05" />
+    </record>
+
+    <record id="falker_group_2_2_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.06</field>
+        <field name="name">LEASING A LONGO PRAZO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2" />
+    </record>
+
+    <record id="falker_group_2_2_06_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.06.01</field>
+        <field name="name">Leasing a Longo Prazo</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_06" />
+    </record>
+
+    <record id="falker_group_2_2_07" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.07</field>
+        <field name="name">IMPOSTOS LONGO PRAZO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2" />
+    </record>
+
+    <record id="falker_group_2_2_07_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.07.01</field>
+        <field name="name">Impostos - Parcelamento</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_07" />
+    </record>
+
+    <record id="falker_group_2_2_08" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.08</field>
+        <field name="name">DÉBITOS FISCAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2" />
+    </record>
+
+    <record id="falker_group_2_2_08_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.08.01</field>
+        <field name="name">Débitos Fiscais CSLL - Diferenças Temporárias</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_08" />
+    </record>
+
+    <record id="falker_group_2_2_09" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.09</field>
+        <field name="name">Débitos Fiscais IRPJ - Diferenças Temporárias</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2" />
+    </record>
+
+    <record id="falker_group_2_2_09_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.09.01</field>
+        <field name="name">SUBVENÇÃO ECONÔMICA PENDENTE DE PRESTAÇÃO DE CONTAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_09" />
+    </record>
+
+    <record id="falker_group_2_2_09_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.09.02</field>
+        <field name="name">PROJETOS de SUBVENÇÃO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_09" />
+    </record>
+
+    <record id="falker_group_2_2_2010" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.2010</field>
+        <field name="name">RECEITAS DIFERIDAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2" />
+    </record>
+
+    <record id="falker_group_2_2_2010_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.2010.01</field>
+        <field name="name">RECEITAS DIFERIDAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_2010" />
+    </record>
+
+    <record id="falker_group_2_2_2010_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.2.2010.02</field>
+        <field name="name">( - ) CUSTOS CORRESPONDENTES ÀS RECEITAS DIFERIDAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_2_2010" />
+    </record>
+
+    <record id="falker_group_2_4" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4</field>
+        <field name="name">PATRIMÔNIO LÍQUIDO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2" />
+    </record>
+
+    <record id="falker_group_2_4_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4.01</field>
+        <field name="name">CAPITAL SOCIAL</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_4" />
+    </record>
+
+    <record id="falker_group_2_4_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4.01.01</field>
+        <field name="name">CAPITAL SUBSCRITO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_4_01" />
+    </record>
+
+    <record id="falker_group_2_4_01_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4.01.03</field>
+        <field name="name">capital a subescrever</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_4_01" />
+    </record>
+
+    <record id="falker_group_2_4_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4.03</field>
+        <field name="name">RESULTADOS ACUMULADOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_4" />
+    </record>
+
+    <record id="falker_group_2_4_03_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4.03.01</field>
+        <field name="name">RESERVA DE LUCROS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_4_03" />
+    </record>
+
+    <record id="falker_group_2_4_03_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4.03.02</field>
+        <field name="name">LUCROS OU PREJUÍZOS ACUMULADOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_4_03" />
+    </record>
+
+    <record id="falker_group_2_4_03_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">2.4.03.03</field>
+        <field name="name">RESULTADO DO EXERCÍCIO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_2_4_03" />
+    </record>
+
+    <record id="falker_group_3" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3</field>
+        <field name="name">RECEITAS</field>
+    </record>
+
+    <record id="falker_group_3_1" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.1</field>
+        <field name="name">RECEITAS comerciais</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3" />
+    </record>
+
+    <record id="falker_group_3_1_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.1.01</field>
+        <field name="name">receita de venda e serviços</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_1" />
+    </record>
+
+    <record id="falker_group_3_1_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.1.01.01</field>
+        <field name="name">RECEITA de vendas</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_1_01" />
+    </record>
+
+    <record id="falker_group_3_1_01_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.1.01.02</field>
+        <field name="name">Receitas de serviço</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_1_01" />
+    </record>
+
+    <record id="falker_group_3_1_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.1.02</field>
+        <field name="name">DEDUÇÕES E ABAT. S/VENDAS E SERVIÇOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_1" />
+    </record>
+
+    <record id="falker_group_3_1_02_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.1.02.01</field>
+        <field name="name">DEDUÇÕES S/VENDAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_1_02" />
+    </record>
+
+    <record id="falker_group_3_1_02_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.1.02.02</field>
+        <field name="name">DEDUÇÕES S/SERVIÇOS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_1_02" />
+    </record>
+
+    <record id="falker_group_3_2" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.2</field>
+        <field name="name">Receitas financeiras</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3" />
+    </record>
+
+    <record id="falker_group_3_2_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.2.01</field>
+        <field name="name">Receitas de rendimento e aplicação</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_2" />
+    </record>
+
+    <record id="falker_group_3_2_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.2.01.01</field>
+        <field name="name">Receitas diversas</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_2_01" />
+    </record>
+
+    <record id="falker_group_3_3" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.3</field>
+        <field name="name">RECEITAS NÃO OPERACIONAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3" />
+    </record>
+
+    <record id="falker_group_3_3_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.3.01</field>
+        <field name="name">RECEITAS NÃO OPERACIONAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_3" />
+    </record>
+
+    <record id="falker_group_3_3_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.3.01.01</field>
+        <field name="name">RECEITAS NÃO OPERACIONAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_3_01" />
+    </record>
+
+    <record id="falker_group_3_4" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4</field>
+        <field name="name">Custos e despesas</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3" />
+    </record>
+
+    <record id="falker_group_3_4_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.01</field>
+        <field name="name">Custos OPERACIONAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4" />
+    </record>
+
+    <record id="falker_group_3_4_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.01.01</field>
+        <field name="name">Custo de mercadoria e serviço vendido</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_01" />
+    </record>
+
+    <record id="falker_group_3_4_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02</field>
+        <field name="name">DESPESAS OPERACIONAIS DAS ATIVIDADES EM GERAL</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4" />
+    </record>
+
+    <record id="falker_group_3_4_02_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.01</field>
+        <field name="name">DESPESAS COM PESSOAL</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.02</field>
+        <field name="name">ENCARGOS SOBRE FOLHA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_03" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.03</field>
+        <field name="name">BENEFÍCIOS SOCIAIS SOBRE FOLHA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_04" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.04</field>
+        <field name="name">DESPESAS COM ESTRUTURA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_06" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.06</field>
+        <field name="name">DESPESAS DE COMERCIALIZAÇÃO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_07" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.07</field>
+        <field name="name">DESPESAS TRIBUTÁRIAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_08" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.08</field>
+        <field name="name">DESPESAS DE MARKETING</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_09" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.09</field>
+        <field name="name">DESPESAS DE DIRETORIA</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_10" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.10</field>
+        <field name="name">DESPESAS DE PDI</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_11" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.11</field>
+        <field name="name">CUSTOS PRODUÇÃO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_12" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.12</field>
+        <field name="name">ENCARGOS DE DEPRECIAÇÃO E AMORTIZAÇÃO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_13" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.13</field>
+        <field name="name">PERDAS EM OPERAÇÕES DE CRÉDITO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_14" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.14</field>
+        <field name="name">Despesas com TI</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_15" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.15</field>
+        <field name="name">SEGURO E TAXAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_16" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.16</field>
+        <field name="name">DESPESAS DE ESCRITORIO</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_02_17" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.02.17</field>
+        <field name="name">CONSULTORIAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_02" />
+    </record>
+
+    <record id="falker_group_3_4_05" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.05</field>
+        <field name="name">DESPESAS NÃO OPERACIONAIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4" />
+    </record>
+
+    <record id="falker_group_3_4_05_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.05.01</field>
+        <field name="name">DESPESAS C/ALIENAÇÕES E OUTRAS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_05" />
+    </record>
+
+    <record id="falker_group_3_4_05_02" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.4.05.02</field>
+        <field name="name">DESPESAS NÃO DEDUTÍVEIS</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_4_05" />
+    </record>
+
+    <record id="falker_group_3_5" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.5</field>
+        <field name="name">Contas De apuração</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3" />
+    </record>
+
+    <record id="falker_group_3_5_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.5.01</field>
+        <field name="name">CONTAS DE PROVISÕES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_5" />
+    </record>
+
+    <record id="falker_group_3_5_01_01" model="account.group.template">
+        <field name="chart_template_id" ref="falker_coa_template" />
+        <field name="code_prefix_start">3.5.01.01</field>
+        <field name="name">CONTAS DE PROVISÕES</field>
+        <field name="parent_id" ref="l10n_br_coa_falker.falker_group_3_5_01" />
+    </record>
+
+</odoo>
