@@ -7,7 +7,7 @@
     <field name="interval_number">1</field>
     <field name="interval_type">hours</field>
     <field name="numbercall">-1</field>
-    <field name="active">True</field>
+    <field name="active">False</field>
   </record>
 
   <record id="ir_cron_import_mautic_companies" model="ir.cron">
@@ -18,7 +18,7 @@
     <field name="interval_number">1</field>
     <field name="interval_type">hours</field>
     <field name="numbercall">-1</field>
-    <field name="active">True</field>
+    <field name="active">False</field>
   </record>
 
   <record id="cron_export_company_to_mautic" model="ir.cron">
@@ -29,7 +29,7 @@
     <field name="interval_number">5</field>
     <field name="interval_type">minutes</field>
     <field name="numbercall">-1</field>
-    <field name="active" eval="True" />
+    <field name="active">False</field>
   </record>
 
   <record id="ir_cron_export_contacts_to_mautic" model="ir.cron">
@@ -40,7 +40,7 @@
     <field name="interval_number">1</field>
     <field name="interval_type">hours</field>
     <field name="numbercall">-1</field>
-    <field name="active">True</field>
+    <field name="active">False</field>
 </record>
 
 </odoo>
