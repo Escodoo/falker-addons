@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import json
 import logging
+import unicodedata
 
 import requests
 
@@ -19,7 +20,7 @@ class AccountAssetProfile(models.Model):
 class ResPartner(models.Model):
     _inherit = "res.partner"
     mautic_company_id = fields.Char("mautic_company_id")
-    mautic_id = fields.Char("ID")
+    mautic_id = fields.Char("Mautic ID")
     mautic_exported = fields.Boolean("mautic_exported", default=False)
     mautic_is_update = fields.Boolean("mautic_is_update", default=False)
 
@@ -31,195 +32,290 @@ class ResPartner(models.Model):
         lastname = parts[-1] if len(parts) > 1 else ""
         return firstname, middlename, lastname
 
-    def export_contact(self):
-        if len(self) > 1:
-            raise UserError(_("Please select only one contact at a time."))
-        if self.mautic_id or self.mautic_exported:
-            raise UserError(_("This contact has already been exported to Mautic."))
-        if not self.env.company.mautic_access_token:
-            raise UserError(
-                _("The associated company does not have an access token for Mautic.")
-            )
-        firstname, middlename, lastname = self._split_name(self.name)
-        payload = {
-            "firstname": firstname,
-            "middlename": middlename,
-            "lastname": lastname,
-            "email": self.email or f"{firstname}.{lastname}@odoo.com",
-            "city": self.city or "",
-            "state": self.state_id.name if self.state_id else "",
-            "country": self.country_id.with_context(lang="en_US").name
-            if self.country_id
-            else "",
-            "zipcode": self.zip or "",
-            "phone": self.phone or "",
-            "address1": self.street or "",
-            "address2": self.street2 or "",
-            "isuser": True,
-        }
-        if self.parent_id and self.parent_id.name:
-            payload["company"] = self.parent_id.name
+    def export_contact(self):  # noqa: C901
+        if not self:
+            return
 
-        url = f"{self.env.company.mautic_api_url}/api/contacts/new"
+        comp = self.env.company
+        if not (comp.mautic_api_url and comp.mautic_access_token):
+            raise UserError(
+                _(
+                    "The company does not have Mautic API URL or Access Token configured."
+                )
+            )
+
+        base = (comp.mautic_api_url or "").rstrip("/")
         headers = {
-            "Authorization": f"Bearer {self.env.company.mautic_access_token}",
+            "Authorization": f"Bearer {comp.mautic_access_token}",
             "Content-Type": "application/json",
         }
+        create_url = f"{base}/api/contacts/new"
 
-        try:
-            response = requests.post(
-                url, data=json.dumps(payload), headers=headers, timeout=30
-            )
-            response.raise_for_status()
-            res = response.json()
+        total = len(self)
+        success = skipped = errors = 0
+        details = []
 
-            contact_data = res.get("contact")
-            if contact_data and contact_data.get("id"):
-                self.write(
-                    {
-                        "mautic_id": str(contact_data["id"]),
-                        "mautic_exported": True,
-                    }
+        for partner in self.sudo():
+            if partner.company_type != "person":
+                skipped += 1
+                details.append(
+                    f"Skip: '{partner.display_name}' is not a contact (person)."
                 )
-                self.env["mautic.sync.log"].create(
-                    {
-                        "sync_type": "contact",
-                        "execution_time": fields.Datetime.now(),
-                        "total_processed": 1,
-                        "success_count": 1,
-                        "error_count": 0,
-                        "log_detail": f"Contact '{self.name}' "
-                        "exported successfully (Mautic ID: {self.mautic_id}).",
-                        "state": "done",
-                    }
-                )
-                return {
-                    "type": "ir.actions.client",
-                    "tag": "display_notification",
-                    "params": {
-                        "title": _("Importação concluída"),
-                        "sticky": False,
-                        "type": "success",
-                    },
-                }
-            else:
-                error_message = f"Error exporting contact '{self.name}'"
-                self.env["mautic.sync.log"].create(
-                    {
-                        "sync_type": "contact",
-                        "execution_time": fields.Datetime.now(),
-                        "total_processed": 1,
-                        "success_count": 0,
-                        "error_count": 1,
-                        "log_detail": error_message,
-                        "state": "error",
-                    }
-                )
-                raise UserError(
-                    _("Unexpected response from Mautic when exporting contact.")
-                )
+                continue
+            if partner.mautic_id:
+                check_url = f"{base}/api/contacts/{partner.mautic_id}"
+                try:
+                    r = requests.get(check_url, headers=headers, timeout=30)
+                    if r.status_code == 404:
+                        partner.write({"mautic_id": False, "mautic_exported": False})
+                    else:
+                        r.raise_for_status()
+                        skipped += 1
+                        details.append(
+                            f"Skip: '{partner.display_name}' already exported "
+                            f"(Mautic ID {partner.mautic_id})."
+                        )
+                        continue
+                except requests.RequestException as e:
+                    _logger.warning(
+                        "Error checking contact %s on Mautic: %s",
+                        partner.display_name,
+                        e,
+                    )
+            firstname, middlename, lastname = self._split_name(partner.name or "")
+            payload = {
+                "firstname": firstname,
+                "middlename": middlename,
+                "lastname": lastname,
+                "email": partner.email or "",
+                "city": partner.city or "",
+                "country": partner.country_id.with_context(lang="en_US").name
+                if partner.country_id
+                else "",
+                "zipcode": partner.zip or "",
+                "phone": partner.phone or "",
+                "address1": partner.street or "",
+                "address2": partner.street2 or "",
+                "isuser": True,
+            }
+            if partner.state_id:
+                st = unicodedata.normalize("NFKD", partner.state_id.name or "")
+                st = "".join(c for c in st if not unicodedata.combining(c))
+                payload["state"] = st
+            if partner.parent_id and partner.parent_id.name:
+                payload["company"] = partner.parent_id.name
 
-        except requests.RequestException as e:
-            raise UserError(_("Error communicating with Mautic: %s") % str(e))
+            resp = None
+            try:
+                resp = requests.post(
+                    create_url, data=json.dumps(payload), headers=headers, timeout=30
+                )
+                resp.raise_for_status()
+                data = resp.json() or {}
+                contact_data = data.get("contact") or {}
+                mautic_id = contact_data.get("id")
+
+                if mautic_id:
+                    partner.write(
+                        {"mautic_id": str(mautic_id), "mautic_exported": True}
+                    )
+                    success += 1
+                    details.append(
+                        f"OK: '{partner.display_name}' → Mautic ID {mautic_id}"
+                    )
+                else:
+                    errors += 1
+                    details.append(
+                        f"ERR: '{partner.display_name}' unexpected response (no contact.id)"
+                    )
+
+            except requests.RequestException as e:
+                msg = str(e)
+                if resp is not None:
+                    try:
+                        err_json = resp.json()
+                        if isinstance(err_json, dict) and "errors" in err_json:
+                            extra = "; ".join(
+                                err.get("message", "") for err in err_json["errors"]
+                            )
+                            if extra:
+                                msg = f"{msg} | {extra}"
+                    except Exception:
+                        pass
+                errors += 1
+                details.append(f"ERR: '{partner.display_name}' → {msg}")
+
+        self.env["mautic.sync.log"].create(
+            {
+                "sync_type": "contact",
+                "execution_time": fields.Datetime.now(),
+                "total_processed": total,
+                "success_count": success,
+                "error_count": errors,
+                "log_detail": "\n".join(details[-200:]),
+                "state": "done" if errors == 0 else ("partial" if success else "error"),
+            }
+        )
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Export finished"),
+                "message": _(
+                    "Total: %(t)s | Exported: %(s)s | Skipped: %(k)s | Errors: %(e)s"
+                )
+                % {"t": total, "s": success, "k": skipped, "e": errors},
+                "type": "success" if errors == 0 else "warning",
+                "sticky": False,
+            },
+        }
 
     @api.model
     def export_company(self):  # noqa: C901
-        if len(self) > 1:
-            raise UserError(_("Please select only one record at a time."))
 
-        if self.company_type != "company":
-            raise UserError(_("This record is not a company."))
+        if not self:
+            return
 
-        if not self.env.company.mautic_access_token:
+        comp = self.env.company
+        if not (comp.mautic_api_url and comp.mautic_access_token):
             raise UserError(
-                _("The company does not have a Mautic access token configured.")
+                _(
+                    "The company does not have Mautic API URL or Access Token configured."
+                )
             )
 
-        url = f"{self.env.company.mautic_api_url}/api/companies/new"
+        base = (comp.mautic_api_url or "").rstrip("/")
         headers = {
-            "Authorization": f"Bearer {self.env.company.mautic_access_token}",
+            "Authorization": f"Bearer {comp.mautic_access_token}",
             "Content-Type": "application/json",
         }
-        data_dict = {}
-        if self.name:
-            data_dict["companyname"] = self.name
-        if self.phone:
-            data_dict["companyphone"] = self.phone
-        if self.email:
-            data_dict["companyemail"] = self.email
-        if self.website:
-            data_dict["companywebsite"] = self.website
-        if self.street:
-            data_dict["companyaddress1"] = self.street
-        if self.street2:
-            data_dict["companyaddress2"] = self.street2
-        if self.city:
-            data_dict["companycity"] = self.city
-        if self.zip:
-            data_dict["companyzipcode"] = self.zip
-        if self.state_id:
-            data_dict["companystate"] = self.state_id.name
-        if self.country_id:
-            country_name_en = self.country_id.with_context(lang="en_US").name
-            data_dict["companycountry"] = country_name_en
+        create_url = f"{base}/api/companies/new"
 
-        data_dict["isuser"] = True
-        payload = json.dumps(data_dict)
-        try:
-            response = requests.post(url, data=payload, headers=headers, timeout=30)
-            response.raise_for_status()
-            res = response.json()
-            company_data = res.get("company")
-            if company_data and company_data.get("id"):
+        total = len(self)
+        success = skipped = errors = 0
+        details = []
+
+        for partner in self.sudo():
+            if partner.company_type != "company":
+                skipped += 1
+                details.append(f"Skip: '{partner.display_name}' is not a company.")
+                continue
+
+            if partner.mautic_id:
+                check_url = f"{base}/api/companies/{partner.mautic_id}"
+                try:
+                    r = requests.get(check_url, headers=headers, timeout=30)
+                    if r.status_code == 404:
+                        partner.write({"mautic_id": False, "mautic_exported": False})
+                    else:
+                        r.raise_for_status()
+                        skipped += 1
+                        details.append(
+                            f"Skip: '{partner.display_name}' already exported "
+                            f"(Mautic ID {partner.mautic_id})."
+                        )
+                        continue
+                except requests.RequestException as e:
+                    _logger.warning(
+                        "Error checking company %s on Mautic: %s",
+                        partner.display_name,
+                        e,
+                    )
+
+            data = {}
+            if partner.name:
+                data["companyname"] = partner.name[:64]
+            if partner.phone:
+                data["companyphone"] = partner.phone
+            if partner.email:
+                data["companyemail"] = partner.email
+            if partner.website:
+                data["companywebsite"] = partner.website
+            if partner.street:
+                data["companyaddress1"] = partner.street
+            if partner.street2:
+                data["companyaddress2"] = partner.street2
+            if partner.city:
+                data["companycity"] = partner.city
+            if partner.zip:
+                data["companyzipcode"] = partner.zip
+            if partner.state_id:
+                st = unicodedata.normalize("NFKD", partner.state_id.name)
+                st = "".join(c for c in st if not unicodedata.combining(c))
+                data["companystate"] = st
+            if partner.country_id:
+                data["companycountry"] = partner.country_id.with_context(
+                    lang="en_US"
+                ).name
+            data["isuser"] = True
+
+            resp = None
+            try:
+                resp = requests.post(
+                    create_url, data=json.dumps(data), headers=headers, timeout=30
+                )
+                resp.raise_for_status()
+                payload = resp.json() or {}
+                company_data = payload.get("company") or {}
                 mautic_id = company_data.get("id")
-                self.write(
-                    {
-                        "mautic_id": str(mautic_id),
-                        "mautic_exported": True,
-                    }
-                )
-                self.env["mautic.sync.log"].create(
-                    {
-                        "sync_type": "company",
-                        "execution_time": fields.Datetime.now(),
-                        "total_processed": 1,
-                        "success_count": 1,
-                        "error_count": 0,
-                        "log_detail": f"Empresa '{self.name}' "
-                        "exportada com sucesso (ID Mautic: {mautic_id}).",
-                        "state": "done",
-                    }
-                )
+                if mautic_id:
+                    partner.write(
+                        {
+                            "mautic_id": str(mautic_id),
+                            "mautic_exported": True,
+                        }
+                    )
+                    success += 1
+                    details.append(
+                        f"OK: '{partner.display_name}' → Mautic ID {mautic_id}"
+                    )
+                else:
+                    errors += 1
+                    details.append(
+                        f"ERR: '{partner.display_name}' unexpected response (no company.id)"
+                    )
+            except requests.RequestException as e:
+                msg = str(e)
+                if resp is not None:
+                    try:
+                        err_json = resp.json()
+                        if isinstance(err_json, dict) and "errors" in err_json:
+                            extra = "; ".join(
+                                err.get("message", "") for err in err_json["errors"]
+                            )
+                            if extra:
+                                msg = f"{msg} | {extra}"
+                    except Exception:
+                        pass
+                errors += 1
+                details.append(f"ERR: '{partner.display_name}' → {msg}")
 
-                return {
-                    "type": "ir.actions.client",
-                    "tag": "display_notification",
-                    "params": {
-                        "title": _("Importação concluída"),
-                        "sticky": False,
-                        "type": "success",
-                    },
-                }
-            else:
-                raise UserError(
-                    _("Error exporting company: unexpected response from Mautic.")
+        self.env["mautic.sync.log"].create(
+            {
+                "sync_type": "company",
+                "execution_time": fields.Datetime.now(),
+                "total_processed": total,
+                "success_count": success,
+                "error_count": errors,
+                "log_detail": "\n".join(details[-200:]),
+                "state": "done" if errors == 0 else ("partial" if success else "error"),
+            }
+        )
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Export finished"),
+                "message": _(
+                    "Total: %(t)s | Exported: %(s)s | Skipped: %(k)s | Errors: %(e)s"
                 )
-        except requests.RequestException as e:
-            error_message = f"Erro ao exportar '{self.name}' para o Mautic: {str(e)}"
-
-            self.env["mautic.sync.log"].create(
-                {
-                    "sync_type": "company",
-                    "execution_time": fields.Datetime.now(),
-                    "total_processed": 1,
-                    "success_count": 0,
-                    "error_count": 1,
-                    "log_detail": error_message,
-                    "state": "error",
-                }
-            )
-
-            raise UserError(_("Error communicating with Mautic: %s") % str(e))
+                % {"t": total, "s": success, "k": skipped, "e": errors},
+                "type": "success" if errors == 0 else "warning",
+                "sticky": False,
+            },
+        }
 
     @api.model
     def cron_export_company_to_mautic(self):
@@ -228,7 +324,7 @@ class ResPartner(models.Model):
                 ("mautic_exported", "=", False),
                 ("is_company", "=", True),
             ],
-            limit=1,
+            limit=100,
         )
 
         for partner in partners:

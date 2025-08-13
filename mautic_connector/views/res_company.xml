@@ -47,11 +47,20 @@
                             icon="fa-arrow-circle-down"
                         />
                     </group>
-                     <group>
+                    <group>
                      <button
                             string='Import Companies'
                             type="object"
                             name="import_company"
+                            class="oe_highlight"
+                            icon="fa-arrow-circle-down"
+                        />
+                    </group>
+                    <group>
+                     <button
+                            string='Import Leads'
+                            type="object"
+                            name="import_leads"
                             class="oe_highlight"
                             icon="fa-arrow-circle-down"
                         />

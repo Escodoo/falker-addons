@@ -1,4 +1,41 @@
 <odoo>
+
+    <record id="view_mautic_sync_log_search" model="ir.ui.view">
+    <field name="name">mautic.sync.log.search</field>
+    <field name="model">mautic.sync.log</field>
+    <field name="arch" type="xml">
+      <search string="Search Logs">
+        <field
+                    name="name"
+                    filter_domain="['|', ('name','ilike', self), ('log_detail','ilike', self)]"
+                />
+
+        <filter name="state_error" string="Error" domain="[('state', '=', 'error')]" />
+        <filter name="state_done" string="Done" domain="[('state', '=', 'done')]" />
+        <filter
+                    name="state_partial"
+                    string="Partial"
+                    domain="[('state', '=', 'partial')]"
+                />
+
+        <group expand="0" string="Group By...">
+          <filter
+                        name="group_sync_type"
+                        string="Type"
+                        context="{'group_by': 'sync_type'}"
+                    />
+          <filter name="group_state" string="Status" context="{'group_by': 'state'}" />
+          <filter
+                        name="group_day"
+                        string="Day"
+                        context="{'group_by': 'execution_time:day'}"
+                    />
+        </group>
+      </search>
+    </field>
+</record>
+
+
   <record id="view_mautic_sync_log_tree" model="ir.ui.view">
     <field name="name">mautic.sync.log.tree</field>
     <field name="model">mautic.sync.log</field>

@@ -3,7 +3,7 @@
      <record model="ir.actions.server" id="export_partner_to_mautic">
         <field name="name">Contact Export to mautic</field>
         <field name="model_id" ref="base.model_res_partner" />
-       <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_model_id" ref="base.model_res_partner" />
         <field name="state">code</field>
         <field name="code">if records:
         action = records.export_contact()
@@ -13,7 +13,7 @@
     <record model="ir.actions.server" id="export_partner_to_mautic_company">
         <field name="name">Company Export to mautic</field>
         <field name="model_id" ref="base.model_res_partner" />
-       <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_model_id" ref="base.model_res_partner" />
         <field name="state">code</field>
         <field name="code">if records:
         action = records.export_company()
