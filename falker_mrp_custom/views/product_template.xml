@@ -4,33 +4,29 @@
 <odoo>
 
     <record model="ir.ui.view" id="product_template_form_view">
-        <field
-            name="name"
-        >product.template.common.form (in falker_mrp_production_byproduct_cost_share_custom)</field>
+        <field name="name">product.template.common.form (in falker_mrp_custom)</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//label[@for='standard_price']" position="attributes">
                 <attribute name="groups">
-                    falker_mrp_production_byproduct_cost_share_custom.group_falker_cost_info</attribute>
+                    falker_mrp_custom.group_falker_cost_info</attribute>
             </xpath>
             <xpath expr="//div[@name='standard_price_uom']" position="attributes">
                 <attribute name="groups">
-                    falker_mrp_production_byproduct_cost_share_custom.group_falker_cost_info</attribute>
+                    falker_mrp_custom.group_falker_cost_info</attribute>
             </xpath>
         </field>
     </record>
 
     <record model="ir.ui.view" id="product_template_tree_view">
-        <field
-            name="name"
-        >product.template.product.tree (in falker_mrp_production_byproduct_cost_share_custom)</field>
+        <field name="name">product.template.product.tree (in falker_mrp_custom)</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_tree_view" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='standard_price']" position="attributes">
                 <attribute name="groups">
-                    falker_mrp_production_byproduct_cost_share_custom.group_falker_cost_info</attribute>
+                    falker_mrp_custom.group_falker_cost_info</attribute>
             </xpath>
         </field>
     </record>

@@ -4,15 +4,13 @@
 <odoo>
 
     <record model="ir.ui.view" id="product_product_tree_view">
-        <field
-            name="name"
-        >product.product.tree (in falker_mrp_production_byproduct_cost_share_custom)</field>
+        <field name="name">product.product.tree (in falker_mrp_custom)</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_product_tree_view" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='standard_price']" position="attributes">
                 <attribute name="groups">
-                    falker_mrp_production_byproduct_cost_share_custom.group_falker_cost_info</attribute>
+                    falker_mrp_custom.group_falker_cost_info</attribute>
             </xpath>
         </field>
     </record>
