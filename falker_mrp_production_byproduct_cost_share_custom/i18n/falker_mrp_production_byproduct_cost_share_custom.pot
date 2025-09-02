@@ -1,0 +1,55 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* falker_mrp_production_byproduct_cost_share_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: falker_mrp_production_byproduct_cost_share_custom
+#: model:ir.model,name:falker_mrp_production_byproduct_cost_share_custom.model_mrp_bom
+msgid "Bill of Material"
+msgstr ""
+
+#. module: falker_mrp_production_byproduct_cost_share_custom
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_mrp_bom__display_name
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_product_product__display_name
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_product_template__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: falker_mrp_production_byproduct_cost_share_custom
+#: model:res.groups,name:falker_mrp_production_byproduct_cost_share_custom.group_falker_cost_info
+msgid "Falker - Cost Info"
+msgstr ""
+
+#. module: falker_mrp_production_byproduct_cost_share_custom
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_mrp_bom__id
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_product_product__id
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_product_template__id
+msgid "ID"
+msgstr ""
+
+#. module: falker_mrp_production_byproduct_cost_share_custom
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_mrp_bom____last_update
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_product_product____last_update
+#: model:ir.model.fields,field_description:falker_mrp_production_byproduct_cost_share_custom.field_product_template____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: falker_mrp_production_byproduct_cost_share_custom
+#: model:ir.model,name:falker_mrp_production_byproduct_cost_share_custom.model_product_product
+msgid "Product"
+msgstr ""
+
+#. module: falker_mrp_production_byproduct_cost_share_custom
+#: model:ir.model,name:falker_mrp_production_byproduct_cost_share_custom.model_product_template
+msgid "Product Template"
+msgstr ""
