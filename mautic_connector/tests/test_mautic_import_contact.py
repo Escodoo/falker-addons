@@ -82,7 +82,10 @@ class TestMauticImportContacts(TransactionCase):
         self.assertIn("tag", result)
         self.assertEqual(result["tag"], "display_notification")
         self.assertIn("params", result)
-        self.assertIn("Sucesso: 1", result["params"]["message"])
+        self.assertIn(
+            "Total: 2 | Criadas: 1 | Atualizadas: 0 | Ignoradas (nome): 0",
+            result["params"]["message"],
+        )
 
         contact = self.env["res.partner"].search([("mautic_id", "=", "5")], limit=1)
         self.assertTrue(contact)

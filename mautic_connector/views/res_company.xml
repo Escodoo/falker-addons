@@ -38,33 +38,27 @@
                             <field name="mautic_auth_code" />
                             <field name="mautic_access_token" />
                     </group>
-                    <group>
                      <button
-                            string='Import Contacts'
-                            type="object"
-                            name="import_contacts"
-                            class="oe_highlight"
-                            icon="fa-arrow-circle-down"
-                        />
-                    </group>
-                    <group>
+                        string='Import Contacts'
+                        type="object"
+                        name="import_contacts"
+                        class="oe_highlight"
+                        icon="fa-arrow-circle-down"
+                    />
                      <button
-                            string='Import Companies'
-                            type="object"
-                            name="import_company"
-                            class="oe_highlight"
-                            icon="fa-arrow-circle-down"
-                        />
-                    </group>
-                    <group>
+                        string='Import Companies'
+                        type="object"
+                        name="import_company"
+                        class="oe_highlight"
+                        icon="fa-arrow-circle-down"
+                    />
                      <button
-                            string='Import Leads'
-                            type="object"
-                            name="import_leads"
-                            class="oe_highlight"
-                            icon="fa-arrow-circle-down"
-                        />
-                    </group>
+                        string='Import Leads'
+                        type="object"
+                        name="import_leads"
+                        class="oe_highlight"
+                        icon="fa-arrow-circle-down"
+                    />
                 </page>
             </xpath>
         </field>

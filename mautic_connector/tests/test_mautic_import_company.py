@@ -1,11 +1,6 @@
-# Copyright 2025 - TODAY, Cristiano Mafra Junior <cristiano.mafra@escodoo.com.br>
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-import logging
 from unittest.mock import MagicMock, patch
 
 from odoo.tests.common import TransactionCase
-
-_logger = logging.getLogger(__name__)
 
 
 class TestMauticImportCompany(TransactionCase):
@@ -17,9 +12,9 @@ class TestMauticImportCompany(TransactionCase):
 
     @patch("requests.get")
     def test_import_company_success(self, mock_get):
-        mock_response = MagicMock()
-        mock_response.raise_for_status.return_value = None
-        mock_response.json.return_value = {
+        page1 = MagicMock()
+        page1.raise_for_status.return_value = None
+        page1.json.return_value = {
             "companies": {
                 "1": {
                     "id": "1",
@@ -41,8 +36,11 @@ class TestMauticImportCompany(TransactionCase):
                 }
             }
         }
-        mock_get.return_value = mock_response
+        page2 = MagicMock()
+        page2.raise_for_status.return_value = None
+        page2.json.return_value = {"companies": {}}
 
+        mock_get.side_effect = [page1, page2]
         country = self.env["res.country"].search(
             [("name", "=", "United States")], limit=1
         )
@@ -58,15 +56,13 @@ class TestMauticImportCompany(TransactionCase):
                 {"name": "California", "code": "CA", "country_id": country.id}
             )
         result = self.company.import_company()
-
         self.assertIn("type", result)
         self.assertEqual(result["type"], "ir.actions.client")
         self.assertIn("tag", result)
         self.assertEqual(result["tag"], "display_notification")
         self.assertIn("params", result)
         self.assertIn("message", result["params"])
-        self.assertIn("Sucesso: 1", result["params"]["message"])
-
+        self.assertIn("Criadas: 1", result["params"]["message"])
         partner = self.env["res.partner"].search(
             [("mautic_company_id", "=", "1")], limit=1
         )
@@ -76,3 +72,4 @@ class TestMauticImportCompany(TransactionCase):
         self.assertEqual(partner.city, "Cidade Teste")
         self.assertEqual(partner.state_id, state)
         self.assertEqual(partner.country_id, country)
+        self.assertEqual(mock_get.call_count, 2)

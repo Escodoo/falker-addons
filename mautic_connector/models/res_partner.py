@@ -140,8 +140,10 @@ class ResPartner(models.Model):
                             )
                             if extra:
                                 msg = f"{msg} | {extra}"
-                    except Exception:
-                        pass
+                    except Exception as err:
+                        _logger.debug(
+                            "Falha ao interpretar resposta JSON do Mautic: %s", err
+                        )
                 errors += 1
                 details.append(f"ERR: '{partner.display_name}' → {msg}")
 
@@ -286,8 +288,10 @@ class ResPartner(models.Model):
                             )
                             if extra:
                                 msg = f"{msg} | {extra}"
-                    except Exception:
-                        pass
+                    except Exception as err:
+                        _logger.debug(
+                            "Falha ao interpretar resposta JSON do Mautic: %s", err
+                        )
                 errors += 1
                 details.append(f"ERR: '{partner.display_name}' → {msg}")
 

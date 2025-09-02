@@ -22,7 +22,7 @@ class MauticSyncLog(models.Model):
     execution_time = fields.Datetime(
         string="Execution Date", default=fields.Datetime.now
     )
-    total_processed = fields.Integer(string="Total Processed")
+    total_processed = fields.Integer()
     success_count = fields.Integer(string="Successes")
     error_count = fields.Integer(string="Failures")
     log_detail = fields.Text(string="Details")
