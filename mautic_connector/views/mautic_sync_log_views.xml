@@ -40,7 +40,7 @@
     <field name="name">mautic.sync.log.tree</field>
     <field name="model">mautic.sync.log</field>
     <field name="arch" type="xml">
-      <tree string="Logs de Sincronização">
+      <tree>
         <field name="execution_time" />
         <field name="sync_type" />
         <field name="total_processed" />

@@ -53,8 +53,8 @@ class ResCompany(models.Model):
                 f"&response_type=code"
             )
             return {"type": "ir.actions.act_url", "url": url, "target": "new"}
-        except Exception:
-            raise ValidationError(_("Fill up the correct information...!!"))
+        except Exception as err:
+            raise ValidationError(_("Fill up the correct information...!!")) from err
 
     def refresh_token(self):
         try:
@@ -67,8 +67,8 @@ class ResCompany(models.Model):
                 + "&response_type=code&grant_type=refresh_token&code=UNIQUE_CODE_STRING"
             )
             return {"type": "ir.actions.act_url", "url": url, "target": "new"}
-        except Exception:
-            raise ValidationError(_("Fill up the correct information...!!"))
+        except Exception as err:
+            raise ValidationError(_("Fill up the correct information...!!")) from err
 
     def _norm(self, s):
         if not s:
@@ -169,13 +169,16 @@ class ResCompany(models.Model):
                     existing_name = None
                     if not existing:
                         existing_name = Partner.search(
-                            [("name", "=", full_name), ("company_type", "=", "person")],
+                            [
+                                ("name", "=", full_name),
+                                ("is_company", "=", False),
+                            ],
                             limit=1,
                         )
                         if not existing_name:
                             candidates = Partner.search(
                                 [
-                                    ("company_type", "=", "person"),
+                                    ("is_company", "=", False),
                                     ("name", "ilike", full_name),
                                 ]
                             )
@@ -268,21 +271,31 @@ class ResCompany(models.Model):
                 "params": {
                     "title": _("Importação concluída"),
                     "message": _(
-                        "Total: %s | Criadas: %s | Atualizadas: %s | Ignoradas (nome): %s"
+                        "Total: %(total)s | Criadas: %(created)s | "
+                        "Atualizadas: %(updated)s | Ignoradas (nome): %(skipped)s"
                     )
-                    % (total, len(created), len(updated), len(skipped)),
+                    % {
+                        "total": total,
+                        "created": len(created),
+                        "updated": len(updated),
+                        "skipped": len(skipped),
+                    },
                     "sticky": False,
                     "type": "success",
                 },
             }
 
         except (requests.RequestException, ValueError) as e:
-            _logger.error(f"Error accessing Mautic contacts API: {str(e)}")
-            raise UserError(_("Error fetching contact data from Mautic. Check logs."))
+            _logger.error("Error accessing Mautic contacts API: %s", e)
+            raise UserError(
+                _("Error fetching contact data from Mautic. Check logs.")
+            ) from e
 
-        except Exception:
+        except Exception as err:
             _logger.exception("Unexpected error importing contacts.")
-            raise UserError(_("Unexpected error importing contacts. Check logs."))
+            raise UserError(
+                _("Unexpected error importing contacts. Check logs.")
+            ) from err
 
     def import_company(self):  # noqa: C901
 
@@ -409,20 +422,30 @@ class ResCompany(models.Model):
                 "tag": "display_notification",
                 "params": {
                     "title": _("Importação concluída"),
-                    "message": _("Total: %s | Criadas: %s | Ignoradas: %s")
-                    % (total, len(created), len(skipped)),
+                    "message": _(
+                        "Total: %(total)s | Criadas: %(created)s | Ignoradas: %(skipped)s"
+                    )
+                    % {
+                        "total": total,
+                        "created": len(created),
+                        "skipped": len(skipped),
+                    },
                     "sticky": False,
                     "type": "success",
                 },
             }
 
-        except (requests.RequestException, ValueError) as e:
-            _logger.error(f"Erro ao acessar API do Mautic: {str(e)}")
-            raise UserError(_("Error fetching company data from Mautic. Check logs."))
+        except (requests.RequestException, ValueError) as err:
+            _logger.error("Erro ao acessar API do Mautic: %s", err)
+            raise UserError(
+                _("Error fetching company data from Mautic. Check logs.")
+            ) from err
 
-        except Exception:
+        except Exception as err:
             _logger.exception("Unexpected error importing companies.")
-            raise UserError(_("Unexpected error importing companies. Check logs."))
+            raise UserError(
+                _("Unexpected error importing companies. Check logs.")
+            ) from err
 
     def import_leads(self):  # noqa: C901
         headers = {
@@ -573,19 +596,25 @@ class ResCompany(models.Model):
                 "params": {
                     "title": _("Importação de Leads concluída"),
                     "message": _(
-                        "Total: %s | Criados: %s | Atualizados: %s | Ignorados (sem e-mail): %s"
+                        "Total: %(total)s | Criados: %(created)s | "
+                        "Atualizados: %(updated)s | Ignorados (sem e-mail): %(skipped)s"
                     )
-                    % (total, len(created), len(updated), skipped_no_email),
+                    % {
+                        "total": total,
+                        "created": len(created),
+                        "updated": len(updated),
+                        "skipped": skipped_no_email,
+                    },
                     "sticky": False,
                     "type": "success",
                 },
             }
 
-        except (requests.RequestException, ValueError) as e:
-            _logger.error(f"Erro acessando API do Mautic: {e}")
-            raise UserError(_("Erro ao buscar dados de Leads do Mautic."))
-        except Exception:
+        except (requests.RequestException, ValueError) as err:
+            _logger.error("Erro acessando API do Mautic: %s", err)
+            raise UserError(_("Erro ao buscar dados de Leads do Mautic.")) from err
+        except Exception as err:
             _logger.exception("Erro inesperado na importação de Leads.")
             raise UserError(
                 _("Erro inesperado na importação de Leads. Verifique os logs.")
-            )
+            ) from err

@@ -2,10 +2,10 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from unittest.mock import patch
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class TestExportCustomer(SavepointCase):
+class TestExportCustomer(TransactionCase):
     def setUp(self):
         super().setUp()
         self.company = self.env.ref("base.main_company")
