@@ -21,4 +21,27 @@
 
     </record>
 
+    <record id="l10n_br_base_partner_form" model="ir.ui.view">
+        <field name="name">l10n_br_base.res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="priority">99</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <page position="after" name="sales_purchases">
+                <page
+                    string="Mautic"
+                    name="Mautic"
+                    groups="mautic_connector.group_mautic_admin,mautic_connector.group_mautic_user"
+                >
+                    <group name="mautic">
+                        <field name="mautic_id" />
+                        <field name="mautic_exported" />
+                        <field name="mautic_is_update" />
+                        <field name="mautic_custom_fields" readonly="1" />
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+
 </odoo>

@@ -1,0 +1,11 @@
+<odoo>
+  <record id="group_mautic_admin" model="res.groups">
+    <field name="name">Administrador do Mautic</field>
+    <field name="category_id" ref="base.module_category_tools" />
+  </record>
+
+  <record id="group_mautic_user" model="res.groups">
+    <field name="name">Usuário do Mautic</field>
+    <field name="category_id" ref="base.module_category_tools" />
+  </record>
+</odoo>

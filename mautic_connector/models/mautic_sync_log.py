@@ -8,24 +8,27 @@ class MauticSyncLog(models.Model):
     _description = "Synchronization Log with Mautic"
     _order = "execution_time desc"
 
-    name = fields.Char()
+    name = fields.Char(readonly=True)
 
     sync_type = fields.Selection(
         [
             ("contact", "Contact"),
             ("company", "Company"),
             ("lead", "Lead"),
+            ("segment", "Segment"),
+            ("tag", "Tag"),
         ],
         required=True,
+        readonly=True,
     )
 
     execution_time = fields.Datetime(
-        string="Execution Date", default=fields.Datetime.now
+        string="Execution Date", default=fields.Datetime.now, readonly=True
     )
-    total_processed = fields.Integer()
-    success_count = fields.Integer(string="Successes")
-    error_count = fields.Integer(string="Failures")
-    log_detail = fields.Text(string="Details")
+    total_processed = fields.Integer(readonly=True)
+    success_count = fields.Integer(string="Successes", readonly=True)
+    error_count = fields.Integer(string="Failures", readonly=True)
+    log_detail = fields.Text(string="Details", readonly=True)
     state = fields.Selection(
         [
             ("done", "Done"),
@@ -33,6 +36,7 @@ class MauticSyncLog(models.Model):
             ("partial", "Partial"),
         ],
         default="done",
+        readonly=True,
     )
 
     @api.depends("sync_type", "execution_time", "success_count", "error_count")
