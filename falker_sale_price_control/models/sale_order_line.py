@@ -4,73 +4,45 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
+    # Mirrors price_unit; editable only via inverse for permitted users.
     fiscal_price = fields.Float(
-        string="Preço Fiscal",
         compute="_compute_fiscal_price",
+        inverse="_inverse_fiscal_price",
+        store=True,  # Stored for reporting/performance
     )
 
-    @api.depends("price_unit", "fiscal_tax_ids", "product_id", "order_id.pricelist_id")
+    # ----------------------------
+    # Compute / Inverse
+    # ----------------------------
+    @api.depends("price_unit")
     def _compute_fiscal_price(self):
+        """
+        Mirror price_unit into fiscal_price.
+        Keep it pure: no writes, no early returns, no super() call.
+        """
         for line in self:
-            if hasattr(super(), "_compute_fiscal_price"):
-                return super(SaleOrderLine, line)._compute_fiscal_price()
-            else:
+            line.fiscal_price = line.price_unit
+
+    def _inverse_fiscal_price(self):
+        """
+        If the user has the editor group, push fiscal_price -> price_unit.
+        Otherwise, ignore edits and mirror back (fiscal_price := price_unit).
+        Context guard is used to reduce re-entrancy risks if other modules
+        override write().
+        """
+        can_edit = self.env.user.has_group(
+            "falker_sale_price_control.group_price_editor"
+        )
+
+        if not can_edit:
+            # Revert any attempted edit for non-permitted users
+            for line in self:
                 line.fiscal_price = line.price_unit
+            return
 
-    def write(self, vals):
-        if self.env.user.has_group("falker_sale_price_control.group_price_editor"):
-            # Users with permission - price synchronization
-            if "price_unit" in vals:
-                vals["fiscal_price"] = vals["price_unit"]
-            elif "fiscal_price" in vals:
-                vals["price_unit"] = vals["fiscal_price"]
-        else:
-            # Users without permission - apply rules
-            if "pricelist_id" not in vals and any(
-                line.order_id.pricelist_id.id
-                != self.env.context.get("default_pricelist_id")
-                for line in self
-                if line.order_id
-            ):
-                vals["price_unit"] = self._get_price_from_pricelist()
-
-            if "product_id" in vals:
-                for line in self:
-                    order = line.order_id
-                    product = self.env["product.product"].browse(vals["product_id"])
-                    quantity = vals.get("product_uom_qty", line.product_uom_qty)
-
-                    if order.pricelist_id:
-                        price = order.pricelist_id.with_context(
-                            uom=product.uom_id.id, date=order.date_order
-                        )._get_product_price(product, quantity)
-
-                        vals["price_unit"] = price
-                        vals["fiscal_price"] = price
-
-        return super().write(vals)
-
-    def _get_price_from_pricelist(self):
-        """Get price from price list"""
-        self.ensure_one()
-
-        if not self.product_id or self.display_type == "line_note":
-            return 0.0
-
-        return self.order_id.pricelist_id.with_context(
-            uom=self.product_uom.id, date=self.order_id.date_order
-        )._get_product_price(self.product_id, self.product_uom_qty)
-
-    @api.onchange("product_id", "product_uom_qty")
-    def _onchange_product_quantity(self):
-        """Att price when change product or quantity"""
-        if not self.env.user.has_group("falker_sale_price_control.group_price_editor"):
-            if self.product_id:
-                price = self._get_price_from_pricelist()
-                self.price_unit = price
-                self.fiscal_price = price
-
-        # Onchange original from Odoo
-        if hasattr(super(), "product_id_change"):
-            return super().product_id_change()
-        self._compute_tax_id()
+        # Permitted users: assign price_unit from fiscal_price
+        for line in self:
+            # Guard context to avoid potential re-entrancy through other overrides
+            line.with_context(skip_fiscal_sync=True).write(
+                {"price_unit": line.fiscal_price}
+            )
