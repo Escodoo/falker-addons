@@ -1,6 +1,6 @@
 <odoo>
 
-    <record id="view_mautic_sync_log_search" model="ir.ui.view">
+  <record id="view_mautic_sync_log_search" model="ir.ui.view">
     <field name="name">mautic.sync.log.search</field>
     <field name="model">mautic.sync.log</field>
     <field name="arch" type="xml">
@@ -9,7 +9,6 @@
                     name="name"
                     filter_domain="['|', ('name','ilike', self), ('log_detail','ilike', self)]"
                 />
-
         <filter name="state_error" string="Error" domain="[('state', '=', 'error')]" />
         <filter name="state_done" string="Done" domain="[('state', '=', 'done')]" />
         <filter
@@ -33,14 +32,13 @@
         </group>
       </search>
     </field>
-</record>
-
+  </record>
 
   <record id="view_mautic_sync_log_tree" model="ir.ui.view">
     <field name="name">mautic.sync.log.tree</field>
     <field name="model">mautic.sync.log</field>
     <field name="arch" type="xml">
-      <tree>
+      <tree create="false">
         <field name="execution_time" />
         <field name="sync_type" />
         <field name="total_processed" />
@@ -56,15 +54,21 @@
     <field name="model">mautic.sync.log</field>
     <field name="arch" type="xml">
       <form string="Detalhes do Log">
-        <group>
-          <field name="execution_time" />
-          <field name="sync_type" />
-          <field name="total_processed" />
-          <field name="success_count" />
-          <field name="error_count" />
-          <field name="state" />
-          <field name="log_detail" />
-        </group>
+        <sheet>
+          <group>
+            <field name="execution_time" />
+            <field name="sync_type" />
+          </group>
+          <group>
+            <field name="total_processed" />
+            <field name="success_count" />
+            <field name="error_count" />
+            <field name="state" />
+          </group>
+          <group>
+            <field name="log_detail" />
+          </group>
+        </sheet>
       </form>
     </field>
   </record>
@@ -74,14 +78,8 @@
     <field name="res_model">mautic.sync.log</field>
     <field name="view_mode">tree,form</field>
     <field name="view_id" ref="view_mautic_sync_log_tree" />
+    <field name="context">{}</field>
+    <field name="target">current</field>
   </record>
 
-  <menuitem id="menu_mautic_root" name="Mautic" sequence="10" />
-  <menuitem id="menu_mautic_logs" name="Logs" parent="menu_mautic_root" sequence="20" />
-  <menuitem
-        id="menu_mautic_sync_log"
-        name="Histórico de Logs"
-        parent="menu_mautic_logs"
-        action="action_mautic_sync_log"
-    />
 </odoo>
