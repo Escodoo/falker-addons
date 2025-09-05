@@ -8,21 +8,21 @@
     "license": "AGPL-3",
     "depends": [
         "account",
-        "sale",
-        "sale_management",
-        "account_asset_management",
         "crm",
     ],
     "data": [
         # Security
+        "security/mautic_groups.xml",
         "security/ir.model.access.csv",
         # Data
         "data/mautic_cron.xml",
-        "data/crm_tag_falker.xml",
         # Views
         "views/res_company.xml",
         "views/res_partner.xml",
         "views/mautic_sync_log_views.xml",
+        "views/mautic_segment_views.xml",
+        "views/mautic_tag_views.xml",
+        "views/mautic_menus.xml",
     ],
     "installable": True,
     "auto_install": False,

@@ -1,0 +1,44 @@
+<odoo>
+
+  <record id="view_mautic_segment_tree" model="ir.ui.view">
+    <field name="name">mautic.segment.tree</field>
+    <field name="model">mautic.segment</field>
+    <field name="arch" type="xml">
+      <tree create="false">
+        <field name="name_mautic" />
+        <field name="external_id" />
+        <field name="auto_create_lead" />
+        <field name="active" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_mautic_segment_form" model="ir.ui.view">
+    <field name="name">mautic.segment.form</field>
+    <field name="model">mautic.segment</field>
+    <field name="arch" type="xml">
+      <form string="Segmento">
+        <sheet>
+          <group>
+            <field name="name_mautic" readonly="1" />
+            <field name="external_id" readonly="1" />
+          </group>
+          <group>
+            <field name="auto_create_lead" />
+            <field name="active" />
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_mautic_segment" model="ir.actions.act_window">
+    <field name="name">Segmentos</field>
+    <field name="res_model">mautic.segment</field>
+    <field name="view_mode">tree,form</field>
+    <field name="view_id" ref="view_mautic_segment_tree" />
+    <field name="context">{}</field>
+    <field name="target">current</field>
+  </record>
+
+</odoo>

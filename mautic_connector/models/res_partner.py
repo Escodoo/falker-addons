@@ -3,6 +3,7 @@
 import json
 import logging
 import unicodedata
+from urllib.parse import quote
 
 import requests
 
@@ -11,18 +12,43 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-
-class AccountAssetProfile(models.Model):
-    _inherit = "account.asset.profile"
-    x_type_id = fields.Char("x_type_id")
+_MAUTIC_NATIVE_KEYS = {
+    "firstname",
+    "lastname",
+    "name",
+    "email",
+    "position",
+    "company",
+    "company_name",
+    "phone",
+    "mobile",
+    "personal_phone",
+    "website",
+    "address1",
+    "address2",
+    "city",
+    "state",
+    "zipcode",
+    "country",
+    "title",
+    "timezone",
+    "preferred_locale",
+    "id",
+    "dateAdded",
+    "dateModified",
+    "last_active",
+    "owner",
+    "points",
+    "ipAddress",
+}
 
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
-    mautic_company_id = fields.Char("mautic_company_id")
-    mautic_id = fields.Char("Mautic ID")
-    mautic_exported = fields.Boolean("mautic_exported", default=False)
-    mautic_is_update = fields.Boolean("mautic_is_update", default=False)
+    mautic_id = fields.Char(string="Mautic ID", readonly=True)
+    mautic_exported = fields.Boolean("mautic_exported", default=False, readonly=True)
+    mautic_is_update = fields.Boolean("mautic_is_update", default=False, readonly=True)
+    mautic_custom_fields = fields.Text(readonly=True)
 
     @api.model
     def _split_name(self, name):
@@ -32,11 +58,36 @@ class ResPartner(models.Model):
         lastname = parts[-1] if len(parts) > 1 else ""
         return firstname, middlename, lastname
 
+    def _extract_mautic_custom_fields(self, contact_dict: dict):
+        out = {}
+
+        fields_all = (contact_dict.get("fields") or {}).get("all", {}) or {}
+        fields_core = (contact_dict.get("fields") or {}).get("core", {}) or {}
+
+        def _val(v):
+            return (v or {}).get("value") if isinstance(v, dict) else v
+
+        source = {}
+        source.update(fields_all)
+        for k, v in fields_core.items():
+            source.setdefault(k, v)
+
+        for key, raw in source.items():
+            if key in _MAUTIC_NATIVE_KEYS:
+                continue
+            val = _val(raw)
+            if val in (None, "", [], {}):
+                continue
+            out[key] = val
+
+        return out
+
     def export_contact(self):  # noqa: C901
         if not self:
             return
 
         comp = self.env.company
+        comp.refresh_token()
         if not (comp.mautic_api_url and comp.mautic_access_token):
             raise UserError(
                 _(
@@ -175,7 +226,7 @@ class ResPartner(models.Model):
 
     @api.model
     def export_company(self):  # noqa: C901
-
+        self.env.company.refresh_token()
         if not self:
             return
 
@@ -352,3 +403,626 @@ class ResPartner(models.Model):
                 contact.export_contact()
             except Exception as e:
                 _logger.error(f"Erro ao exportar contato ID {contact.id}: {e}")
+
+    def _norm(self, s):
+        if not s:
+            return ""
+        return (
+            "".join(
+                c
+                for c in unicodedata.normalize("NFKD", s)
+                if not unicodedata.combining(c)
+            )
+            .strip()
+            .lower()
+        )
+
+    def _find_state(self, value, country=None):
+        """
+        Busca estado/província por código (SP/CA/BC) ou nome (com/sem acento).
+        `country` pode ser record, id numérico, código ISO2 ou nome.
+        Se não resolver país, faz fallback global (menos preciso).
+        """
+        State = self.env["res.country.state"]
+        Country = self.env["res.country"]
+
+        if not value:
+            return State
+
+        val = str(value).strip()
+        domain = []
+
+        if country:
+            cid = getattr(country, "id", None)
+            if not cid:
+                s = str(country).strip()
+                if s.isdigit():
+                    cid = int(s)
+                else:
+                    c = Country.search(
+                        ["|", ("code", "=", s.upper()), ("name", "=", s)], limit=1
+                    )
+                    if not c:
+                        target = self._norm(s)
+                        for cand in Country.search([]):
+                            if self._norm(cand.name) == target:
+                                c = cand
+                                break
+                    cid = c.id if c else False
+            if cid:
+                domain = [("country_id", "=", cid)]
+
+        st = State.search(domain + [("code", "=", val.upper())], limit=1)
+        if st:
+            return st
+        st = State.search(domain + [("name", "=", val)], limit=1)
+        if st:
+            return st
+        target = self._norm(val)
+        candidates = State.search(domain or []) or State.search([])
+        for s in candidates:
+            if self._norm(s.name) == target:
+                return s
+
+        return State
+
+    def _extract_tag_ids(self, contact: dict):
+        result = []
+        tags = contact.get("tags") or []
+        if isinstance(tags, list):
+            for t in tags:
+                if t and t.get("id") is not None:
+                    result.append(str(t["id"]).strip())
+        elif isinstance(tags, dict):
+            for t in tags.values():
+                if t and t.get("id") is not None:
+                    result.append(str(t["id"]).strip())
+        seen, out = set(), []
+        for x in result:
+            if x and x not in seen:
+                seen.add(x)
+                out.append(x)
+        return out
+
+    def create_leads_from_segments_members(  # noqa: C901
+        self, only_auto=True, page_limit=200
+    ):
+        try:
+            Company = self.env.company.sudo()
+            Company.refresh_token()
+            headers = {
+                "Authorization": f"Bearer {Company.mautic_access_token}",
+                "Content-Type": "application/json",
+            }
+            Seg = self.env["mautic.segment"].sudo()
+            Lead = self.env["crm.lead"].sudo()
+            CrmTag = self.env["crm.tag"].sudo()
+
+            domain = [("active", "=", True)]
+            if only_auto:
+                domain.append(("auto_create_lead", "=", True))
+            segments = Seg.search(domain)
+
+            total_contacts = 0
+            created_leads = 0
+            updated_leads = 0
+            errors = 0
+            messages = []
+
+            partner_by_mautic = {}
+            tag_by_name = {}
+
+            for seg in segments:
+                seg_tag_name = seg.name_mautic or seg.external_id
+                seg_tag = tag_by_name.get(seg_tag_name)
+                if not seg_tag:
+                    seg_tag = CrmTag.search([("name", "=", seg_tag_name)], limit=1)
+                    if not seg_tag:
+                        seg_tag = CrmTag.create({"name": seg_tag_name})
+                    tag_by_name[seg_tag_name] = seg_tag
+
+                search_token = f"segment:{(seg.alias or seg.name_mautic or '').strip()}"
+                if not search_token.endswith(":") and not (
+                    seg.alias or seg.name_mautic
+                ):
+                    messages.append(
+                        f"Segmento {seg.external_id} sem alias/nome para busca."
+                    )
+                    continue
+
+                start = 0
+                while True:
+                    url = (
+                        f"{Company.mautic_api_url}/api/contacts"
+                        f"?limit={page_limit}&start={start}&search={quote(search_token)}"
+                    )
+                    try:
+                        res = requests.get(url, headers=headers, timeout=30)
+                        res.raise_for_status()
+                        payload = res.json() or {}
+                    except Exception as e:
+                        errors += 1
+                        messages.append(
+                            f"Falha ao buscar membros de '{search_token}': {e}"
+                        )
+                        break
+
+                    items = payload.get("contacts") or {}
+                    if not items:
+                        break
+
+                    batch = 0
+                    iter_items = (
+                        items.items() if isinstance(items, dict) else enumerate(items)
+                    )
+                    for __, c in iter_items:
+                        batch += 1
+                        total_contacts += 1
+                        try:
+                            cid = str(c.get("id") or "").strip()
+                            if not cid:
+                                continue
+
+                            partner = partner_by_mautic.get(cid)
+                            if partner is None:
+                                partner = self.sudo().search(
+                                    [("mautic_id", "=", cid)], limit=1
+                                )
+                                partner_by_mautic[cid] = partner or False
+                            if not partner:
+                                continue
+
+                            core = (c.get("fields") or {}).get("core", {}) or {}
+
+                            def _val(k):
+                                v = core.get(k) or {}
+                                return v.get("value") if isinstance(v, dict) else v
+
+                            lead_vals = {
+                                "name": partner.name,
+                                "partner_id": partner.id,
+                                "email_from": _val("email") or partner.email or False,
+                                "phone": _val("phone") or partner.phone or False,
+                                "mobile": _val("mobile")
+                                or c.get("mobile")
+                                or partner.mobile
+                                or False,
+                                "function": _val("position")
+                                or partner.function
+                                or False,
+                                "website": _val("website") or partner.website or False,
+                                "type": "opportunity",
+                                "tag_ids": [(4, tag_by_name[seg_tag_name].id)],
+                            }
+
+                            lead = Lead.search(
+                                [("partner_id", "=", partner.id)], limit=1
+                            )
+                            if not lead and partner.email:
+                                lead = Lead.search(
+                                    [("email_from", "=ilike", partner.email)], limit=1
+                                )
+
+                            if lead:
+                                lead.write(lead_vals)
+                                updated_leads += 1
+                            else:
+                                Lead.create(lead_vals)
+                                created_leads += 1
+
+                        except Exception as e:
+                            errors += 1
+                            messages.append(f"Contato seg '{search_token}' erro: {e}")
+
+                    if batch < page_limit:
+                        break
+                    start += page_limit
+
+            detail = (
+                f"Contatos: {total_contacts} | Leads C/A: "
+                f"{created_leads}/{updated_leads} | Erros: {errors}\n"
+                + "\n".join(messages[:50])
+            )
+            self.env["mautic.sync.log"].sudo().create(
+                {
+                    "sync_type": "lead",
+                    "execution_time": fields.Datetime.now(),
+                    "total_processed": total_contacts,
+                    "success_count": created_leads + updated_leads,
+                    "error_count": errors,
+                    "log_detail": detail,
+                    "state": "done" if errors == 0 else "partial",
+                }
+            )
+            return None
+
+        except (requests.RequestException, ValueError) as e:
+            _logger.error("Error accessing Mautic contacts API: %s", e)
+            raise UserError(
+                _("Error fetching contact data from Mautic. Check logs.")
+            ) from e
+
+        except Exception as err:
+            _logger.exception("Unexpected error importing segment members.")
+            raise UserError(
+                _("Unexpected error importing segment members. Check logs.")
+            ) from err
+
+    def import_contacts(self):  # noqa: C901
+        self.env.company.refresh_token()
+        headers = {
+            "Authorization": f"Bearer {self.env.company.mautic_access_token}",
+            "Content-Type": "application/json",
+        }
+        total = success = errors = 0
+        messages, created, updated, skipped = [], [], [], []
+
+        try:
+            res = requests.get(
+                f"{self.env.company.mautic_api_url}/api/contacts?limit=65005&include=tags,lists",
+                headers=headers,
+                timeout=30,
+            )
+            res.raise_for_status()
+            result = res.json()
+
+            Partner = self.env["res.partner"].sudo()
+            for __, val in (result.get("contacts", {}) or {}).items():
+                total += 1
+                try:
+                    core = (val.get("fields") or {}).get("core", {}) or {}
+                    firstname = (core.get("firstname") or {}).get("value") or ""
+                    lastname = (core.get("lastname") or {}).get("value") or ""
+                    full_name = f"{firstname} {lastname}".strip()
+                    if not full_name:
+                        continue
+                    email = (core.get("email") or {}).get("value") or ""
+                    full_name_norm = self._norm(full_name)
+                    existing = Partner.search([("mautic_id", "=", val.get("id")), ("is_company", "=", False)], limit=1)
+                    if not existing and email:
+                        existing = Partner.search([("email", "=", email), ("is_company", "=", False)], limit=1)
+                    existing_name = None
+                    if not existing and full_name_norm:
+                        existing_name = Partner.search([("name", "=", full_name), ("is_company", "=", False)], limit=1)
+                        if not existing_name:
+                            candidates = Partner.search([("is_company", "=", False), ("name", "ilike", full_name)])
+                            for p in candidates:
+                                if self._norm(p.name) == self._norm(full_name):
+                                    existing_name = p
+                                    break
+                    if existing_name and not existing:
+                        skipped.append(full_name)
+                        continue
+                    my_dict = {
+                        "name": full_name,
+                        "mautic_id": val.get("id"),
+                        "street": (core.get("address1") or {}).get("value") or "",
+                        "street2": (core.get("address2") or {}).get("value") or "",
+                        "mobile": (core.get("mobile") or {}).get("value")
+                        or (val.get("mobile") or ""),
+                        "phone": (core.get("phone") or {}).get("value") or "",
+                        "email": email,
+                        "zip": (core.get("zipcode") or {}).get("value") or "",
+                        "website": (core.get("website") or {}).get("value") or "",
+                        "function": (core.get("position") or {}).get("value") or "",
+                        "company_type": "person",
+                        "is_company": False,
+                    }
+
+                    country_name = (core.get("country") or {}).get("value")
+                    if country_name:
+                        country_id = (
+                            self.env["res.country"]
+                            .with_context(lang="en_US")
+                            .search([("name", "=", country_name)], limit=1)
+                        )
+                        if country_id:
+                            my_dict["country_id"] = country_id.id
+
+                    state_name = (core.get("state") or {}).get("value")
+                    if state_name:
+                        state_id = self._find_state(state_name, country_name)
+                        if state_id:
+                            my_dict["state_id"] = state_id.id
+
+                    city_name = (core.get("city") or {}).get("value")
+                    if city_name:
+                        city_id = self.env["res.city"].search(
+                            [("name", "=", city_name)], limit=1
+                        )
+                        if city_id:
+                            my_dict["city_id"] = city_id.id
+
+                    partner_name = (core.get("company") or {}).get("value")
+                    if partner_name:
+                        company = Partner.search(
+                            [("is_company", "=", True), ("name", "=", partner_name)],
+                            limit=1,
+                        )
+                        if company:
+                            my_dict["parent_id"] = company.id
+
+                    custom = self._extract_mautic_custom_fields(val)
+                    if custom:
+                        my_dict["mautic_custom_fields"] = custom
+                    if not existing:
+                        partner = Partner.create(my_dict)
+                        created.append(full_name)
+                    else:
+                        diffs = {}
+                        for k, new_v in my_dict.items():
+                            if k not in existing._fields:
+                                continue
+
+                            # NÃO atualizar com vazio: '', None, False, [], {}
+                            if new_v in ("", None, False, [], {}):
+                                continue
+
+                            # ignorar update de ids que já existem
+                            if k in ("mautic_id", "mautic_custom_fields") and existing[k] not in (False, None, "", 0, {}):
+                                continue
+
+                            cur_v = existing[k]
+                            cur_cmp = getattr(cur_v, "id", cur_v)
+                            new_cmp = getattr(new_v, "id", new_v)
+                            if cur_cmp != new_cmp:
+                                diffs[k] = new_v
+
+                        if diffs:
+                            existing.write(diffs)
+                            partner = existing
+                            updated.append(full_name)
+                        else:
+                            partner = existing
+                            skipped.append(full_name)
+                    tag_ids = self._extract_tag_ids(val)
+                    if tag_ids:
+                        TagModel = self.env["mautic.tag"].sudo()
+                        Category = self.env["res.partner.category"].sudo()
+                        has_partner_mautic_tag_field = ("mautic_tag_ids" in Partner._fields)
+
+                        tags_found = TagModel.search([("external_id", "in", tag_ids)])
+                        new_cat_ids = set(partner.category_id.ids)
+                        for t in tags_found:
+                            display = t.name_mautic or t.external_id
+                            cat = Category.search([("name", "=", display)], limit=1)
+                            if not cat:
+                                cat = Category.create({"name": display})
+                            new_cat_ids.add(cat.id)
+
+                        writes = {}
+                        if set(partner.category_id.ids) != new_cat_ids:
+                            writes["category_id"] = [(6, 0, list(new_cat_ids))]
+
+                        if has_partner_mautic_tag_field and set(partner.mautic_tag_ids.ids) != set(tags_found.ids):
+                            writes["mautic_tag_ids"] = [(6, 0, tags_found.ids)]
+
+                        if writes:
+                            partner.write(writes)
+                    success += 1
+
+                except Exception as e:
+                    errors += 1
+                    messages.append(
+                        f"Error processing contact ID {val.get('id')}: {str(e)}"
+                    )
+                    _logger.error(messages[-1])
+            try:
+                self.env["res.partner"].sudo().create_leads_from_segments_members(
+                    only_auto=True,
+                    page_limit=200,
+                )
+            except Exception as e:
+                _logger.warning("Pós-import: falha ao criar leads por segmentos: %s", e)
+            log_detail = (
+                f"Created: {len(created)} ({', '.join(created)})\n"
+                f"Updated: {len(updated)} ({', '.join(updated)})\n"
+                f"Skipped (same name): {len(skipped)} ({', '.join(skipped)})\n"
+                f"Errors: {errors}\n" + "\n".join(messages)
+            )
+
+            self.env["mautic.sync.log"].create(
+                {
+                    "sync_type": "contact",
+                    "execution_time": fields.Datetime.now(),
+                    "total_processed": total,
+                    "success_count": success,
+                    "error_count": errors,
+                    "log_detail": log_detail,
+                    "state": "done" if errors == 0 else "partial",
+                }
+            )
+
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Importação concluída"),
+                    "message": _(
+                        "Total: %(total)s | Criadas: %(created)s | "
+                        "Atualizadas: %(updated)s | Ignoradas (nome): %(skipped)s"
+                    )
+                    % {
+                        "total": total,
+                        "created": len(created),
+                        "updated": len(updated),
+                        "skipped": len(skipped),
+                    },
+                    "sticky": False,
+                    "type": "success",
+                },
+            }
+
+        except (requests.RequestException, ValueError) as e:
+            _logger.error("Error accessing Mautic contacts API: %s", e)
+            raise UserError(
+                _("Error fetching contact data from Mautic. Check logs.")
+            ) from e
+
+        except Exception as err:
+            _logger.exception("Unexpected error importing contacts.")
+            raise UserError(
+                _("Unexpected error importing contacts. Check logs.")
+            ) from err
+
+    def import_company(self):  # noqa: C901
+        self.env.company.refresh_token()
+        headers = {
+            "Authorization": f"Bearer {self.env.company.mautic_access_token}",
+            "Content-Type": "application/json",
+        }
+        total = success = errors = 0
+        messages, created, skipped = [], [], []
+
+        try:
+            limit, start = 100, 0
+            while True:
+                url = (
+                    f"{self.env.company.mautic_api_url}/api/companies"
+                    f"?limit={limit}&start={start}"
+                )
+                res = requests.get(
+                    url=url,
+                    headers=headers,
+                    timeout=30,
+                )
+                res.raise_for_status()
+                companies = res.json().get("companies", {})
+                if not companies:
+                    break
+
+                for __, val in companies.items():
+                    total += 1
+                    try:
+                        fields_all = (val.get("fields") or {}).get("all", {}) or {}
+                        fields_core = (val.get("fields") or {}).get("core", {}) or {}
+
+                        name = (fields_core.get("companyname", {}) or {}).get(
+                            "value"
+                        ) or ""
+                        email = (fields_core.get("companyemail", {}) or {}).get(
+                            "value"
+                        ) or ""
+                        name_norm = self._norm(name)
+
+                        Partner = self.env["res.partner"].sudo()
+                        existing = Partner.search(
+                            [("mautic_id", "=", val.get("id"))], limit=1
+                        )
+                        # TODO: Pode ter parceiro diferente com mesmo e-mail
+                        if not existing and email:
+                            existing = Partner.search(
+                                [("email", "=", email), ("is_company", "=", True)],
+                                limit=1,
+                            )
+                        if not existing and name:
+                            existing = Partner.search(
+                                [("is_company", "=", True), ("name", "=", name)],
+                                limit=1,
+                            )
+                            if not existing:
+                                candidates = Partner.search(
+                                    [("is_company", "=", True), ("name", "ilike", name)]
+                                )
+                                for p in candidates:
+                                    if self._norm(p.name) == name_norm:
+                                        existing = p
+                                        break
+                        if existing:
+                            skipped.append(name or f"ID {val.get('id')}")
+                            continue
+
+                        data_dict = {
+                            "mautic_id": val.get("id"),
+                            "website": fields_all.get("companywebsite") or "",
+                            "zip": fields_all.get("companyzipcode") or "",
+                            "city": fields_all.get("companycity") or "",
+                            "street": fields_all.get("companyaddress1") or "",
+                            "street2": fields_all.get("companyaddress2") or "",
+                            "email": email,
+                            "name": name,
+                            "is_company": True,
+                        }
+
+                        country_name = fields_all.get("companycountry")
+                        if country_name:
+                            country = (
+                                self.env["res.country"]
+                                .with_context(lang="en_US")
+                                .search([("name", "=", country_name)], limit=1)
+                            )
+                            if country:
+                                data_dict["country_id"] = country.id
+
+                        state_name = fields_all.get("companystate")
+                        if state_name:
+                            state = self._find_state(state_name, country_name)
+                            if state:
+                                data_dict["state_id"] = state.id
+
+                        city_name = (fields_all.get("companycity") or "",)
+                        if city_name:
+                            city_id = self.env["res.city"].search(
+                                [("name", "=", city_name)], limit=1
+                            )
+                            if city_id:
+                                data_dict["city_id"] = city_id.id
+
+                        self.env["res.partner"].create(data_dict)
+                        created.append(name or f"ID {val.get('id')}")
+                        success += 1
+
+                    except Exception as e:
+                        errors += 1
+                        msg = f"Error processing company ID {val.get('id')} ({name}): {str(e)}"
+                        messages.append(msg)
+
+                start += limit
+
+            log_detail = (
+                f"Created: {len(created)} ({', '.join(created)})\n"
+                f"Skipped: {len(skipped)} ({', '.join(skipped)})\n"
+                f"Errors: {errors}\n" + "\n".join(messages)
+            )
+
+            self.env["mautic.sync.log"].create(
+                {
+                    "sync_type": "company",
+                    "execution_time": fields.Datetime.now(),
+                    "total_processed": total,
+                    "success_count": success,
+                    "error_count": errors,
+                    "log_detail": log_detail,
+                    "state": "done" if errors == 0 else "partial",
+                }
+            )
+
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Importação concluída"),
+                    "message": _(
+                        "Total: %(total)s | Criadas: %(created)s | Ignoradas: %(skipped)s"
+                    )
+                    % {
+                        "total": total,
+                        "created": len(created),
+                        "skipped": len(skipped),
+                    },
+                    "sticky": False,
+                    "type": "success",
+                },
+            }
+
+        except (requests.RequestException, ValueError) as err:
+            _logger.error("Erro ao acessar API do Mautic: %s", err)
+            raise UserError(
+                _("Error fetching company data from Mautic. Check logs.")
+            ) from err
+
+        except Exception as err:
+            _logger.exception("Unexpected error importing companies.")
+            raise UserError(
+                _("Unexpected error importing companies. Check logs.")
+            ) from err
