@@ -249,3 +249,49 @@ class TestSaleOrderLinePriceControl(TransactionCase):
         line.write({"product_id": self.product_b.id, "product_uom_qty": 3})
         self._recompute_line(line)
         self.assertEqual(line.fiscal_price, line.price_unit)
+
+    def test_price_unit_cannot_be_changed_after_confirm_without_permission(self):
+        """Ensure that after order confirmation, a user without the price editor group
+        cannot change the price_unit, and the value remains as confirmed.
+        """
+        sales_group = self.env.ref("sales_team.group_sale_salesman")
+        self.user_no_perm.write({"groups_id": [(4, sales_group.id)]})
+
+        # Create order with pricelist
+        order = (
+            self.env["sale.order"]
+            .with_user(self.user_no_perm)
+            .create(
+                {
+                    "partner_id": self.partner.id,
+                    "pricelist_id": self.pricelist.id,
+                }
+            )
+        )
+        # Set product to invoice on ordered quantities to allow direct invoicing
+        self.product_b.write({"invoice_policy": "order"})
+        line = (
+            self.env["sale.order.line"]
+            .with_user(self.user_no_perm)
+            .create(
+                {
+                    "order_id": order.id,
+                    "product_id": self.product_b.id,
+                    "name": "Test Line",
+                    "product_uom_qty": 1,
+                }
+            )
+        )
+
+        # User without permission manually changes the price before confirmation
+        line.write({"price_unit": 123.45})
+
+        # Confirm the order
+        order.action_confirm()
+
+        # Try to change price_unit after confirmation (should be ignored)
+        line.write({"price_unit": 99.99})
+
+        # The price_unit should remain as it was at confirmation (123.45)
+        self.assertAlmostEqual(line.price_unit, 123.45, places=2)
+        self.assertNotEqual(line.price_unit, 99.99)

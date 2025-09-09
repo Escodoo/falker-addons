@@ -46,3 +46,17 @@ class SaleOrderLine(models.Model):
             line.with_context(skip_fiscal_sync=True).write(
                 {"price_unit": line.fiscal_price}
             )
+
+    def write(self, vals):
+        """Prevent non-editors from changing price_unit after confirmation."""
+        if (
+            "price_unit" in vals
+            and self.order_id.state in ("sale", "done")
+            and not self.env.user.has_group(
+                "falker_sale_price_control.group_price_editor"
+            )
+            and not self.env.context.get("skip_fiscal_sync")
+        ):
+            vals = vals.copy()
+            vals.pop("price_unit")
+        return super().write(vals)
