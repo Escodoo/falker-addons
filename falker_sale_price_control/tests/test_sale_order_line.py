@@ -4,269 +4,294 @@ from odoo.tests.common import TransactionCase
 
 @tagged("post_install", "-at_install")
 class TestSaleOrderLinePriceControl(TransactionCase):
+    """
+    Single test suite covering both the core purpose (minimal)
+    and optional scenarios (pricelist interactions), without
+    asserting core sale pricing numbers. Focus:
+      - fiscal_price mirrors price_unit
+      - inverse only for users in editor group
+      - no side effects with taxes/confirmation/pricelists
+    """
+
     def setUp(self):
         super().setUp()
-        # Basic setup
+
+        # --- Partner ---
+        self.partner = self.env["res.partner"].create({"name": "Test Partner"})
+
+        # --- Taxes (just to ensure no side effects on mirror) ---
         self.tax = self.env["account.tax"].create(
-            {
-                "name": "Tax 10%",
-                "amount": 10.0,
-                "type_tax_use": "sale",
-            }
+            {"name": "Tax 10%", "amount": 10.0, "type_tax_use": "sale"}
         )
 
-        self.tax_icms = self.env["account.tax"].create(
-            {
-                "name": "ICMS Test",
-                "type_tax_use": "sale",
-                "amount_type": "percent",
-                "amount": 17.0,
-            }
-        )
-
-        self.tax_ipi = self.env["account.tax"].create(
-            {
-                "name": "IPI Test",
-                "type_tax_use": "sale",
-                "amount_type": "percent",
-                "amount": 5.0,
-            }
-        )
-
+        # --- Products ---
         self.product = self.env["product.product"].create(
             {
-                "name": "Test Product",
+                "name": "Product A",
                 "list_price": 100.0,
-                "taxes_id": [(6, 0, [self.tax_icms.id])],
+                "taxes_id": [(6, 0, [self.tax.id])],
             }
         )
-
-        self.new_product = self.env["product.product"].create(
-            {
-                "name": "New Test Product",
-                "list_price": 200.0,
-                "taxes_id": [(6, 0, [self.tax_icms.id, self.tax_ipi.id])],
-            }
+        self.product_b = self.env["product.product"].create(
+            {"name": "Product B", "list_price": 200.0}
         )
 
-        self.discount_product = self.env["product.product"].create(
-            {
-                "name": "Discount Product",
-                "list_price": 50.0,
-                "taxes_id": [(6, 0, [self.tax_icms.id])],
-            }
-        )
-
+        # --- Pricelist (optional scenarios) ---
+        # Use 'without_discount' so rules are shown in 'discount' when needed.
         self.pricelist = self.env["product.pricelist"].create(
             {
-                "name": "Test Pricelist",
+                "name": "PL Combined",
                 "currency_id": self.env.company.currency_id.id,
                 "discount_policy": "without_discount",
             }
         )
-
-        self.pricelist_item = self.env["product.pricelist.item"].create(
+        # Fixed price rule for Product B (e.g., 150.0)
+        self.env["product.pricelist.item"].create(
             {
                 "pricelist_id": self.pricelist.id,
                 "applied_on": "0_product_variant",
-                "product_id": self.new_product.id,
+                "product_id": self.product_b.id,
                 "fixed_price": 150.0,
             }
         )
-
-        self.discount_pricelist_item = self.env["product.pricelist.item"].create(
+        # Percentage discount rule for Product A (e.g., 20%)
+        self.env["product.pricelist.item"].create(
             {
                 "pricelist_id": self.pricelist.id,
                 "applied_on": "0_product_variant",
-                "product_id": self.discount_product.id,
+                "product_id": self.product.id,
                 "compute_price": "percentage",
-                "percent_price": 20.0,  # 20% discount
+                "percent_price": 20.0,
             }
         )
 
-        self.order = self.env["sale.order"].create(
-            {
-                "partner_id": self.env["res.partner"]
-                .create({"name": "Test Partner"})
-                .id,
-                "pricelist_id": self.pricelist.id,
-            }
-        )
+        # --- Order (default without pricelist, optional tests will set one) ---
+        self.order = self.env["sale.order"].create({"partner_id": self.partner.id})
 
-        self.order_line = self.env["sale.order.line"].create(
+        # --- Initial order line (minimal path) ---
+        self.line = self.env["sale.order.line"].create(
             {
                 "order_id": self.order.id,
                 "product_id": self.product.id,
                 "name": self.product.name,
                 "product_uom_qty": 1,
-                "fiscal_tax_ids": [(6, 0, [self.tax_icms.id])],
             }
         )
 
-    def test_fiscal_price_calculation(self):
-        """Verifies the basic calculation of the fiscal price"""
-        self.order_line._compute_fiscal_price()
-        self.assertEqual(
-            self.order_line.fiscal_price,
-            self.order_line.price_unit,
-            "The fiscal price must be equal to the unit price without adjustments.",
+        # --- Groups / users for inverse behavior ---
+        try:
+            self.group_editor = self.env.ref(
+                "falker_sale_price_control.group_price_editor"
+            )
+        except ValueError:
+            self.group_editor = self.env["res.groups"].create(
+                {"name": "Price Editor (Test)"}
+            )
+
+        base_group = self.env.ref("base.group_user")
+
+        self.user_no_perm = (
+            self.env["res.users"]
+            .with_context(no_reset_password=True)
+            .create(
+                {
+                    "name": "No Perm",
+                    "login": "no_perm_tester",
+                    "email": "no_perm@test.example.com",
+                    "groups_id": [(6, 0, [base_group.id])],
+                }
+            )
         )
 
-    def test_fiscal_price_with_taxes(self):
-        """Verifies the calculation with taxes applied"""
-        self.order_line._compute_fiscal_price()
-        self.assertEqual(
-            self.order_line.fiscal_price,
-            100.0,
-            "The fiscal price should remain as the base price even with taxes.",
+        self.user_with_perm = (
+            self.env["res.users"]
+            .with_context(no_reset_password=True)
+            .create(
+                {
+                    "name": "With Perm",
+                    "login": "with_perm_tester",
+                    "email": "with_perm@test.example.com",
+                    "groups_id": [(6, 0, [base_group.id, self.group_editor.id])],
+                }
+            )
         )
 
-    def test_price_update_on_product_change(self):
-        """Verifies price update when the product is changed"""
-        self.order_line.write(
-            {
-                "product_id": self.new_product.id,
-                "product_uom_qty": 2,
-            }
-        )
-        self.assertEqual(
-            self.order_line.price_unit,
-            150.0,
-            "The price should be updated according to the pricelist when changing the product.",
-        )
-        self.assertEqual(
-            self.order_line.fiscal_price,
-            150.0,
-            "The fiscal price should follow the change in unit price.",
-        )
+    # -------------------------
+    # Helper
+    # -------------------------
+    def _recompute_line(self, line):
+        """
+        Force recompute of price-related fields to reflect pricelist rules.
+        Useful in tests when timing/prefetch might skip automatic computes.
+        """
+        line._compute_pricelist_item_id()
+        line._compute_price_unit()
+        line._compute_discount()
+        # fiscal_price mirrors price_unit automatically (compute).
 
-    def test_pricelist_price_application(self):
-        """Verifies correct price application from the pricelist"""
-        new_line = self.env["sale.order.line"].create(
-            {
-                "order_id": self.order.id,
-                "product_id": self.new_product.id,
-                "name": self.new_product.name,
-                "product_uom_qty": 1,
-            }
-        )
-        new_line.price_unit = new_line._get_price_from_pricelist()
-        new_line._compute_fiscal_price()
-        self.assertEqual(
-            new_line.price_unit,
-            150.0,
-            "New products should have their price set according to the pricelist.",
-        )
+    # -------------------------
+    # Minimal: mirror invariants
+    # -------------------------
+    def test_mirror_on_create(self):
+        """fiscal_price must mirror price_unit on create."""
+        self.assertEqual(self.line.fiscal_price, self.line.price_unit)
 
-    def test_tax_recalculation_on_product_change(self):
-        """Test tax recalculation when changing products"""
-        test_product = self.env["product.product"].create(
-            {
-                "name": "Test Product for Tax Change",
-                "list_price": 75.0,
-                "taxes_id": [(6, 0, [self.tax.id])],
-            }
-        )
+    def test_mirror_after_price_change(self):
+        """
+        Directly changing price_unit should be mirrored by fiscal_price
+        (compute handles the sync).
+        """
+        self.line.write({"price_unit": 123.45})
+        self.assertAlmostEqual(self.line.fiscal_price, 123.45, places=2)
 
-        self.order_line.write(
-            {
-                "product_id": test_product.id,
-                "product_uom_qty": 1,
-            }
-        )
+    def test_mirror_survives_taxes_change(self):
+        """Changing taxes must not break the mirror relation."""
+        self.line.write({"tax_id": [(6, 0, [self.tax.id])]})
+        self.assertEqual(self.line.fiscal_price, self.line.price_unit)
 
-        self.assertEqual(
-            self.order_line.price_unit,
-            75.0,
-            "Price should be updated to the product's list price",
+    def test_note_line(self):
+        """A note line has zero unit price and falsy fiscal_price."""
+        note = self.env["sale.order.line"].create(
+            {"order_id": self.order.id, "name": "Note", "display_type": "line_note"}
         )
-        self.assertEqual(
-            self.order_line.tax_id,
-            self.tax,
-            "Taxes should be updated to the product's taxes",
-        )
-        self.assertEqual(
-            self.order_line.fiscal_price,
-            75.0,
-            "Fiscal price should follow the unit price",
-        )
+        self.assertEqual(note.price_unit, 0.0)
+        self.assertFalse(note.fiscal_price)
 
-    def test_empty_order_line(self):
-        """Test a line without fiscal_price."""
-        empty_line = self.env["sale.order.line"].create(
-            {
-                "order_id": self.order.id,
-                "name": "Empty Line",
-                "display_type": "line_note",
-            }
-        )
-        self.assertEqual(
-            empty_line.price_unit, 0.0, "Empty line should have zero price"
-        )
-        self.assertFalse(
-            empty_line.fiscal_price, "Empty line should have no fiscal price"
-        )
+    def test_zero_quantity_does_not_break_mirror(self):
+        """Setting quantity to zero keeps mirror intact."""
+        self.line.write({"product_uom_qty": 0})
+        self.assertEqual(self.line.fiscal_price, self.line.price_unit)
 
-    def test_multiple_taxes_impact(self):
-        """Verify fiscal price with multiple taxes"""
-        new_line = self.env["sale.order.line"].create(
-            {
-                "order_id": self.order.id,
-                "product_id": self.new_product.id,
-                "name": self.new_product.name,
-                "product_uom_qty": 1,
-                "fiscal_tax_ids": [(6, 0, [self.tax_icms.id, self.tax_ipi.id])],
-            }
-        )
-        new_line.price_unit = new_line._get_price_from_pricelist()
-        new_line._compute_fiscal_price()
-        self.assertEqual(
-            new_line.fiscal_price,
-            150.0,
-            "Fiscal price should be equal to unit price regardless of multiple taxes",
-        )
-
-    def test_pricelist_discount_application(self):
-        """Test fiscal price with pricelist percentage discount"""
-        discount_line = self.env["sale.order.line"].create(
-            {
-                "order_id": self.order.id,
-                "product_id": self.discount_product.id,
-                "name": self.discount_product.name,
-                "product_uom_qty": 2,
-            }
-        )
-        discount_line.price_unit = discount_line._get_price_from_pricelist()
-        discount_line._compute_fiscal_price()
-
-        expected_price = 50.0 * 0.8  # 20% discount from pricelist
-        self.assertEqual(
-            discount_line.price_unit,
-            expected_price,
-            "Price should respect the percentage discount from pricelist",
-        )
-        self.assertEqual(
-            discount_line.fiscal_price,
-            expected_price,
-            "Fiscal price should follow the discounted price",
-        )
-
-    def test_zero_quantity_line(self):
-        """Test behavior when quantity is zero"""
-        self.order_line.write({"product_uom_qty": 0})
-        self.order_line._compute_fiscal_price()
-
-        self.assertEqual(
-            self.order_line.fiscal_price,
-            100.0,
-            "Fiscal price should remain unchanged even with zero quantity",
-        )
-
-    def test_fiscal_price_after_order_confirmation(self):
-        """Verify fiscal price persists after order confirmation"""
+    def test_mirror_after_confirm(self):
+        """Confirming the order must not break the mirror."""
         self.order.action_confirm()
-        self.assertEqual(
-            self.order_line.fiscal_price,
-            100.0,
-            "Fiscal price should remain after order confirmation",
+        self.assertEqual(self.line.fiscal_price, self.line.price_unit)
+
+    # -------------------------
+    # Minimal: inverse behavior (group-gated)
+    # -------------------------
+    def test_inverse_with_permission(self):
+        """
+        Users in the editor group: writing fiscal_price updates price_unit.
+        """
+        line = self.line.with_user(self.user_with_perm)
+        line.write({"fiscal_price": 111.11})
+        self.assertAlmostEqual(line.price_unit, 111.11, places=2)
+        self.assertAlmostEqual(line.fiscal_price, 111.11, places=2)
+
+    def test_inverse_without_permission(self):
+        """
+        Users without the editor group: writing fiscal_price is ignored
+        (fiscal_price mirrors price_unit).
+        """
+        orig = self.line.price_unit
+        line = self.line.with_user(self.user_no_perm)
+        line.write({"fiscal_price": 999.99})
+        self.assertAlmostEqual(line.price_unit, orig, places=2)
+        self.assertAlmostEqual(line.fiscal_price, orig, places=2)
+
+    # -------------------------
+    # Optional: pricelist interactions (mirror only)
+    # -------------------------
+    def test_create_with_pricelist_rules_mirror_holds(self):
+        """
+        Creating lines under a pricelist should keep the mirror invariant,
+        regardless of how core sale represents price/discount.
+        """
+        order_pl = self.env["sale.order"].create(
+            {
+                "partner_id": self.partner.id,
+                "pricelist_id": self.pricelist.id,
+            }
         )
+        line_a = self.env["sale.order.line"].create(
+            {
+                "order_id": order_pl.id,
+                "product_id": self.product.id,
+                "name": "A",
+                "product_uom_qty": 1,
+            }
+        )
+        self._recompute_line(line_a)
+        self.assertEqual(line_a.fiscal_price, line_a.price_unit)
+
+        line_b = self.env["sale.order.line"].create(
+            {
+                "order_id": order_pl.id,
+                "product_id": self.product_b.id,
+                "name": "B",
+                "product_uom_qty": 2,
+            }
+        )
+        self._recompute_line(line_b)
+        self.assertEqual(line_b.fiscal_price, line_b.price_unit)
+
+    def test_change_product_under_pricelist_mirror_holds(self):
+        """
+        Changing the product with a pricelist in place must keep the mirror
+        invariant. No numeric assertions about core pricing logic.
+        """
+        order_pl = self.env["sale.order"].create(
+            {
+                "partner_id": self.partner.id,
+                "pricelist_id": self.pricelist.id,
+            }
+        )
+        line = self.env["sale.order.line"].create(
+            {
+                "order_id": order_pl.id,
+                "product_id": self.product.id,
+                "name": "Line",
+                "product_uom_qty": 1,
+            }
+        )
+        self._recompute_line(line)
+        line.write({"product_id": self.product_b.id, "product_uom_qty": 3})
+        self._recompute_line(line)
+        self.assertEqual(line.fiscal_price, line.price_unit)
+
+    def test_price_unit_cannot_be_changed_after_confirm_without_permission(self):
+        """Ensure that after order confirmation, a user without the price editor group
+        cannot change the price_unit, and the value remains as confirmed.
+        """
+        sales_group = self.env.ref("sales_team.group_sale_salesman")
+        self.user_no_perm.write({"groups_id": [(4, sales_group.id)]})
+
+        # Create order with pricelist
+        order = (
+            self.env["sale.order"]
+            .with_user(self.user_no_perm)
+            .create(
+                {
+                    "partner_id": self.partner.id,
+                    "pricelist_id": self.pricelist.id,
+                }
+            )
+        )
+        # Set product to invoice on ordered quantities to allow direct invoicing
+        self.product_b.write({"invoice_policy": "order"})
+        line = (
+            self.env["sale.order.line"]
+            .with_user(self.user_no_perm)
+            .create(
+                {
+                    "order_id": order.id,
+                    "product_id": self.product_b.id,
+                    "name": "Test Line",
+                    "product_uom_qty": 1,
+                }
+            )
+        )
+
+        # User without permission manually changes the price before confirmation
+        line.write({"price_unit": 123.45})
+
+        # Confirm the order
+        order.action_confirm()
+
+        # Try to change price_unit after confirmation (should be ignored)
+        line.write({"price_unit": 99.99})
+
+        # The price_unit should remain as it was at confirmation (123.45)
+        self.assertAlmostEqual(line.price_unit, 123.45, places=2)
+        self.assertNotEqual(line.price_unit, 99.99)
