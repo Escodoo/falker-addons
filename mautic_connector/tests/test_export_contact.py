@@ -13,6 +13,9 @@ class TestExportCustomer(TransactionCase):
             {
                 "mautic_access_token": "test_token",
                 "mautic_api_url": "http://testmautic.com",
+                "mautic_auth_base_url": "http://testmautic.com",
+                "mautic_client_id": "cid",
+                "mautic_client_secret": "csec",
             }
         )
 
@@ -31,7 +34,7 @@ class TestExportCustomer(TransactionCase):
             }
         )
 
-    def test_export_customer_success(self):
+    def test_export_contact_success(self):
         mock_response = {"contact": {"id": 1234}}
 
         with patch("requests.post") as mock_post:

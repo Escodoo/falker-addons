@@ -9,6 +9,7 @@
     "depends": [
         "account",
         "crm",
+        "l10n_br_base",
     ],
     "data": [
         # Security
