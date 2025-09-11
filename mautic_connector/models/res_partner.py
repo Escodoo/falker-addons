@@ -2,7 +2,9 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import json
 import logging
+import time
 import unicodedata
+from datetime import datetime, timedelta, timezone
 from urllib.parse import quote
 
 import requests
@@ -658,155 +660,486 @@ class ResPartner(models.Model):
         messages, created, updated, skipped = [], [], [], []
 
         try:
-            res = requests.get(
-                f"{self.env.company.mautic_api_url}/api/contacts?limit=65005&include=tags,lists",
-                headers=headers,
-                timeout=30,
-            )
-            res.raise_for_status()
-            result = res.json()
+            ICP = self.env["ir.config_parameter"].sudo()
+            base = (self.env.company.mautic_api_url or "").rstrip("/")
+            limit = 200  # máx por execução
 
+            bootstrap_done = (
+                ICP.get_param("mautic.contacts.bootstrap_done") or ""
+            ).strip() == "1"
             Partner = self.env["res.partner"].sudo()
-            for __, val in (result.get("contacts", {}) or {}).items():
-                total += 1
-                try:
-                    core = (val.get("fields") or {}).get("core", {}) or {}
-                    firstname = (core.get("firstname") or {}).get("value") or ""
-                    lastname = (core.get("lastname") or {}).get("value") or ""
-                    full_name = f"{firstname} {lastname}".strip()
-                    if not full_name:
-                        continue
-                    email = (core.get("email") or {}).get("value") or ""
-                    full_name_norm = self._norm(full_name)
-                    existing = Partner.search([("mautic_id", "=", val.get("id")), ("is_company", "=", False)], limit=1)
-                    if not existing and email:
-                        existing = Partner.search([("email", "=", email), ("is_company", "=", False)], limit=1)
-                    existing_name = None
-                    if not existing and full_name_norm:
-                        existing_name = Partner.search([("name", "=", full_name), ("is_company", "=", False)], limit=1)
-                        if not existing_name:
-                            candidates = Partner.search([("is_company", "=", False), ("name", "ilike", full_name)])
-                            for p in candidates:
-                                if self._norm(p.name) == self._norm(full_name):
-                                    existing_name = p
-                                    break
-                    if existing_name and not existing:
-                        skipped.append(full_name)
-                        continue
-                    my_dict = {
-                        "name": full_name,
-                        "mautic_id": val.get("id"),
-                        "street": (core.get("address1") or {}).get("value") or "",
-                        "street2": (core.get("address2") or {}).get("value") or "",
-                        "mobile": (core.get("mobile") or {}).get("value")
-                        or (val.get("mobile") or ""),
-                        "phone": (core.get("phone") or {}).get("value") or "",
-                        "email": email,
-                        "zip": (core.get("zipcode") or {}).get("value") or "",
-                        "website": (core.get("website") or {}).get("value") or "",
-                        "function": (core.get("position") or {}).get("value") or "",
-                        "company_type": "person",
-                        "is_company": False,
-                    }
 
-                    country_name = (core.get("country") or {}).get("value")
-                    if country_name:
-                        country_id = (
-                            self.env["res.country"]
-                            .with_context(lang="en_US")
-                            .search([("name", "=", country_name)], limit=1)
+            # =========================
+            # MODO 1: BOOTSTRAP (criar todos; NÃO atualiza existentes)
+            # =========================
+            if not bootstrap_done:
+                start = int(ICP.get_param("mautic.contacts.bootstrap_start", "0") or 0)
+                url = f"{base}/api/contacts?limit={limit}&start={start}&include=tags,lists&orderBy=id&orderByDir=ASC"  # noqa: B950
+
+                max_retries, attempt = 3, 0
+                while True:
+                    res = requests.get(url, headers=headers, timeout=30)
+                    if res.status_code in (429, 500, 502, 503, 504):
+                        attempt += 1
+                        if attempt > max_retries:
+                            res.raise_for_status()
+                        delay = 2**attempt
+                        _logger.warning(
+                            "Mautic %s (bootstrap start=%s). Retry %s em %ss",
+                            res.status_code,
+                            start,
+                            attempt,
+                            delay,
                         )
-                        if country_id:
-                            my_dict["country_id"] = country_id.id
+                        time.sleep(delay)
+                        continue
+                    res.raise_for_status()
+                    break
 
-                    state_name = (core.get("state") or {}).get("value")
-                    if state_name:
-                        state_id = self._find_state(state_name, country_name)
-                        if state_id:
-                            my_dict["state_id"] = state_id.id
+                result = res.json()
+                contacts = result.get("contacts") or {}
 
-                    city_name = (core.get("city") or {}).get("value")
-                    if city_name:
-                        city_id = self.env["res.city"].search(
-                            [("name", "=", city_name)], limit=1
-                        )
-                        if city_id:
-                            my_dict["city_id"] = city_id.id
+                for __, val in contacts.items():
+                    total += 1
+                    try:
+                        core = (val.get("fields") or {}).get("core", {}) or {}
+                        firstname = (core.get("firstname") or {}).get("value") or ""
+                        lastname = (core.get("lastname") or {}).get("value") or ""
+                        full_name = f"{firstname} {lastname}".strip()
+                        if not full_name:
+                            continue
+                        email = (core.get("email") or {}).get("value") or ""
+                        full_name_norm = self._norm(full_name)
 
-                    partner_name = (core.get("company") or {}).get("value")
-                    if partner_name:
-                        company = Partner.search(
-                            [("is_company", "=", True), ("name", "=", partner_name)],
+                        existing = Partner.search(
+                            [
+                                ("mautic_id", "=", val.get("id")),
+                                ("is_company", "=", False),
+                            ],
                             limit=1,
                         )
-                        if company:
-                            my_dict["parent_id"] = company.id
+                        if not existing and email:
+                            existing = Partner.search(
+                                [("email", "=", email), ("is_company", "=", False)],
+                                limit=1,
+                            )
+                        if not existing and full_name_norm:
+                            existing = Partner.search(
+                                [("name", "=", full_name), ("is_company", "=", False)],
+                                limit=1,
+                            )
+                            if not existing:
+                                candidates = Partner.search(
+                                    [
+                                        ("is_company", "=", False),
+                                        ("name", "ilike", full_name),
+                                    ]
+                                )
+                                for p in candidates:
+                                    if self._norm(p.name) == self._norm(full_name):
+                                        existing = p
+                                        break
 
-                    custom = self._extract_mautic_custom_fields(val)
-                    if custom:
-                        my_dict["mautic_custom_fields"] = custom
-                    if not existing:
+                        if existing:
+                            skipped.append(full_name or f"ID {val.get('id')}")
+                            continue
+
+                        my_dict = {
+                            "name": full_name,
+                            "mautic_id": val.get("id"),
+                            "street": (core.get("address1") or {}).get("value") or "",
+                            "street2": (core.get("address2") or {}).get("value") or "",
+                            "mobile": (core.get("mobile") or {}).get("value")
+                            or (val.get("mobile") or ""),
+                            "phone": (core.get("phone") or {}).get("value") or "",
+                            "email": email,
+                            "zip": (core.get("zipcode") or {}).get("value") or "",
+                            "website": (core.get("website") or {}).get("value") or "",
+                            "function": (core.get("position") or {}).get("value") or "",
+                            "company_type": "person",
+                            "is_company": False,
+                        }
+
+                        country_name = (core.get("country") or {}).get("value")
+                        if country_name:
+                            country_id = (
+                                self.env["res.country"]
+                                .with_context(lang="en_US")
+                                .search([("name", "=", country_name)], limit=1)
+                            )
+                            if country_id:
+                                my_dict["country_id"] = country_id.id
+
+                        state_name = (core.get("state") or {}).get("value")
+                        if state_name:
+                            state_id = self._find_state(state_name, country_name)
+                            if state_id:
+                                my_dict["state_id"] = state_id.id
+
+                        city_name = (core.get("city") or {}).get("value")
+                        if city_name:
+                            city_id = self.env["res.city"].search(
+                                [("name", "=", city_name)], limit=1
+                            )
+                            if city_id:
+                                my_dict["city_id"] = city_id.id
+
+                        partner_name = (core.get("company") or {}).get("value")
+                        if partner_name:
+                            company = Partner.search(
+                                [
+                                    ("is_company", "=", True),
+                                    ("name", "=", partner_name),
+                                ],
+                                limit=1,
+                            )
+                            if company:
+                                my_dict["parent_id"] = company.id
+
+                        custom = self._extract_mautic_custom_fields(val)
+                        if custom:
+                            my_dict["mautic_custom_fields"] = custom
+
                         partner = Partner.create(my_dict)
                         created.append(full_name)
-                    else:
-                        diffs = {}
-                        for k, new_v in my_dict.items():
-                            if k not in existing._fields:
-                                continue
-
-                            # NÃO atualizar com vazio: '', None, False, [], {}
-                            if new_v in ("", None, False, [], {}):
-                                continue
-
-                            # ignorar update de ids que já existem
-                            if k in ("mautic_id", "mautic_custom_fields") and existing[k] not in (False, None, "", 0, {}):
-                                continue
-
-                            cur_v = existing[k]
-                            cur_cmp = getattr(cur_v, "id", cur_v)
-                            new_cmp = getattr(new_v, "id", new_v)
-                            if cur_cmp != new_cmp:
-                                diffs[k] = new_v
-
-                        if diffs:
-                            existing.write(diffs)
-                            partner = existing
-                            updated.append(full_name)
-                        else:
-                            partner = existing
-                            skipped.append(full_name)
-                    tag_ids = self._extract_tag_ids(val)
-                    if tag_ids:
-                        TagModel = self.env["mautic.tag"].sudo()
-                        Category = self.env["res.partner.category"].sudo()
-                        has_partner_mautic_tag_field = ("mautic_tag_ids" in Partner._fields)
-
-                        tags_found = TagModel.search([("external_id", "in", tag_ids)])
-                        new_cat_ids = set(partner.category_id.ids)
-                        for t in tags_found:
-                            display = t.name_mautic or t.external_id
-                            cat = Category.search([("name", "=", display)], limit=1)
-                            if not cat:
-                                cat = Category.create({"name": display})
-                            new_cat_ids.add(cat.id)
-
-                        writes = {}
-                        if set(partner.category_id.ids) != new_cat_ids:
-                            writes["category_id"] = [(6, 0, list(new_cat_ids))]
-
-                        if has_partner_mautic_tag_field and set(partner.mautic_tag_ids.ids) != set(tags_found.ids):
-                            writes["mautic_tag_ids"] = [(6, 0, tags_found.ids)]
-
-                        if writes:
+                        tag_ids = self._extract_tag_ids(val)
+                        if tag_ids:
+                            TagModel = self.env["mautic.tag"].sudo()
+                            Category = self.env["res.partner.category"].sudo()
+                            has_partner_mautic_tag_field = (
+                                "mautic_tag_ids" in Partner._fields
+                            )
+                            tags_found = TagModel.search(
+                                [("external_id", "in", tag_ids)]
+                            )
+                            cat_ids = set(partner.category_id.ids)
+                            for t in tags_found:
+                                display = t.name_mautic or t.external_id
+                                cat = Category.search([("name", "=", display)], limit=1)
+                                if not cat:
+                                    cat = Category.create({"name": display})
+                                cat_ids.add(cat.id)
+                            writes = {"category_id": [(6, 0, list(cat_ids))]}
+                            if has_partner_mautic_tag_field:
+                                writes["mautic_tag_ids"] = [(6, 0, tags_found.ids)]
                             partner.write(writes)
-                    success += 1
 
-                except Exception as e:
-                    errors += 1
-                    messages.append(
-                        f"Error processing contact ID {val.get('id')}: {str(e)}"
+                        success += 1
+
+                    except Exception as e:
+                        errors += 1
+                        messages.append(
+                            f"Error processing contact ID {val.get('id')}: {str(e)}"
+                        )
+                        _logger.error(messages[-1])
+                next_start = start + len(contacts)
+                ICP.set_param("mautic.contacts.bootstrap_start", str(next_start))
+                if not contacts:
+                    ICP.set_param("mautic.contacts.bootstrap_done", "1")
+
+                    cursor_dt = datetime.now(timezone.utc) - timedelta(minutes=5)
+                    ICP.set_param(
+                        "mautic.contacts.last_modified",
+                        cursor_dt.isoformat().replace("+00:00", "Z"),
                     )
-                    _logger.error(messages[-1])
+
+            # =========================
+            # MODO 2: INCREMENTAL — “últimos modificados/criados” via WHERE
+            # =========================
+            else:
+
+                def _parse_dt(v):
+                    if not v:
+                        return None
+                    if isinstance(v, (int, float)):
+                        return datetime.fromtimestamp(float(v), tz=timezone.utc)
+                    s = str(v).strip()
+                    if s.isdigit():
+                        return datetime.fromtimestamp(float(s), tz=timezone.utc)
+                    try:
+                        return datetime.fromisoformat(
+                            s.replace("Z", "+00:00")
+                        ).astimezone(timezone.utc)
+                    except Exception:
+                        return None
+
+                def _fmt_sql(dt_utc):
+                    # 'YYYY-MM-DD HH:MM:SS' em UTC (Mautic aceita este formato no where[val])
+                    return dt_utc.strftime("%Y-%m-%d %H:%M:%S")
+
+                last_mod_key = "mautic.contacts.last_modified"
+                last_mod_str = (ICP.get_param(last_mod_key) or "").strip()
+                last_mod_dt = _parse_dt(last_mod_str) or (
+                    datetime.now(timezone.utc) - timedelta(days=3650)
+                )
+                where_val = _fmt_sql(last_mod_dt)
+
+                def _fetch_contacts_where(col_name, quota, include_lists=False):
+                    fetched = []
+                    start = 0
+                    page_size = min(200, quota)
+                    while len(fetched) < quota:
+                        params = {
+                            "limit": page_size,
+                            "start": start,
+                            "include": "tags,lists" if include_lists else "tags",
+                            "orderBy": col_name,
+                            "orderByDir": "DESC",
+                            "where[0][col]": col_name,
+                            "where[0][expr]": "gte",
+                            "where[0][val]": where_val,
+                        }
+                        attempt, max_retries = 0, 3
+                        while True:
+                            try:
+                                res = requests.get(
+                                    f"{base}/api/contacts",
+                                    headers=headers,
+                                    params=params,
+                                    timeout=30,
+                                )
+                                if (
+                                    res.status_code in (429, 500, 502, 503, 504)
+                                    and include_lists
+                                ):
+                                    attempt += 1
+                                    if attempt <= max_retries:
+                                        time.sleep(2**attempt)
+                                        continue
+                                    return _fetch_contacts_where(
+                                        col_name,
+                                        quota - len(fetched),
+                                        include_lists=False,
+                                    )
+                                res.raise_for_status()
+                                break
+                            except requests.RequestException as e:
+                                raise e
+                        data = res.json() or {}
+                        chunk = list((data.get("contacts") or {}).values())
+                        if not chunk:
+                            break
+                        fetched.extend(chunk)
+                        if len(chunk) < page_size:
+                            break
+                        start += len(chunk)
+                    return fetched[:quota]
+
+                remaining = limit
+                contacts_list = []
+
+                try:
+                    contacts_list.extend(
+                        _fetch_contacts_where(
+                            "date_modified", remaining, include_lists=False
+                        )
+                    )
+                except requests.RequestException as e:
+                    msg = f"Incremental fetch (date_modified) falhou: {e.__class__.__name__}: {e}"  # noqa: B950
+                    messages.append(msg)
+                    _logger.warning(msg, exc_info=True)
+
+                remaining = limit - len(contacts_list)
+                if remaining > 0:
+                    try:
+                        contacts_list.extend(
+                            _fetch_contacts_where(
+                                "date_added", remaining, include_lists=False
+                            )
+                        )
+                    except requests.RequestException as e:
+                        msg = f"Incremental fetch (date_added) falhou: {e.__class__.__name__}: {e}"  # noqa: B950
+                        messages.append(msg)
+                        _logger.warning(msg, exc_info=True)
+
+                def _extract_dm(v):
+                    return (
+                        _parse_dt(v.get("dateModified"))
+                        or _parse_dt(v.get("lastModified"))
+                        or _parse_dt(v.get("lastActive"))
+                        or _parse_dt(v.get("dateAdded"))
+                        or datetime.fromtimestamp(0, tz=timezone.utc)
+                    )
+
+                contacts_list.sort(key=lambda v: _extract_dm(v), reverse=True)
+                max_seen_dt = last_mod_dt
+                for val in contacts_list:
+                    dm_dt = _extract_dm(val)
+                    total += 1
+                    try:
+                        core = (val.get("fields") or {}).get("core", {}) or {}
+                        firstname = (core.get("firstname") or {}).get("value") or ""
+                        lastname = (core.get("lastname") or {}).get("value") or ""
+                        full_name = f"{firstname} {lastname}".strip()
+                        if not full_name:
+                            continue
+                        email = (core.get("email") or {}).get("value") or ""
+                        full_name_norm = self._norm(full_name)
+                        existing = Partner.search(
+                            [
+                                ("mautic_id", "=", val.get("id")),
+                                ("is_company", "=", False),
+                            ],
+                            limit=1,
+                        )
+                        if not existing and email:
+                            existing = Partner.search(
+                                [("email", "=", email), ("is_company", "=", False)],
+                                limit=1,
+                            )
+                        existing_name = None
+                        if not existing and full_name_norm:
+                            existing_name = Partner.search(
+                                [("name", "=", full_name), ("is_company", "=", False)],
+                                limit=1,
+                            )
+                            if not existing_name:
+                                candidates = Partner.search(
+                                    [
+                                        ("is_company", "=", False),
+                                        ("name", "ilike", full_name),
+                                    ]
+                                )
+                                for p in candidates:
+                                    if self._norm(p.name) == self._norm(full_name):
+                                        existing_name = p
+                                        break
+                        if existing_name and not existing:
+                            skipped.append(full_name)
+                            if dm_dt and dm_dt > max_seen_dt:
+                                max_seen_dt = dm_dt
+                            continue
+
+                        my_dict = {
+                            "name": full_name,
+                            "mautic_id": val.get("id"),
+                            "street": (core.get("address1") or {}).get("value") or "",
+                            "street2": (core.get("address2") or {}).get("value") or "",
+                            "mobile": (core.get("mobile") or {}).get("value")
+                            or (val.get("mobile") or ""),
+                            "phone": (core.get("phone") or {}).get("value") or "",
+                            "email": email,
+                            "zip": (core.get("zipcode") or {}).get("value") or "",
+                            "website": (core.get("website") or {}).get("value") or "",
+                            "function": (core.get("position") or {}).get("value") or "",
+                            "company_type": "person",
+                            "is_company": False,
+                        }
+
+                        country_name = (core.get("country") or {}).get("value")
+                        if country_name:
+                            country_id = (
+                                self.env["res.country"]
+                                .with_context(lang="en_US")
+                                .search([("name", "=", country_name)], limit=1)
+                            )
+                            if country_id:
+                                my_dict["country_id"] = country_id.id
+
+                        state_name = (core.get("state") or {}).get("value")
+                        if state_name:
+                            state_id = self._find_state(state_name, country_name)
+                            if state_id:
+                                my_dict["state_id"] = state_id.id
+
+                        city_name = (core.get("city") or {}).get("value")
+                        if city_name:
+                            city_id = self.env["res.city"].search(
+                                [("name", "=", city_name)], limit=1
+                            )
+                            if city_id:
+                                my_dict["city_id"] = city_id.id
+
+                        partner_name = (core.get("company") or {}).get("value")
+                        if partner_name:
+                            company = Partner.search(
+                                [
+                                    ("is_company", "=", True),
+                                    ("name", "=", partner_name),
+                                ],
+                                limit=1,
+                            )
+                            if company:
+                                my_dict["parent_id"] = company.id
+
+                        custom = self._extract_mautic_custom_fields(val)
+                        if custom:
+                            my_dict["mautic_custom_fields"] = custom
+
+                        if not existing:
+                            partner = Partner.create(my_dict)
+                            created.append(full_name)
+                        else:
+                            diffs = {}
+                            for k, new_v in my_dict.items():
+                                if k not in existing._fields:
+                                    continue
+                                if new_v in ("", None, False, [], {}):
+                                    continue
+                                if k in (
+                                    "mautic_id",
+                                    "mautic_custom_fields",
+                                ) and existing[k] not in (False, None, "", 0, {}):
+                                    continue
+                                cur_v = existing[k]
+                                cur_cmp = getattr(cur_v, "id", cur_v)
+                                new_cmp = getattr(new_v, "id", new_v)
+                                if cur_cmp != new_cmp:
+                                    diffs[k] = new_v
+
+                            if diffs:
+                                existing.write(diffs)
+                                partner = existing
+                                updated.append(full_name)
+                            else:
+                                partner = existing
+                                skipped.append(full_name)
+                        tag_ids = self._extract_tag_ids(val)
+                        if tag_ids:
+                            TagModel = self.env["mautic.tag"].sudo()
+                            Category = self.env["res.partner.category"].sudo()
+                            has_partner_mautic_tag_field = (
+                                "mautic_tag_ids" in Partner._fields
+                            )
+                            tags_found = TagModel.search(
+                                [("external_id", "in", tag_ids)]
+                            )
+                            new_cat_ids = set(partner.category_id.ids)
+                            for t in tags_found:
+                                display = t.name_mautic or t.external_id
+                                cat = Category.search([("name", "=", display)], limit=1)
+                                if not cat:
+                                    cat = Category.create({"name": display})
+                                new_cat_ids.add(cat.id)
+                            writes = {}
+                            if set(partner.category_id.ids) != new_cat_ids:
+                                writes["category_id"] = [(6, 0, list(new_cat_ids))]
+                            if has_partner_mautic_tag_field and set(
+                                partner.mautic_tag_ids.ids
+                            ) != set(tags_found.ids):
+                                writes["mautic_tag_ids"] = [(6, 0, tags_found.ids)]
+                            if writes:
+                                partner.write(writes)
+
+                        success += 1
+                        if dm_dt and dm_dt > max_seen_dt:
+                            max_seen_dt = dm_dt
+
+                    except Exception as e:
+                        errors += 1
+                        messages.append(
+                            f"Error processing contact ID {val.get('id')}: {str(e)}"
+                        )
+                        _logger.error(messages[-1])
+
+                if max_seen_dt:
+                    new_cursor = (max_seen_dt - timedelta(minutes=5)).astimezone(
+                        timezone.utc
+                    )
+                    ICP.set_param(
+                        "mautic.contacts.last_modified",
+                        new_cursor.isoformat().replace("+00:00", "Z"),
+                    )
             try:
                 self.env["res.partner"].sudo().create_leads_from_segments_members(
                     only_auto=True,
@@ -817,7 +1150,7 @@ class ResPartner(models.Model):
             log_detail = (
                 f"Created: {len(created)} ({', '.join(created)})\n"
                 f"Updated: {len(updated)} ({', '.join(updated)})\n"
-                f"Skipped (same name): {len(skipped)} ({', '.join(skipped)})\n"
+                f"Skipped: {len(skipped)} ({', '.join(skipped)})\n"
                 f"Errors: {errors}\n" + "\n".join(messages)
             )
 
@@ -840,7 +1173,7 @@ class ResPartner(models.Model):
                     "title": _("Importação concluída"),
                     "message": _(
                         "Total: %(total)s | Criadas: %(created)s | "
-                        "Atualizadas: %(updated)s | Ignoradas (nome): %(skipped)s"
+                        "Atualizadas: %(updated)s | Ignoradas: %(skipped)s"
                     )
                     % {
                         "total": total,
