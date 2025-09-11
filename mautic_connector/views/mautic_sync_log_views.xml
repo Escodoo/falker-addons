@@ -1,0 +1,85 @@
+<odoo>
+
+  <record id="view_mautic_sync_log_search" model="ir.ui.view">
+    <field name="name">mautic.sync.log.search</field>
+    <field name="model">mautic.sync.log</field>
+    <field name="arch" type="xml">
+      <search string="Search Logs">
+        <field
+                    name="name"
+                    filter_domain="['|', ('name','ilike', self), ('log_detail','ilike', self)]"
+                />
+        <filter name="state_error" string="Error" domain="[('state', '=', 'error')]" />
+        <filter name="state_done" string="Done" domain="[('state', '=', 'done')]" />
+        <filter
+                    name="state_partial"
+                    string="Partial"
+                    domain="[('state', '=', 'partial')]"
+                />
+
+        <group expand="0" string="Group By...">
+          <filter
+                        name="group_sync_type"
+                        string="Type"
+                        context="{'group_by': 'sync_type'}"
+                    />
+          <filter name="group_state" string="Status" context="{'group_by': 'state'}" />
+          <filter
+                        name="group_day"
+                        string="Day"
+                        context="{'group_by': 'execution_time:day'}"
+                    />
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_mautic_sync_log_tree" model="ir.ui.view">
+    <field name="name">mautic.sync.log.tree</field>
+    <field name="model">mautic.sync.log</field>
+    <field name="arch" type="xml">
+      <tree create="false">
+        <field name="execution_time" />
+        <field name="sync_type" />
+        <field name="total_processed" />
+        <field name="success_count" />
+        <field name="error_count" />
+        <field name="state" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_mautic_sync_log_form" model="ir.ui.view">
+    <field name="name">mautic.sync.log.form</field>
+    <field name="model">mautic.sync.log</field>
+    <field name="arch" type="xml">
+      <form string="Detalhes do Log">
+        <sheet>
+          <group>
+            <field name="execution_time" />
+            <field name="sync_type" />
+          </group>
+          <group>
+            <field name="total_processed" />
+            <field name="success_count" />
+            <field name="error_count" />
+            <field name="state" />
+          </group>
+          <group>
+            <field name="log_detail" />
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_mautic_sync_log" model="ir.actions.act_window">
+    <field name="name">Synchronization Logs</field>
+    <field name="res_model">mautic.sync.log</field>
+    <field name="view_mode">tree,form</field>
+    <field name="view_id" ref="view_mautic_sync_log_tree" />
+    <field name="context">{}</field>
+    <field name="target">current</field>
+  </record>
+
+</odoo>

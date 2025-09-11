@@ -1,0 +1,51 @@
+<odoo>
+
+  <menuitem
+        id="menu_mautic_root"
+        name="Mautic"
+        web_icon="mautic_connector,static/description/icon.png"
+        sequence="10"
+        groups="mautic_connector.group_mautic_admin"
+    />
+
+  <menuitem
+        id="menu_mautic_logs"
+        name="Logs"
+        parent="menu_mautic_root"
+        sequence="20"
+        groups="mautic_connector.group_mautic_admin"
+    />
+  <menuitem
+        id="menu_mautic_sync_log"
+        name="Histórico de Logs"
+        parent="menu_mautic_logs"
+        action="action_mautic_sync_log"
+        sequence="10"
+        groups="mautic_connector.group_mautic_admin"
+    />
+
+  <menuitem
+        id="menu_mautic_config"
+        name="Configurações"
+        parent="menu_mautic_root"
+        sequence="30"
+        groups="mautic_connector.group_mautic_admin"
+    />
+  <menuitem
+        id="menu_mautic_segments"
+        name="Segmentos"
+        parent="menu_mautic_config"
+        action="action_mautic_segment"
+        sequence="10"
+        groups="mautic_connector.group_mautic_admin"
+    />
+    <menuitem
+        id="menu_mautic_tags"
+        name="Tags"
+        parent="menu_mautic_config"
+        action="action_mautic_tag"
+        sequence="20"
+        groups="mautic_connector.group_mautic_admin"
+    />
+
+</odoo>

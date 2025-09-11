@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="freshbooks_view_company_form">
+        <field name="name">freshbooks.view.company.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[1]" position="after">
+                <page string="Mautic" groups="mautic_connector.group_mautic_admin">
+                    <separator name="configuration" string="Mautic Configuration" />
+                    <div>
+                        <span>
+                            <button
+                                string='Authenticate'
+                                type="object"
+                                name="authenticate"
+                                class="oe_highlight"
+                                icon="fa-plug"
+                            />
+                        </span>
+                        <span>
+                        <button
+                                string='Refresh Token'
+                                type="object"
+                                name="refresh_token"
+                                class="oe_highlight"
+                                icon="fa-refresh"
+                            />
+                        </span>
+
+                    </div>
+                    <group string="Credentials">
+                            <field name="mautic_api_url" />
+                            <field name="mautic_client_id" />
+                            <field name="mautic_client_secret" />
+                            <field name="mautic_auth_base_url" />
+                            <field name="mautic_request_token_url" />
+                            <field name="mautic_auth_code" password="True" />
+                            <field name="mautic_access_token" password="True" />
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

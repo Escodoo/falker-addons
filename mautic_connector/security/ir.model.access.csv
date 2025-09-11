@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+mautic_access_segment_admin,mautic_access_segment_admin,mautic_connector.model_mautic_segment,mautic_connector.group_mautic_admin,1,1,1,1
+mautic_access_segment_user,mautic_access_segment_user,mautic_connector.model_mautic_segment,mautic_connector.group_mautic_user,1,0,0,0
+
+mautic_access_tag_admin,mautic_access_tag_admin,mautic_connector.model_mautic_tag,mautic_connector.group_mautic_admin,1,1,1,1
+mautic_access_tag_user,mautic_access_tag_user,mautic_connector.model_mautic_tag,mautic_connector.group_mautic_user,1,0,0,0
+
+mautic_access_log_admin,mautic_access_log_admin,mautic_connector.model_mautic_sync_log,mautic_connector.group_mautic_admin,1,1,1,1
+mautic_access_log_user,mautic_access_log_user,mautic_connector.model_mautic_sync_log,mautic_connector.group_mautic_user,1,0,0,0
