@@ -10,8 +10,15 @@ class TestExportCompany(TransactionCase):
         super().setUp()
 
         self.company = self.env.ref("base.main_company")
-        self.company.mautic_api_url = "http://fake-mautic.com"
-        self.company.mautic_access_token = "test-token"
+        self.company.write(
+            {
+                "mautic_access_token": "test_token",
+                "mautic_api_url": "http://testmautic.com",
+                "mautic_auth_base_url": "http://testmautic.com",
+                "mautic_client_id": "cid",
+                "mautic_client_secret": "csec",
+            }
+        )
 
         self.partner = self.env["res.partner"].create(
             {
