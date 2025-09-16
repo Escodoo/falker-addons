@@ -37,7 +37,12 @@
                         <field name="mautic_id" />
                         <field name="mautic_exported" />
                         <field name="mautic_is_update" />
-                        <field name="mautic_custom_fields" readonly="1" />
+                        <field
+                            name="mautic_custom_fields"
+                            readonly="1"
+                            nolabel="1"
+                            style="white-space: pre-wrap;"
+                        />
                     </group>
                 </page>
             </page>

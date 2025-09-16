@@ -744,6 +744,17 @@ class ResPartner(models.Model):
                             skipped.append(full_name or f"ID {val.get('id')}")
                             continue
 
+                        country_lang_map = {
+                            "Brazil": "pt_BR",
+                            "Portugal": "pt_PT",
+                            "United States": "en_US",
+                            "Spain": "es_ES",
+                            "Mexico": "es_MX",
+                            "France": "fr_FR",
+                            "Germany": "de_DE",
+                            "Italy": "it_IT",
+                        }
+
                         my_dict = {
                             "name": full_name,
                             "mautic_id": val.get("id"),
@@ -758,6 +769,17 @@ class ResPartner(models.Model):
                             "function": (core.get("position") or {}).get("value") or "",
                             "company_type": "person",
                             "is_company": False,
+                            "vat": (core.get("cf_cnpj_cpf") or {}).get("value") or "",
+                            "ref": (core.get("cf_ref_do_contato") or {}).get("value")
+                            or "",
+                            "comment": (core.get("cf_comentario1") or {}).get("value")
+                            or "",
+                            "l10n_br_ie_code": (core.get("cf_inscricao") or {}).get(
+                                "value"
+                            )
+                            or "",
+                            "district": (core.get("cf_bairro") or {}).get("value")
+                            or "",
                         }
 
                         country_name = (core.get("country") or {}).get("value")
@@ -767,6 +789,9 @@ class ResPartner(models.Model):
                                 .with_context(lang="en_US")
                                 .search([("name", "=", country_name)], limit=1)
                             )
+                            lang_code = country_lang_map.get(country_name)
+                            if lang_code:
+                                my_dict["lang"] = lang_code
                             if country_id:
                                 my_dict["country_id"] = country_id.id
 
@@ -1016,14 +1041,26 @@ class ResPartner(models.Model):
                             "street": (core.get("address1") or {}).get("value") or "",
                             "street2": (core.get("address2") or {}).get("value") or "",
                             "mobile": (core.get("mobile") or {}).get("value")
-                            or (val.get("mobile") or ""),
-                            "phone": (core.get("phone") or {}).get("value") or "",
+                            or (core.get("cf_temp_mobile") or {}).get("value"),
+                            "phone": (core.get("phone") or {}).get("value")
+                            or (core.get("cf_temp_phone") or {}).get("value"),
                             "email": email,
                             "zip": (core.get("zipcode") or {}).get("value") or "",
                             "website": (core.get("website") or {}).get("value") or "",
                             "function": (core.get("position") or {}).get("value") or "",
                             "company_type": "person",
                             "is_company": False,
+                            "vat": (core.get("cf_cnpj_cpf") or {}).get("value") or "",
+                            "ref": (core.get("cf_ref_do_contato") or {}).get("value")
+                            or "",
+                            "comment": (core.get("cf_comentario1") or {}).get("value")
+                            or "",
+                            "l10n_br_ie_code": (core.get("cf_inscricao") or {}).get(
+                                "value"
+                            )
+                            or "",
+                            "district": (core.get("cf_bairro") or {}).get("value")
+                            or "",
                         }
 
                         country_name = (core.get("country") or {}).get("value")
@@ -1033,6 +1070,9 @@ class ResPartner(models.Model):
                                 .with_context(lang="en_US")
                                 .search([("name", "=", country_name)], limit=1)
                             )
+                            lang_code = country_lang_map.get(country_name)
+                            if lang_code:
+                                my_dict["lang"] = lang_code
                             if country_id:
                                 my_dict["country_id"] = country_id.id
 
