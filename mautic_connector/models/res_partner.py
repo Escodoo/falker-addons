@@ -1238,6 +1238,46 @@ class ResPartner(models.Model):
                 _("Unexpected error importing contacts. Check logs.")
             ) from err
 
+    def _extract_mautic_company_custom_fields(self, company_dict: dict):
+        out = {}
+        fields = company_dict.get("fields") or {}
+        fields_all = fields.get("all", {}) or {}
+        fields_core = fields.get("core", {}) or {}
+
+        def _val(v):
+            return (v or {}).get("value") if isinstance(v, dict) else v
+
+        source = {}
+        source.update(fields_all)
+        for k, v in fields_core.items():
+            source.setdefault(k, v)
+        NATIVE = {
+            "companyname",
+            "companyemail",
+            "companywebsite",
+            "companyaddress1",
+            "companyaddress2",
+            "companycity",
+            "companystate",
+            "companyzipcode",
+            "companycountry",
+            "cf_cnpj_cpf_comp",
+            "cf_bairro_comp",
+            "cf_comentario_comp",
+            "cf_ref_do_contato_comp",
+            "cf_inscricao_comp",
+        }
+
+        for key, raw in source.items():
+            if key in NATIVE:
+                continue
+            val = _val(raw)
+            if val in (None, "", [], {}):
+                continue
+            out[key] = val
+
+        return out
+
     def import_company(self):  # noqa: C901
         self.env.company.refresh_token()
         headers = {
@@ -1245,73 +1285,69 @@ class ResPartner(models.Model):
             "Content-Type": "application/json",
         }
         total = success = errors = 0
-        messages, created, skipped = [], [], []
+        messages, created, updated, skipped = [], [], [], []
 
         try:
-            limit, start = 100, 0
+            limit, start = 200, 0
+            Partner = self.env["res.partner"].sudo()
+            base = (self.env.company.mautic_api_url or "").rstrip("/")
             while True:
-                url = (
-                    f"{self.env.company.mautic_api_url}/api/companies"
-                    f"?limit={limit}&start={start}"
-                )
-                res = requests.get(
-                    url=url,
-                    headers=headers,
-                    timeout=30,
-                )
+                url = f"{base}/api/companies?limit={limit}&start={start}"
+                res = requests.get(url=url, headers=headers, timeout=30)
                 res.raise_for_status()
-                companies = res.json().get("companies", {})
+                companies = res.json().get("companies", {}) or {}
                 if not companies:
                     break
 
                 for __, val in companies.items():
                     total += 1
+                    name = ""
                     try:
-                        fields_all = (val.get("fields") or {}).get("all", {}) or {}
-                        fields_core = (val.get("fields") or {}).get("core", {}) or {}
+                        company_fields = val.get("fields") or {}
+                        fields_all = company_fields.get("all", {}) or {}
+                        fields_core = company_fields.get("core", {}) or {}
 
-                        name = (fields_core.get("companyname", {}) or {}).get(
-                            "value"
-                        ) or ""
-                        email = (fields_core.get("companyemail", {}) or {}).get(
-                            "value"
-                        ) or ""
+                        def v(d, k):
+                            x = d.get(k) or {}
+                            return (x.get("value") if isinstance(x, dict) else x) or ""
+
+                        name = v(fields_core, "companyname")
+                        email = v(fields_core, "companyemail")
                         name_norm = self._norm(name)
-
-                        Partner = self.env["res.partner"].sudo()
+                        mautic_id = val.get("id")
                         existing = Partner.search(
-                            [("mautic_id", "=", val.get("id"))], limit=1
+                            [("mautic_id", "=", mautic_id)], limit=1
                         )
-                        # TODO: Pode ter parceiro diferente com mesmo e-mail
                         if not existing and email:
                             existing = Partner.search(
                                 [("email", "=", email), ("is_company", "=", True)],
                                 limit=1,
                             )
                         if not existing and name:
-                            existing = Partner.search(
+                            exact = Partner.search(
                                 [("is_company", "=", True), ("name", "=", name)],
                                 limit=1,
                             )
-                            if not existing:
-                                candidates = Partner.search(
+                            if exact:
+                                existing = exact
+                            else:
+                                for p in Partner.search(
                                     [("is_company", "=", True), ("name", "ilike", name)]
-                                )
-                                for p in candidates:
+                                ):
                                     if self._norm(p.name) == name_norm:
                                         existing = p
                                         break
-                        if existing:
-                            skipped.append(name or f"ID {val.get('id')}")
-                            continue
-
                         data_dict = {
-                            "mautic_id": val.get("id"),
-                            "website": fields_all.get("companywebsite") or "",
-                            "zip": fields_all.get("companyzipcode") or "",
-                            "city": fields_all.get("companycity") or "",
-                            "street": fields_all.get("companyaddress1") or "",
-                            "street2": fields_all.get("companyaddress2") or "",
+                            "mautic_id": mautic_id,
+                            "website": v(fields_all, "companywebsite"),
+                            "zip": v(fields_all, "companyzipcode"),
+                            "street": v(fields_all, "companyaddress1"),
+                            "street2": v(fields_all, "companyaddress2"),
+                            "vat": v(fields_all, "cf_cnpj_cpf_comp"),
+                            "district": v(fields_all, "cf_bairro_comp"),
+                            "comment": v(fields_all, "cf_comentario_comp"),
+                            "ref": v(fields_all, "cf_ref_do_contato_comp"),
+                            "l10n_br_ie_code": v(fields_all, "cf_inscricao_comp"),
                             "email": email,
                             "name": name,
                             "is_company": True,
@@ -1333,16 +1369,43 @@ class ResPartner(models.Model):
                             if state:
                                 data_dict["state_id"] = state.id
 
-                        city_name = (fields_all.get("companycity") or "",)
+                        city_name = fields_all.get("companycity")
                         if city_name:
                             city_id = self.env["res.city"].search(
                                 [("name", "=", city_name)], limit=1
                             )
                             if city_id:
                                 data_dict["city_id"] = city_id.id
+                        company_custom = self._extract_mautic_company_custom_fields(val)
+                        if company_custom:
+                            data_dict["mautic_custom_fields"] = company_custom
+                        if not existing:
+                            Partner.create(data_dict)
+                            created.append(name or f"ID {mautic_id}")
+                        else:
+                            diffs = {}
+                            for k, new_v in data_dict.items():
+                                if k not in existing._fields:
+                                    continue
+                                if new_v in ("", None, False, [], {}):
+                                    continue
+                                if k in (
+                                    "mautic_id",
+                                    "mautic_custom_fields",
+                                ) and existing[k] not in (False, None, "", 0, {}):
+                                    continue
+                                cur_v = existing[k]
+                                cur_cmp = getattr(cur_v, "id", cur_v)
+                                new_cmp = getattr(new_v, "id", new_v)
+                                if cur_cmp != new_cmp:
+                                    diffs[k] = new_v
 
-                        self.env["res.partner"].create(data_dict)
-                        created.append(name or f"ID {val.get('id')}")
+                            if diffs:
+                                existing.write(diffs)
+                                updated.append(name or f"ID {mautic_id}")
+                            else:
+                                skipped.append(name or f"ID {mautic_id}")
+
                         success += 1
 
                     except Exception as e:
@@ -1354,6 +1417,7 @@ class ResPartner(models.Model):
 
             log_detail = (
                 f"Created: {len(created)} ({', '.join(created)})\n"
+                f"Updated: {len(updated)} ({', '.join(updated)})\n"
                 f"Skipped: {len(skipped)} ({', '.join(skipped)})\n"
                 f"Errors: {errors}\n" + "\n".join(messages)
             )
@@ -1376,11 +1440,12 @@ class ResPartner(models.Model):
                 "params": {
                     "title": _("Importação concluída"),
                     "message": _(
-                        "Total: %(total)s | Criadas: %(created)s | Ignoradas: %(skipped)s"
+                        "Total: %(total)s | Criadas: %(created)s | Atualizadas: %(updated)s | Ignoradas: %(skipped)s"  # noqa: B950
                     )
                     % {
                         "total": total,
                         "created": len(created),
+                        "updated": len(updated),
                         "skipped": len(skipped),
                     },
                     "sticky": False,
