@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import json
 import logging
+import time
 import unicodedata
 from urllib.parse import quote
 
@@ -485,7 +486,10 @@ class ResPartner(models.Model):
         return out
 
     def create_leads_from_segments_members(  # noqa: C901
-        self, only_auto=True, page_limit=200
+        self,
+        only_auto=True,
+        page_limit=200,
+        max_pages=10,
     ):
         try:
             Company = self.env.company.sudo()
@@ -497,6 +501,7 @@ class ResPartner(models.Model):
             Seg = self.env["mautic.segment"].sudo()
             Lead = self.env["crm.lead"].sudo()
             CrmTag = self.env["crm.tag"].sudo()
+            Partner = self.env["res.partner"].sudo()
 
             domain = [("active", "=", True)]
             if only_auto:
@@ -505,130 +510,210 @@ class ResPartner(models.Model):
 
             total_contacts = 0
             created_leads = 0
-            updated_leads = 0
+            skipped_count = 0
+            skipped_list = []
             errors = 0
             messages = []
-
-            partner_by_mautic = {}
             tag_by_name = {}
+            mautic_id_field = Partner._fields.get("mautic_id")
+            mautic_id_is_integer = bool(
+                mautic_id_field
+                and getattr(mautic_id_field, "type", "") in ("integer", "many2one")
+            )
 
             for seg in segments:
                 seg_tag_name = seg.name_mautic or seg.external_id
                 seg_tag = tag_by_name.get(seg_tag_name)
                 if not seg_tag:
-                    seg_tag = CrmTag.search([("name", "=", seg_tag_name)], limit=1)
-                    if not seg_tag:
-                        seg_tag = CrmTag.create({"name": seg_tag_name})
+                    seg_tag = CrmTag.search(
+                        [("name", "=", seg_tag_name)], limit=1
+                    ) or CrmTag.create({"name": seg_tag_name})
                     tag_by_name[seg_tag_name] = seg_tag
-
-                search_token = f"segment:{(seg.alias or seg.name_mautic or '').strip()}"
-                if not search_token.endswith(":") and not (
-                    seg.alias or seg.name_mautic
-                ):
+                base_key = (seg.alias or seg.name_mautic or "").strip()
+                if not base_key:
                     messages.append(
                         f"Segmento {seg.external_id} sem alias/nome para busca."
                     )
                     continue
-
+                search_token = f"segment:{base_key}"
+                page_count = 0
                 start = 0
                 while True:
+                    if max_pages is not None and page_count >= int(max_pages):
+                        break
                     url = (
                         f"{Company.mautic_api_url}/api/contacts"
-                        f"?limit={page_limit}&start={start}&search={quote(search_token)}"
+                        f"?limit={page_limit}"
+                        f"&start={start}"
+                        f"&search={quote(search_token)}"
+                        f"&orderBy=id&orderByDir=DESC"
                     )
-                    try:
-                        res = requests.get(url, headers=headers, timeout=30)
-                        res.raise_for_status()
-                        payload = res.json() or {}
-                    except Exception as e:
-                        errors += 1
-                        messages.append(
-                            f"Falha ao buscar membros de '{search_token}': {e}"
-                        )
-                        break
+                    attempts = 0
+                    payload = None
+                    while attempts < 3:
+                        try:
+                            res = requests.get(url, headers=headers, timeout=30)
+                            res.raise_for_status()
+                            payload = res.json() or {}
+                            break
+                        except requests.RequestException as e:
+                            attempts += 1
+                            if attempts >= 3:
+                                errors += 1
+                                messages.append(
+                                    f"Falha ao buscar membros de '{search_token}' (start={start}): {e}"  # noqa: B950
+                                )
+                            else:
+                                time.sleep(1.5 * attempts)
 
+                    if payload is None:
+                        break
                     items = payload.get("contacts") or {}
                     if not items:
                         break
+                    page = list(items.values() if isinstance(items, dict) else items)
+                    batch = len(page)
+                    if not batch:
+                        break
 
-                    batch = 0
-                    iter_items = (
-                        items.items() if isinstance(items, dict) else enumerate(items)
+                    total_contacts += batch
+                    page_count += 1
+                    cids_str = []
+                    for c in page:
+                        cid = str(c.get("id") or "").strip()
+                        if cid:
+                            cids_str.append(cid)
+                        else:
+                            skipped_count += 1
+                            if len(skipped_list) < 1000:
+                                skipped_list.append("sem_id_mautic")
+
+                    if not cids_str:
+                        start += batch
+                        if batch < page_limit:
+                            break
+                        continue
+                    if mautic_id_is_integer:
+                        cids_num = []
+                        for s in cids_str:
+                            try:
+                                cids_num.append(int(s))
+                            except (ValueError, TypeError):
+                                _logger.warning("CID inválido ignorado: %s", s)
+                        partner_domain_vals = cids_num
+                        key_normalizer = int
+                    else:
+                        partner_domain_vals = cids_str
+                        key_normalizer = str
+                    partners = (
+                        Partner.search([("mautic_id", "in", partner_domain_vals)])
+                        if partner_domain_vals
+                        else self.env["res.partner"]
                     )
-                    for __, c in iter_items:
-                        batch += 1
-                        total_contacts += 1
+                    by_mid = {}
+                    for p in partners:
                         try:
-                            cid = str(c.get("id") or "").strip()
-                            if not cid:
-                                continue
+                            by_mid[key_normalizer(p.mautic_id)] = p
+                        except Exception:
+                            continue
+                    partners_in_page = []
+                    for s in cids_str:
+                        try:
+                            key = key_normalizer(s)
+                        except Exception:
+                            key = None
+                        p = by_mid.get(key)
+                        if not p:
+                            skipped_count += 1
+                            if len(skipped_list) < 1000:
+                                skipped_list.append(f"cid={s}")
+                            continue
+                        partners_in_page.append(p)
 
-                            partner = partner_by_mautic.get(cid)
-                            if partner is None:
-                                partner = self.sudo().search(
-                                    [("mautic_id", "=", cid)], limit=1
+                    if not partners_in_page:
+                        start += batch
+                        if batch < page_limit:
+                            break
+                        continue
+
+                    partner_ids = [p.id for p in partners_in_page]
+                    existing = Lead.with_context(active_test=False).search(
+                        [
+                            ("partner_id", "in", partner_ids),
+                            ("type", "=", "opportunity"),
+                        ]
+                    )
+                    has_lead = set(existing.mapped("partner_id").ids)
+                    vals_to_create = []
+                    for c in page:
+                        cid_s = str(c.get("id") or "").strip()
+                        try:
+                            key = key_normalizer(cid_s)
+                        except Exception:
+                            key = None
+                        p = by_mid.get(key)
+                        if not p:
+                            continue
+                        if p.id in has_lead:
+                            skipped_count += 1
+                            if len(skipped_list) < 1000:
+                                skipped_list.append(
+                                    p.display_name or f"partner_id={p.id}"
                                 )
-                                partner_by_mautic[cid] = partner or False
-                            if not partner:
-                                continue
+                            continue
 
-                            core = (c.get("fields") or {}).get("core", {}) or {}
+                        core = (c.get("fields") or {}).get("core", {}) or {}
 
-                            def _val(k):
-                                v = core.get(k) or {}
-                                return v.get("value") if isinstance(v, dict) else v
+                        def _val(k):
+                            v = core.get(k) or {}
+                            return v.get("value") if isinstance(v, dict) else v
 
-                            lead_vals = {
-                                "name": partner.name,
-                                "partner_id": partner.id,
-                                "email_from": _val("email") or partner.email or False,
-                                "phone": _val("phone") or partner.phone or False,
+                        vals_to_create.append(
+                            {
+                                "name": p.name,
+                                "partner_id": p.id,
+                                "email_from": _val("email") or p.email or False,
+                                "phone": _val("phone") or p.phone or False,
                                 "mobile": _val("mobile")
                                 or c.get("mobile")
-                                or partner.mobile
+                                or p.mobile
                                 or False,
-                                "function": _val("position")
-                                or partner.function
-                                or False,
-                                "website": _val("website") or partner.website or False,
+                                "function": _val("position") or p.function or False,
+                                "website": _val("website") or p.website or False,
                                 "type": "opportunity",
                                 "tag_ids": [(4, tag_by_name[seg_tag_name].id)],
                             }
-
-                            lead = Lead.search(
-                                [("partner_id", "=", partner.id)], limit=1
-                            )
-                            if not lead and partner.email:
-                                lead = Lead.search(
-                                    [("email_from", "=ilike", partner.email)], limit=1
-                                )
-
-                            if lead:
-                                lead.write(lead_vals)
-                                updated_leads += 1
-                            else:
-                                Lead.create(lead_vals)
-                                created_leads += 1
-
-                        except Exception as e:
-                            errors += 1
-                            messages.append(f"Contato seg '{search_token}' erro: {e}")
-
+                        )
+                    if vals_to_create:
+                        with self.env.cr.savepoint():
+                            Lead.create(vals_to_create)
+                        created_leads += len(vals_to_create)
+                    start += batch
                     if batch < page_limit:
                         break
-                    start += page_limit
-
             detail = (
-                f"Contatos: {total_contacts} | Leads C/A: "
-                f"{created_leads}/{updated_leads} | Erros: {errors}\n"
-                + "\n".join(messages[:50])
+                f"Contatos processados: {total_contacts} | "
+                f"Leads criadas: {created_leads} | "
+                f"Ignoradas: {skipped_count} | "
+                f"Erros: {errors}\n"
             )
+            if skipped_list:
+                preview = ", ".join(skipped_list[:1000])
+                more = len(skipped_list) - 1000
+                detail += f"Ignoradas (amostra): {preview}"
+                if more > 0:
+                    detail += f"... (+{more} mais)\n"
+                else:
+                    detail += "\n"
+            if messages:
+                detail += "\n".join(messages[:50])
+
             self.env["mautic.sync.log"].sudo().create(
                 {
                     "sync_type": "lead",
                     "execution_time": fields.Datetime.now(),
                     "total_processed": total_contacts,
-                    "success_count": created_leads + updated_leads,
+                    "success_count": created_leads,
                     "error_count": errors,
                     "log_detail": detail,
                     "state": "done" if errors == 0 else "partial",
@@ -686,32 +771,12 @@ class ResPartner(models.Model):
                     email = (core.get("email") or {}).get("value") or ""
 
                     mautic_id = val.get("id")
-                    existing = Partner.search(
-                        [("mautic_id", "=", mautic_id), ("is_company", "=", False)],
-                        limit=1,
-                    )
-                    if not existing and email:
+                    existing = False
+                    if mautic_id:
                         existing = Partner.search(
-                            [("email", "=", email), ("is_company", "=", False)], limit=1
-                        )
-                    if not existing and not email and full_name:
-                        exact = Partner.search(
-                            [("name", "=", full_name), ("is_company", "=", False)],
+                            [("mautic_id", "=", mautic_id), ("is_company", "=", False)],
                             limit=1,
                         )
-                        if exact:
-                            existing = exact
-                        else:
-                            candidates = Partner.search(
-                                [
-                                    ("is_company", "=", False),
-                                    ("name", "ilike", full_name),
-                                ]
-                            )
-                            for p in candidates:
-                                if (p.name or "").strip().lower() == full_name.lower():
-                                    existing = p
-                                    break
 
                     country_lang_map = {
                         "Brazil": "pt_BR",
@@ -785,21 +850,18 @@ class ResPartner(models.Model):
                         )
                         if company:
                             my_dict["parent_id"] = company.id
-
                     custom = self._extract_mautic_custom_fields(val)
                     if custom:
                         my_dict["mautic_custom_fields"] = custom
 
                     if existing:
+                        ALLOWED_UPDATES = {"mautic_custom_fields"}
                         diffs = {}
-                        for k, new_v in my_dict.items():
-                            if k not in existing._fields:
+                        for k in ALLOWED_UPDATES:
+                            if k not in my_dict:
                                 continue
+                            new_v = my_dict[k]
                             if new_v in ("", None, False, [], {}):
-                                continue
-                            if k in ("mautic_id", "mautic_custom_fields") and existing[
-                                k
-                            ] not in (False, None, "", 0, {}):
                                 continue
                             cur_v = existing[k]
                             cur_cmp = getattr(cur_v, "id", cur_v)
@@ -816,7 +878,6 @@ class ResPartner(models.Model):
                     else:
                         partner = Partner.create(my_dict)
                         created.append(full_name)
-
                     tag_ids = self._extract_tag_ids(val)
                     if tag_ids:
                         TagModel = self.env["mautic.tag"].sudo()
