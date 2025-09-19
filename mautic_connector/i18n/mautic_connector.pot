@@ -484,17 +484,11 @@ msgstr ""
 #. module: mautic_connector
 #. odoo-python
 #: code:addons/mautic_connector/models/res_partner.py:0
+#: code:addons/mautic_connector/models/res_partner.py:0
 #, python-format
 msgid ""
 "Total: %(total)s | Criadas: %(created)s | Atualizadas: %(updated)s | "
 "Ignoradas: %(skipped)s"
-msgstr ""
-
-#. module: mautic_connector
-#. odoo-python
-#: code:addons/mautic_connector/models/res_partner.py:0
-#, python-format
-msgid "Total: %(total)s | Criadas: %(created)s | Ignoradas: %(skipped)s"
 msgstr ""
 
 #. module: mautic_connector
