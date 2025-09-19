@@ -1,6 +1,6 @@
 Documentação Mautic - Connector Odoo
 
-Este guia explica como configurar a integração entre Mautic e Odoo V14 usando o conector Odoo, incluindo soluções para limitações da API e o fluxo recomendado de importação de dados.
+Este guia explica como configurar a integração entre Mautic e Odoo usando o conector Odoo, incluindo soluções para limitações da API e o fluxo recomendado de importação de dados.
 
 Configuração no Mautic
 ----------------------
@@ -13,7 +13,7 @@ Configuração no Mautic
    - **ID do Cliente**: Será gerada automaticamente
    - **Senha do Cliente**: Será gerada automaticamente
 
-Configuração no Odoo V14
+Configuração no Odoo
 ------------------------
 
 1. Acesse **Definições** - **Selecionar sua Empresa** - **Aba Mautic**
@@ -27,51 +27,102 @@ Configuração no Odoo V14
    - **Código de Autenticação**: Será gerado após a autenticação
    - **Token de Acesso**: Será gerado após a autenticação
 
-Fluxo de Importação de Dados
-----------------------------
+Fluxo de Sincronização
+----------------------
 
-**Ordem de Importação (CRUCIAL):**
+O módulo implementa um sistema inteligente de sincronização que respeita as limitações da API do Mautic:
 
-1. Empresas primeiro
-2. Contatos depois
+**Ordem de Importação (OBRIGATÓRIA):**
 
-**Motivo:** Muitos contatos estão vinculados a empresas no Mautic. Esta ordem garante que:
+1. 🏢 **Empresas** (Companies) - Primeiro
+2. 👥 **Contatos** (Contacts) - Depois
 
-- As relações empresa-contato sejam mantidas corretamente
-- Evita erros de referência onde contatos referenciam empresas inexistentes
-- Mantém a integridade dos dados no Odoo
+**Por que esta ordem é crucial?**
 
-**Processo de Importação:**
+* Muitos contatos estão vinculados a empresas no Mautic
+* Evita erros de referência onde contatos referenciam empresas inexistentes
+* Mantém a integridade relacional dos dados no Odoo
+* Garante que as associações empresa-contato sejam criadas corretamente
 
-1. **Empresas:**
+**Processo Automático:**
 
-   - Cron Job roda a cada 1 minuto
-   - Importa empresas uma por uma (limitação da API)
-   - Cria/atualiza registros no Odoo
+.. code-block:: text
 
-2. **Contatos:**
+   ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+   │   Mautic API    │───▶│  Cron Job (1min) │───▶│   Odoo Database │
+   │   Companies     │    │  Processamento   │    │   Companies     │
+   └─────────────────┘    └──────────────────┘    └─────────────────┘
+           │                        │                        │
+           │                        ▼                        │
+           │              ┌──────────────────┐              │
+           │              │  Cron Job (5min) │              │
+           │              │  Processamento   │              │
+           │              └──────────────────┘              │
+           │                        │                        │
+           ▼                        ▼                        ▼
+   ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+   │   Mautic API    │───▶│  Importação em   │───▶│   Odoo Database │
+   │   Contacts      │    │  Lote (Bulk)     │    │   Contacts      │
+   └─────────────────┘    └──────────────────┘    └─────────────────┘
 
-   - Executado após conclusão da importação de empresas
-   - Importa todos os contatos de uma só vez
-   - Associa automaticamente cada contato à empresa correspondente
+**Configuração dos Cron Jobs:**
+
+* **Empresas**: Execução a cada 1 minuto
+* **Contatos**: Execução a cada 5 minutos
+* **Logs**: Armazenados automaticamente para auditoria
+
+3. **Leads:**
+
+   - Cada contato pode estar associado a um ou mais segmentos.
+   - Esses segmentos são usados como critério de geração de leads no Odoo
+   - Cria novos leads no Odoo para contatos que ainda não possuem oportunidades
+   - Marcar o Campo Criar Oportunides no Segmento para criar os Leads
 
 Limitações da API e Soluções
 ----------------------------
 
 **Empresas (Companies):**
 
-- **Limitação:** API só permite criação individual
-- **Solução:** Cron Job que processa uma empresa por vez
+* ⚠️ **Limitação**: API do Mautic só permite criação individual
+* ✅ **Solução**: Cron Job que processa uma empresa por vez
+* 📊 **Performance**: ~60 empresas por hora
 
 **Contatos (Contacts):**
 
-- **Processamento:** Exportação em massa possível
-- **Solução:** Cron Job para importação completa após empresas
+* ✅ **Vantagem**: API permite exportação em massa
+* ✅ **Solução**: Importação completa após empresas
+* 📊 **Performance**: ~1000+ contatos por execução
+
+**Logs e Monitoramento:**
+
+* 📝 **Logs Detalhados**: Cada operação é registrada
+* 🔍 **Rastreabilidade**: Possibilidade de rastrear erros
+* 📊 **Métricas**: Contadores de sucesso/falha
+
+Troubleshooting
+---------------
+
+**Problemas Comuns:**
+
+1. **Erro de Autenticação OAuth2:**
+   * Verifique se as URLs de redirecionamento são idênticas
+   * Confirme se as credenciais estão corretas
+   * Teste a conexão via interface
+
+2. **Timeout na API:**
+   * Aumente o tempo limite nas configurações
+   * Verifique a conectividade de rede
+   * Monitore os logs de erro
+
+3. **Dados Duplicados:**
+   * Verifique se a sincronização está rodando corretamente
+   * Confirme se não há múltiplas instâncias do cron job
+   * Revise os critérios de mapeamento
 
 Observações Importantes
 -----------------------
 
-1. **Ordem de Importação:** Fundamental seguir empresa- contatos
+1. **Ordem de Importação:** Fundamental seguir empresa - contatos - leads
 2. **Sincronização:** URLs de redirecionamento devem ser idênticas
 3. **Autenticação:** Campos preenchidos automaticamente
 4. **Monitoramento:**
