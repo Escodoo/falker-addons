@@ -92,7 +92,7 @@ class ResPartner(models.Model):
         if not (comp.mautic_api_url and comp.mautic_access_token):
             raise UserError(
                 _(
-                    "The company does not have Mautic API URL or Access Token configured."
+                    "The company does not have Mautic API URL or Access Token configured."  # noqa: E501
                 )
             )
 
@@ -178,7 +178,7 @@ class ResPartner(models.Model):
                 else:
                     errors += 1
                     details.append(
-                        f"ERR: '{partner.display_name}' unexpected response (no contact.id)"
+                        f"ERR: '{partner.display_name}' unexpected response (no contact.id)"  # noqa: E501
                     )
 
             except requests.RequestException as e:
@@ -235,7 +235,7 @@ class ResPartner(models.Model):
         if not (comp.mautic_api_url and comp.mautic_access_token):
             raise UserError(
                 _(
-                    "The company does not have Mautic API URL or Access Token configured."
+                    "The company does not have Mautic API URL or Access Token configured."  # noqa: E501
                 )
             )
 
@@ -327,7 +327,7 @@ class ResPartner(models.Model):
                 else:
                     errors += 1
                     details.append(
-                        f"ERR: '{partner.display_name}' unexpected response (no company.id)"
+                        f"ERR: '{partner.display_name}' unexpected response (no company.id)"  # noqa: E501
                     )
             except requests.RequestException as e:
                 msg = str(e)
@@ -561,7 +561,7 @@ class ResPartner(models.Model):
                             if attempts >= 3:
                                 errors += 1
                                 messages.append(
-                                    f"Falha ao buscar membros de '{search_token}' (start={start}): {e}"  # noqa: B950
+                                    f"Falha ao buscar membros de '{search_token}' (start={start}): {e}"  # noqa: E501
                                 )
                             else:
                                 time.sleep(1.5 * attempts)
@@ -665,7 +665,7 @@ class ResPartner(models.Model):
                         core = (c.get("fields") or {}).get("core", {}) or {}
 
                         def _val(k):
-                            v = core.get(k) or {}
+                            v = core.get(k) or {}  # noqa: B023
                             return v.get("value") if isinstance(v, dict) else v
 
                         vals_to_create.append(
@@ -1140,7 +1140,10 @@ class ResPartner(models.Model):
 
                     except Exception as e:
                         errors += 1
-                        msg = f"Error processing company ID {val.get('id')} ({name}): {str(e)}"
+                        msg = (
+                            f"Error processing company ID {val.get('id')} "
+                            f"({name}): {str(e)}"
+                        )
                         messages.append(msg)
 
                 start += limit
@@ -1170,7 +1173,7 @@ class ResPartner(models.Model):
                 "params": {
                     "title": _("Importação concluída"),
                     "message": _(
-                        "Total: %(total)s | Criadas: %(created)s | Atualizadas: %(updated)s | Ignoradas: %(skipped)s"  # noqa: B950
+                        "Total: %(total)s | Criadas: %(created)s | Atualizadas: %(updated)s | Ignoradas: %(skipped)s"  # noqa: E501
                     )
                     % {
                         "total": total,
