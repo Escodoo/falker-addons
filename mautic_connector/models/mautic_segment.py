@@ -42,6 +42,7 @@ class MauticSegment(models.Model):
     @api.model
     def import_segments(self):
         Company = self.env.company
+        self = self.with_context(active_test=False)
 
         headers = {
             "Authorization": f"Bearer {Company.mautic_access_token}",
@@ -89,7 +90,6 @@ class MauticSegment(models.Model):
                         vals = {
                             "name_mautic": name or ext_id,
                             "alias": alias,
-                            "active": True,
                         }
 
                         if rec:
