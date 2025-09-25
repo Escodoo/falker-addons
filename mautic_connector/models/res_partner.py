@@ -850,6 +850,9 @@ class ResPartner(models.Model):
                         )
                         if company:
                             my_dict["parent_id"] = company.id
+                            my_dict["type"] = "private"
+                    else:
+                        my_dict["type"] = "contact"
                     custom = self._extract_mautic_custom_fields(val)
                     if custom:
                         my_dict["mautic_custom_fields"] = custom
@@ -907,8 +910,6 @@ class ResPartner(models.Model):
             next_start = start + len(contacts)
             if contacts:
                 ICP.set_param("mautic.contacts.bootstrap_start", str(next_start))
-            else:
-                ICP.set_param("mautic.contacts.bootstrap_start", "0")
             try:
                 self.env["res.partner"].sudo().create_leads_from_segments_members(
                     only_auto=True,
