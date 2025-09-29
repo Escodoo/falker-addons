@@ -778,17 +778,6 @@ class ResPartner(models.Model):
                             limit=1,
                         )
 
-                    country_lang_map = {
-                        "Brazil": "pt_BR",
-                        "Portugal": "pt_PT",
-                        "United States": "en_US",
-                        "Spain": "es_ES",
-                        "Mexico": "es_MX",
-                        "France": "fr_FR",
-                        "Germany": "de_DE",
-                        "Italy": "it_IT",
-                    }
-
                     my_dict = {
                         "name": full_name,
                         "mautic_id": mautic_id,
@@ -815,6 +804,25 @@ class ResPartner(models.Model):
                         "district": (core.get("cf_bairro") or {}).get("value") or "",
                     }
 
+                    ident = (core.get("cf_conversion_identifier") or {}).get(
+                        "value"
+                    ) or ""
+                    installed_langs = set(
+                        self.env["res.lang"]
+                        .sudo()
+                        .search([("active", "=", True)])
+                        .mapped("code")
+                    )
+
+                    def _lang_from_ident(ident_l: str) -> str:
+                        if ident_l == "form-cotacao-eua":
+                            return "en_US"
+                        if ident_l == "form-cotacao-es":
+                            return "es_ES"
+                        if ident_l == "form-cotacao-br":
+                            return "pt_BR"
+                        return "pt_BR"
+
                     country_name = (core.get("country") or {}).get("value")
                     if country_name:
                         country_id = (
@@ -822,8 +830,8 @@ class ResPartner(models.Model):
                             .with_context(lang="en_US")
                             .search([("name", "=", country_name)], limit=1)
                         )
-                        lang_code = country_lang_map.get(country_name)
-                        if lang_code:
+                        lang_code = _lang_from_ident(ident)
+                        if lang_code in installed_langs:
                             my_dict["lang"] = lang_code
                         if country_id:
                             my_dict["country_id"] = country_id.id
