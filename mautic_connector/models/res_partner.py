@@ -485,6 +485,22 @@ class ResPartner(models.Model):
                 out.append(x)
         return out
 
+    def _utm_get_or_create(self, model, raw):
+        if raw in (None, "", [], {}):
+            return False
+        if isinstance(raw, dict):
+            raw = raw.get("value")
+        if raw in (None, "", [], {}):
+            return False
+        if isinstance(raw, int) or (isinstance(raw, str) and raw.isdigit()):
+            rec = self.env[model].sudo().browse(int(raw))
+            return rec if rec.exists() else False
+        name = str(raw).strip()
+        rec = self.env[model].sudo().search([("name", "=", name)], limit=1)
+        if rec:
+            return rec
+        return self.env[model].sudo().create({"name": name})
+
     def create_leads_from_segments_members(  # noqa: C901
         self,
         only_auto=True,
@@ -803,6 +819,15 @@ class ResPartner(models.Model):
                         or "",
                         "district": (core.get("cf_bairro") or {}).get("value") or "",
                     }
+                    utm_campaign_raw = (core.get("cf_utm_campaign") or {}).get("value")
+                    utm_medium_raw = (core.get("cf_utm_medium") or {}).get("value")
+                    utm_source_raw = (core.get("cf_utm_source") or {}).get("value")
+
+                    utm_campaign = self._utm_get_or_create(
+                        "utm.campaign", utm_campaign_raw
+                    )
+                    utm_medium = self._utm_get_or_create("utm.medium", utm_medium_raw)
+                    utm_source = self._utm_get_or_create("utm.source", utm_source_raw)
 
                     ident = (core.get("cf_conversion_identifier") or {}).get(
                         "value"
@@ -884,6 +909,12 @@ class ResPartner(models.Model):
                             skipped.append(full_name)
                             partner = existing
                     else:
+                        if utm_campaign:
+                            my_dict["campaign_id"] = utm_campaign.id
+                        if utm_medium:
+                            my_dict["medium_id"] = utm_medium.id
+                        if utm_source:
+                            my_dict["source_id"] = utm_source.id
                         partner = Partner.create(my_dict)
                         created.append(full_name)
                     tag_ids = self._extract_tag_ids(val)
