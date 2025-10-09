@@ -816,7 +816,9 @@ class ResPartner(models.Model):
                         "is_company": False,
                         "vat": (core.get("cf_cnpj_cpf") or {}).get("value") or "",
                         "ref": (core.get("cf_ref_do_contato") or {}).get("value") or "",
-                        "comment": (core.get("cf_comentario1") or {}).get("value")
+                        "comment": (core.get("cf_informacoes_adicionais") or {}).get(
+                            "value"
+                        )
                         or "",
                         "l10n_br_ie_code": (core.get("cf_inscricao") or {}).get("value")
                         or "",
@@ -843,7 +845,7 @@ class ResPartner(models.Model):
                     )
 
                     def _lang_from_ident(ident_l: str) -> str:
-                        if ident_l == "form-cotacao-eua":
+                        if ident_l in ("form-cotacao-eua", "form-cotacao-en"):
                             return "en_US"
                         if ident_l == "form-cotacao-es":
                             return "es_ES"
@@ -1079,7 +1081,9 @@ class ResPartner(models.Model):
                         "is_company": False,
                         "vat": (core.get("cf_cnpj_cpf") or {}).get("value") or "",
                         "ref": (core.get("cf_ref_do_contato") or {}).get("value") or "",
-                        "comment": (core.get("cf_comentario1") or {}).get("value")
+                        "comment": (core.get("cf_informacoes_adicionais") or {}).get(
+                            "value"
+                        )
                         or "",
                         "l10n_br_ie_code": (core.get("cf_inscricao") or {}).get("value")
                         or "",
@@ -1106,7 +1110,7 @@ class ResPartner(models.Model):
                     )
 
                     def _lang_from_ident(ident_l: str) -> str:
-                        if ident_l == "form-cotacao-eua":
+                        if ident_l in ("form-cotacao-eua", "form-cotacao-en"):
                             return "en_US"
                         if ident_l == "form-cotacao-es":
                             return "es_ES"
@@ -1149,6 +1153,7 @@ class ResPartner(models.Model):
                         )
                         if company:
                             my_dict["parent_id"] = company.id
+                            my_dict["type"] = "private"
                     custom = self._extract_mautic_custom_fields(val)
                     if custom:
                         my_dict["mautic_custom_fields"] = custom
