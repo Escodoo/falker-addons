@@ -37,6 +37,7 @@ class MauticController(http.Controller):
 
         parsed_response = res.json()
         access_token = parsed_response.get("access_token")
+        refresh_token = parsed_response.get("refresh_token")
 
         if not access_token:
             return "Token not received. See the logs."
@@ -48,6 +49,7 @@ class MauticController(http.Controller):
                 "mautic_client_id": comp.mautic_client_id,
                 "mautic_client_secret": comp.mautic_client_secret,
                 "mautic_request_token_url": redirect_uri,
+                "mautic_refresh_token": refresh_token,
             }
         )
 

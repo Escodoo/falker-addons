@@ -17,6 +17,7 @@ class TestExportCompany(TransactionCase):
                 "mautic_auth_base_url": "http://testmautic.com",
                 "mautic_client_id": "cid",
                 "mautic_client_secret": "csec",
+                "mautic_refresh_token": "rftok",
             }
         )
 
@@ -36,8 +37,12 @@ class TestExportCompany(TransactionCase):
             }
         )
 
+    @patch(
+        "odoo.addons.mautic_connector.models.res_company.ResCompany.refresh_token",
+        return_value=None,
+    )
     @patch("odoo.addons.mautic_connector.models.res_partner.requests.post")
-    def test_export_company_success(self, mock_post):
+    def test_export_company_success(self, mock_post, _mock_refresh):
         mock_post.return_value.status_code = 200
         mock_post.return_value.json.return_value = {
             "company": {

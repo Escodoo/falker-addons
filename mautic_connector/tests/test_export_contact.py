@@ -16,6 +16,7 @@ class TestExportCustomer(TransactionCase):
                 "mautic_auth_base_url": "http://testmautic.com",
                 "mautic_client_id": "cid",
                 "mautic_client_secret": "csec",
+                "mautic_refresh_token": "rftok",
             }
         )
 
@@ -34,7 +35,12 @@ class TestExportCustomer(TransactionCase):
             }
         )
 
-    def test_export_contact_success(self):
+    @patch(
+        "odoo.addons.mautic_connector.models.res_company.ResCompany.refresh_token",
+        return_value=None,
+    )
+    @patch("odoo.addons.mautic_connector.models.res_partner.requests.post")
+    def test_export_contact_success(self, mock_post_partner, _mock_refresh):
         mock_response = {"contact": {"id": 1234}}
 
         with patch("requests.post") as mock_post:
