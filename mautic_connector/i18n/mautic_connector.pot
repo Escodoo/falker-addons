@@ -193,6 +193,13 @@ msgid "Error fetching contact data from Mautic. Check logs."
 msgstr ""
 
 #. module: mautic_connector
+#. odoo-python
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Error renewing token: %s"
+msgstr ""
+
+#. module: mautic_connector
 #: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__execution_time
 msgid "Execution Date"
 msgstr ""
@@ -224,7 +231,6 @@ msgstr ""
 
 #. module: mautic_connector
 #. odoo-python
-#: code:addons/mautic_connector/models/res_company.py:0
 #: code:addons/mautic_connector/models/res_company.py:0
 #, python-format
 msgid "Fill up the correct information...!!"
@@ -373,6 +379,13 @@ msgid "Name"
 msgstr ""
 
 #. module: mautic_connector
+#. odoo-python
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "No access token received from Mautic."
+msgstr ""
+
+#. module: mautic_connector
 #: model:ir.model.fields,field_description:mautic_connector.field_mautic_segment__name_mautic
 #: model:ir.model.fields,field_description:mautic_connector.field_mautic_tag__name_mautic
 msgid "Nome no Mautic"
@@ -396,6 +409,7 @@ msgid "Redirect URL"
 msgstr ""
 
 #. module: mautic_connector
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_refresh_token
 #: model_terms:ir.ui.view,arch_db:mautic_connector.freshbooks_view_company_form
 msgid "Refresh Token"
 msgstr ""
@@ -474,6 +488,13 @@ msgstr ""
 #: code:addons/mautic_connector/models/res_partner.py:0
 #, python-format
 msgid "The company does not have Mautic API URL or Access Token configured."
+msgstr ""
+
+#. module: mautic_connector
+#. odoo-python
+#: code:addons/mautic_connector/models/res_company.py:0
+#, python-format
+msgid "Token updated successfully!"
 msgstr ""
 
 #. module: mautic_connector
