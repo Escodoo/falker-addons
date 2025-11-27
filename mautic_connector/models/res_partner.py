@@ -536,8 +536,13 @@ class ResPartner(models.Model):
                 mautic_id_field
                 and getattr(mautic_id_field, "type", "") in ("integer", "many2one")
             )
+            TOTAL_LIMIT = 400
+            processed = 0
 
             for seg in segments:
+                if processed >= TOTAL_LIMIT:
+                    break
+
                 seg_tag_name = seg.name_mautic or seg.external_id
                 seg_tag = tag_by_name.get(seg_tag_name)
                 if not seg_tag:
@@ -555,6 +560,8 @@ class ResPartner(models.Model):
                 page_count = 0
                 start = 0
                 while True:
+                    if processed >= TOTAL_LIMIT:
+                        break
                     if max_pages is not None and page_count >= int(max_pages):
                         break
                     url = (
@@ -661,7 +668,10 @@ class ResPartner(models.Model):
                     )
                     has_lead = set(existing.mapped("partner_id").ids)
                     vals_to_create = []
+                    remaining = max(0, TOTAL_LIMIT - processed)
                     for c in page:
+                        if remaining <= 0:
+                            break
                         cid_s = str(c.get("id") or "").strip()
                         try:
                             key = key_normalizer(cid_s)
@@ -700,12 +710,20 @@ class ResPartner(models.Model):
                                 "tag_ids": [(4, tag_by_name[seg_tag_name].id)],
                             }
                         )
+                        remaining -= 1
+                    if len(vals_to_create) > (TOTAL_LIMIT - processed):
+                        vals_to_create = vals_to_create[: TOTAL_LIMIT - processed]
+
                     if vals_to_create:
                         with self.env.cr.savepoint():
                             Lead.create(vals_to_create)
                         created_leads += len(vals_to_create)
+                        processed += len(vals_to_create)
+                    total_contacts += batch
                     start += batch
                     if batch < page_limit:
+                        break
+                    if processed >= TOTAL_LIMIT:
                         break
             detail = (
                 f"Contatos processados: {total_contacts} | "
