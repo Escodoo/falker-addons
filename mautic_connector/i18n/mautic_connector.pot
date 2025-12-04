@@ -187,7 +187,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/mautic_connector/models/res_partner.py:0
 #: code:addons/mautic_connector/models/res_partner.py:0
-#: code:addons/mautic_connector/models/res_partner.py:0
 #, python-format
 msgid "Error fetching contact data from Mautic. Check logs."
 msgstr ""
@@ -260,14 +259,7 @@ msgid "Import Mautic Companies"
 msgstr ""
 
 #. module: mautic_connector
-#: model:ir.actions.server,name:mautic_connector.ir_cron_import_mautic_contacts_ir_actions_server
-#: model:ir.cron,cron_name:mautic_connector.ir_cron_import_mautic_contacts
-msgid "Import Mautic Contacts"
-msgstr ""
-
-#. module: mautic_connector
 #. odoo-python
-#: code:addons/mautic_connector/models/res_partner.py:0
 #: code:addons/mautic_connector/models/res_partner.py:0
 #: code:addons/mautic_connector/models/res_partner.py:0
 #, python-format
@@ -514,7 +506,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/mautic_connector/models/res_partner.py:0
 #: code:addons/mautic_connector/models/res_partner.py:0
-#: code:addons/mautic_connector/models/res_partner.py:0
 #, python-format
 msgid ""
 "Total: %(total)s | Criadas: %(created)s | Atualizadas: %(updated)s | "
@@ -550,7 +541,6 @@ msgstr ""
 
 #. module: mautic_connector
 #. odoo-python
-#: code:addons/mautic_connector/models/res_partner.py:0
 #: code:addons/mautic_connector/models/res_partner.py:0
 #, python-format
 msgid "Unexpected error importing contacts. Check logs."
