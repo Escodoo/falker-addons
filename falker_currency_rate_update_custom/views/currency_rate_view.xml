@@ -1,16 +1,20 @@
 <odoo>
-    <record id="view_currency_rate_tree_custom" model="ir.ui.view">
-        <field name="name">res.currency.rate.tree.custom</field>
-        <field name="model">res.currency.rate</field>
-        <field name="arch" type="xml">
-            <tree create="false">
-                <field name="currency_id" />
-                <field name="rate" />
-                <field name="name" />
-                <field name="company_id" />
-            </tree>
-        </field>
-    </record>
+    <odoo>
+        <record id="view_currency_rate_tree_inherit_purchase" model="ir.ui.view">
+            <field name="name">res.currency.rate.tree.inherit.purchase</field>
+            <field name="model">res.currency.rate</field>
+            <field name="inherit_id" ref="base.view_currency_rate_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_rate']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='rate']" position="after">
+                    <field name="rate_purchase" digits="[12,12]" />
+                    <field name="rate" string="Sale Rate (BCB)" digits="[12,12]" />
+                </xpath>
+            </field>
+        </record>
+    </odoo>
 
     <record id="action_currency_rate_custom" model="ir.actions.act_window">
         <field name="name">Currency Rate</field>

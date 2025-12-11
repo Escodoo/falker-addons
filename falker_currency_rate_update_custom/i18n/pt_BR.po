@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-30 16:39+0000\n"
-"PO-Revision-Date: 2025-07-30 16:39+0000\n"
+"POT-Creation-Date: 2025-12-11 19:45+0000\n"
+"PO-Revision-Date: 2025-12-11 19:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: falker_currency_rate_update_custom
+#. odoo-python
+#: code:addons/falker_currency_rate_update_custom/models/res_currency_rate_provider_bcb.py:0
+#, python-format
+msgid ""
+"BCB retornou resposta inválida para cotação de compra da moeda %(cur)s na "
+"data %(date)s."
+msgstr ""
+
+#. module: falker_currency_rate_update_custom
 #: model:ir.actions.act_window,name:falker_currency_rate_update_custom.action_currency_rate_custom
+#: model:ir.model,name:falker_currency_rate_update_custom.model_res_currency_rate
 #: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_bank_statement_line__currency_rate_id
 #: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move__currency_rate_id
 #: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_payment__currency_rate_id
@@ -26,15 +36,17 @@ msgid "Currency Rate"
 msgstr "Taxa de câmbio"
 
 #. module: falker_currency_rate_update_custom
-#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move__display_name
-#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_sale_order__display_name
-msgid "Display Name"
-msgstr "Nome exibido"
+#: model:ir.model,name:falker_currency_rate_update_custom.model_res_currency_rate_provider
+msgid "Currency Rates Provider"
+msgstr "Atualização da Taxas de Câmbio"
 
 #. module: falker_currency_rate_update_custom
-#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move__id
-#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_sale_order__id
-msgid "ID"
+#. odoo-python
+#: code:addons/falker_currency_rate_update_custom/models/res_currency_rate_provider_bcb.py:0
+#, python-format
+msgid ""
+"Falha ao consultar cotação de compra no BCB para %(cur)s em %(date)s.\n"
+"Código HTTP: %(status)s"
 msgstr ""
 
 #. module: falker_currency_rate_update_custom
@@ -43,10 +55,23 @@ msgid "Journal Entry"
 msgstr "Lançamento de Diário"
 
 #. module: falker_currency_rate_update_custom
-#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_account_move____last_update
-#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_sale_order____last_update
-msgid "Last Modified on"
-msgstr "Última modificação em"
+#. odoo-python
+#: code:addons/falker_currency_rate_update_custom/models/res_currency_rate_provider_bcb.py:0
+#, python-format
+msgid ""
+"Nenhum dado de cotação de compra retornado pelo BCB para %(cur)s em "
+"%(date)s."
+msgstr ""
+
+#. module: falker_currency_rate_update_custom
+#: model:ir.model.fields,field_description:falker_currency_rate_update_custom.field_res_currency_rate__rate_purchase
+msgid "Purchase Rate (BCB)"
+msgstr "Cotação de Compra (BCB)"
+
+#. module: falker_currency_rate_update_custom
+#: model_terms:ir.ui.view,arch_db:falker_currency_rate_update_custom.view_currency_rate_tree_inherit_purchase
+msgid "Sale Rate (BCB)"
+msgstr "Cotação de Venda (BCB)"
 
 #. module: falker_currency_rate_update_custom
 #: model:ir.model,name:falker_currency_rate_update_custom.model_sale_order
