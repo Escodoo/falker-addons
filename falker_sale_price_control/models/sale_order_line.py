@@ -11,52 +11,52 @@ class SaleOrderLine(models.Model):
         store=True,  # Stored for reporting/performance
     )
 
-    # ----------------------------
-    # Compute / Inverse
-    # ----------------------------
-    @api.depends("price_unit")
-    def _compute_fiscal_price(self):
-        """
-        Mirror price_unit into fiscal_price.
-        Keep it pure: no writes, no early returns, no super() call.
-        """
-        for line in self:
-            line.fiscal_price = line.price_unit
+    # # ----------------------------
+    # # Compute / Inverse
+    # # ----------------------------
+    # @api.depends("price_unit")
+    # def _compute_fiscal_price(self):
+    #     """
+    #     Mirror price_unit into fiscal_price.
+    #     Keep it pure: no writes, no early returns, no super() call.
+    #     """
+    #     for line in self:
+    #         line.fiscal_price = line.price_unit
 
-    def _inverse_fiscal_price(self):
-        """
-        If the user has the editor group, push fiscal_price -> price_unit.
-        Otherwise, ignore edits and mirror back (fiscal_price := price_unit).
-        Context guard is used to reduce re-entrancy risks if other modules
-        override write().
-        """
-        can_edit = self.env.user.has_group(
-            "falker_sale_price_control.group_price_editor"
-        )
+    # def _inverse_fiscal_price(self):
+    #     """
+    #     If the user has the editor group, push fiscal_price -> price_unit.
+    #     Otherwise, ignore edits and mirror back (fiscal_price := price_unit).
+    #     Context guard is used to reduce re-entrancy risks if other modules
+    #     override write().
+    #     """
+    #     can_edit = self.env.user.has_group(
+    #         "falker_sale_price_control.group_price_editor"
+    #     )
 
-        if not can_edit:
-            # Revert any attempted edit for non-permitted users
-            for line in self:
-                line.fiscal_price = line.price_unit
-            return
+    #     if not can_edit:
+    #         # Revert any attempted edit for non-permitted users
+    #         for line in self:
+    #             line.fiscal_price = line.price_unit
+    #         return
 
-        # Permitted users: assign price_unit from fiscal_price
-        for line in self:
-            # Guard context to avoid potential re-entrancy through other overrides
-            line.with_context(skip_fiscal_sync=True).write(
-                {"price_unit": line.fiscal_price}
-            )
+    #     # Permitted users: assign price_unit from fiscal_price
+    #     for line in self:
+    #         # Guard context to avoid potential re-entrancy through other overrides
+    #         line.with_context(skip_fiscal_sync=True).write(
+    #             {"price_unit": line.fiscal_price}
+    #         )
 
-    def write(self, vals):
-        """Prevent non-editors from changing price_unit after confirmation."""
-        if (
-            "price_unit" in vals
-            and self.order_id.state in ("sale", "done")
-            and not self.env.user.has_group(
-                "falker_sale_price_control.group_price_editor"
-            )
-            and not self.env.context.get("skip_fiscal_sync")
-        ):
-            vals = vals.copy()
-            vals.pop("price_unit")
-        return super().write(vals)
+    # def write(self, vals):
+    #     """Prevent non-editors from changing price_unit after confirmation."""
+    #     if (
+    #         "price_unit" in vals
+    #         and self.order_id.state in ("sale", "done")
+    #         and not self.env.user.has_group(
+    #             "falker_sale_price_control.group_price_editor"
+    #         )
+    #         and not self.env.context.get("skip_fiscal_sync")
+    #     ):
+    #         vals = vals.copy()
+    #         vals.pop("price_unit")
+    #     return super().write(vals)
