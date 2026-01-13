@@ -1,6 +1,7 @@
 # Copyright 2025 - TODAY, Cristiano Mafra Junior <cristiano.mafra@escodoo.com.br>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+
 import requests
 
 from odoo import _, fields, models
@@ -35,7 +36,8 @@ class ResCompany(models.Model):
             raise ValidationError(_("Fill up the correct information...!!")) from err
 
     def refresh_token(self):
-        token_url = f"{self.mautic_api_url}/oauth/v2/token"
+        base = (self.mautic_api_url or "").rstrip("/")
+        token_url = f"{base}/oauth/v2/token"
         payload = {
             "client_id": self.mautic_client_id,
             "client_secret": self.mautic_client_secret,
@@ -51,7 +53,17 @@ class ResCompany(models.Model):
 
         try:
             res = requests.post(token_url, headers=headers, data=payload, timeout=30)
-            res.raise_for_status()
+            try:
+                res.raise_for_status()
+            except requests.HTTPError as http_err:
+                try:
+                    data_err = res.json()
+                except ValueError:
+                    data_err = {}
+                new_refresh_token = data_err.get("refresh_token")
+                if new_refresh_token:
+                    self.write({"mautic_refresh_token": new_refresh_token})
+                raise http_err
             data = res.json()
         except Exception as e:
             raise ValidationError(_("Error renewing token: %s") % e) from e
