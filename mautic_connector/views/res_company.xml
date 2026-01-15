@@ -36,6 +36,7 @@
                             <field name="mautic_auth_base_url" />
                             <field name="mautic_request_token_url" />
                             <field name="mautic_refresh_token" />
+                            <field name="mautic_token_expires_at" />
                             <field name="mautic_auth_code" password="True" />
                             <field name="mautic_access_token" password="True" />
                     </group>

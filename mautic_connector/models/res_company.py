@@ -2,8 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 
-import requests
-
 from odoo import _, fields, models
 from odoo.exceptions import ValidationError
 
@@ -22,6 +20,7 @@ class ResCompany(models.Model):
     mautic_auth_code = fields.Char("Auth Code")
     mautic_access_token = fields.Char("Access Token")
     mautic_refresh_token = fields.Char("Refresh Token")
+    mautic_token_expires_at = fields.Datetime("Token expires at")
 
     def authenticate(self):
         try:
@@ -35,49 +34,13 @@ class ResCompany(models.Model):
         except Exception as err:
             raise ValidationError(_("Fill up the correct information...!!")) from err
 
+    def is_mautic_token_expired(self):
+        self.ensure_one()
+        if not self.mautic_access_token or not self.mautic_token_expires_at:
+            return True
+        return fields.Datetime.now() >= self.mautic_token_expires_at
+
     def refresh_token(self):
-        base = (self.mautic_api_url or "").rstrip("/")
-        token_url = f"{base}/oauth/v2/token"
-        payload = {
-            "client_id": self.mautic_client_id,
-            "client_secret": self.mautic_client_secret,
-            "grant_type": "refresh_token",
-            "refresh_token": self.mautic_refresh_token,
-        }
-
-        headers = {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "application/json",
-            "User-Agent": "Odoo/Mautic OAuth",
-        }
-
-        try:
-            res = requests.post(token_url, headers=headers, data=payload, timeout=30)
-            try:
-                res.raise_for_status()
-            except requests.HTTPError as http_err:
-                try:
-                    data_err = res.json()
-                except ValueError:
-                    data_err = {}
-                new_refresh_token = data_err.get("refresh_token")
-                if new_refresh_token:
-                    self.write({"mautic_refresh_token": new_refresh_token})
-                raise http_err
-            data = res.json()
-        except Exception as e:
-            raise ValidationError(_("Error renewing token: %s") % e) from e
-
-        access_token = data.get("access_token")
-        refresh_token = data.get("refresh_token")
-
-        if not access_token:
-            raise ValidationError(_("No access token received from Mautic."))
-        self.write(
-            {
-                "mautic_access_token": access_token,
-                "mautic_refresh_token": refresh_token or self.mautic_refresh_token,
-            }
-        )
-
-        return _("Token updated successfully!")
+        self.ensure_one()
+        service = self.env["mautic.oauth.service"]
+        return service.get_valid_access_token(self)
