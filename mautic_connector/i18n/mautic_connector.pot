@@ -192,13 +192,6 @@ msgid "Error fetching contact data from Mautic. Check logs."
 msgstr ""
 
 #. module: mautic_connector
-#. odoo-python
-#: code:addons/mautic_connector/models/res_company.py:0
-#, python-format
-msgid "Error renewing token: %s"
-msgstr ""
-
-#. module: mautic_connector
 #: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__execution_time
 msgid "Execution Date"
 msgstr ""
@@ -338,6 +331,11 @@ msgid "Mautic ID"
 msgstr ""
 
 #. module: mautic_connector
+#: model:ir.model,name:mautic_connector.model_mautic_oauth_service
+msgid "Mautic OAuth Service"
+msgstr ""
+
+#. module: mautic_connector
 #: model:ir.model,name:mautic_connector.model_mautic_segment
 msgid "Mautic Segment"
 msgstr ""
@@ -345,6 +343,13 @@ msgstr ""
 #. module: mautic_connector
 #: model:ir.model,name:mautic_connector.model_mautic_tag
 msgid "Mautic Tag"
+msgstr ""
+
+#. module: mautic_connector
+#. odoo-python
+#: code:addons/mautic_connector/services/mautic_oauth_service.py:0
+#, python-format
+msgid "Mautic refresh token não configurado."
 msgstr ""
 
 #. module: mautic_connector
@@ -368,13 +373,6 @@ msgstr ""
 #. module: mautic_connector
 #: model:ir.model.fields,field_description:mautic_connector.field_mautic_sync_log__name
 msgid "Name"
-msgstr ""
-
-#. module: mautic_connector
-#. odoo-python
-#: code:addons/mautic_connector/models/res_company.py:0
-#, python-format
-msgid "No access token received from Mautic."
 msgstr ""
 
 #. module: mautic_connector
@@ -483,10 +481,8 @@ msgid "The company does not have Mautic API URL or Access Token configured."
 msgstr ""
 
 #. module: mautic_connector
-#. odoo-python
-#: code:addons/mautic_connector/models/res_company.py:0
-#, python-format
-msgid "Token updated successfully!"
+#: model:ir.model.fields,field_description:mautic_connector.field_res_company__mautic_token_expires_at
+msgid "Token expires at"
 msgstr ""
 
 #. module: mautic_connector
