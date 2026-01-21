@@ -1,0 +1,65 @@
+<odoo>
+    <template
+        id="report_sale_order_terms_inherit"
+        inherit_id="sale.report_saleorder_document"
+        name="Custom Sale Terms (BR)"
+    >
+
+        <!-- Insert terms and conditions AFTER the note field -->
+        <xpath expr="//p[@name='order_note']" position="after">
+            <div class="mt32" style="font-size: 12px;">
+                <strong>--- Condições Comerciais ---</strong><br /><br />
+                <p>
+                    A Falker Automação Agrícola Ltda. esclarece condições comerciais válidas para as propostas apresentadas
+                    para clientes finais.<br /><br />
+                    * Impostos<br />
+                    O valor total desta cotação tem todos os impostos inclusos, incluindo ICMS e IPI.
+                    Para clientes com Inscrição Estadual IE, Diferencial de alíquota de ICMS, caso cobrado pelo estado do cliente,
+                    não incluso nos valores.
+                    A quitação deste valor fica a cargo do cliente. A comprovação da quitação é necessária para o envio das
+                    mercadorias.<br /><br />
+                    * Prazos<br />
+                    O prazo de entrega tem início a partir da confirmação da compra e da comprovação da quitação, autorização
+                    do crédito ou pagamento da primeira parcela, conforme o caso. Em casos de envio por transportadora, os
+                    prazos de entrega consideram os prazos de trânsito médio das mesmas, podendo sofrer variações devido ao
+                    serviço contratado.<br /><br />
+                    * Fretes e Instalações<br />
+                    O valor de frete, quando houver, estará discriminado em Nota Fiscal.
+                    Os valores de instalações de equipamentos, quando houver, estarão inclusos nos preços dos equipamentos
+                    correspondentes em nota fiscal.<br /><br />
+                    * Condições de Pagamento<br />
+                    A Falker trabalha com diferentes condições e meios de pagamento. Os valores apresentados são válidos
+                    apenas para a condição descrita, podendo ser alterados para
+                    outras condições.<br />
+                    Em caso de atraso no pagamento, incide multa de 2% sobre o valor total em atraso, mais juros de 3,5% ao
+                    mês.<br />
+                    Caso pagamento seja feito por depósito bancário, deve ser feito na conta:<br
+                    />
+                    Banco do Brasil<br />
+                    Ag. 5745-2<br />
+                    CC 29.554-x<br /><br />
+                    PIX (Chave CNPJ): 07736144000150<br /><br />
+                    * Garantias<br />
+                    Para detalhes sobre as garantias dos produtos, consulte o Termo de Garantia que acompanha o produto ou
+                    solicite cópia antecipadamente. Aqui são apresentadas condições gerais para esclarecimento.<br
+                    /><br />
+                    Todos produtos possuem 12 meses de garantia de fábrica contra defeitos de fabricação em suas peças e
+                    componentes. A garantia é dada na sede da empresa, em Porto Alegre, RS.<br
+                    /><br />
+                    Nos 6 meses iniciais, caso necessário, a garantia cobre também despesas de frete. A garantia para serviços
+                    de manutenção e consertos em geral, fora do período inicial de 12 meses, será de 3 meses a contar da data
+                    de execução do serviço.<br /><br />
+                    A Falker não se responsabiliza pela manutenção dos veículos em que o equipamento tenha sido instalado e
+                    recomenda revisão periódica da instalação e do veículo.<br /><br />
+                    O trabalho em meio agrícola com quadriciclos e similares, dependendo do ritmo de trabalho, pode acarretar
+                    desgaste acelerado do veículo. É responsabilidade do cliente a manutenção preventiva, reaperto das
+                    fixações e manutenções corretivas necessárias no veículo.<br /><br
+                    />
+                    A não realização de manutenção periódica pode caracterizar mau uso e anular a garantia dos equipamentos
+                    Falker.<br />
+                </p>
+            </div>
+        </xpath>
+
+    </template>
+</odoo>
