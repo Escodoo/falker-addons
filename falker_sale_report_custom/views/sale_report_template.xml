@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 - TODAY, Wesley Oliveira <wesley.oliveira@escodoo.com.br>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <template
+        id="report_saleorder_document"
+        name="falker_report_saleorder_document_custom"
+        inherit_id="sale.report_saleorder_document"
+    >
+        <xpath expr="//td[@name='td_subtotal']" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_subtotal']" position="after">
+            <td
+                t-if="not line.is_downpayment"
+                name="td_subtotal"
+                class="text-end o_price_total"
+            >
+                <span t-field="line.amount_fiscal" />
+            </td>
+        </xpath>
+    </template>
+
+</odoo>
