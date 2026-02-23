@@ -2,10 +2,13 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import requests
+import logging
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, fields, models
 from odoo.exceptions import ValidationError
+
+_logger = logging.getLogger(__name__)
 
 
 class MauticOAuthService(models.AbstractModel):
@@ -16,9 +19,9 @@ class MauticOAuthService(models.AbstractModel):
         self.env.cr.execute(
             """
             SELECT id
-            FROM res_company
-            WHERE id = %s
-            FOR UPDATE
+              FROM res_company
+             WHERE id = %s
+             FOR UPDATE
             """,
             [company.id],
         )
@@ -33,19 +36,21 @@ class MauticOAuthService(models.AbstractModel):
         )
 
         if must_refresh:
-            self._refresh_token(company)
+            return self._refresh_token(company)
 
         return company.mautic_access_token
 
-    def _refresh_token(self, company):
-        if not company.mautic_refresh_token:
+    def _refresh_token(self, company, refresh_token_from_db=None):
+        refresh_token = refresh_token_from_db or company.mautic_refresh_token
+
+        if not refresh_token:
             raise ValidationError(_("Mautic refresh token não configurado."))
 
         payload = {
             "grant_type": "refresh_token",
             "client_id": company.mautic_client_id,
             "client_secret": company.mautic_client_secret,
-            "refresh_token": company.mautic_refresh_token,
+            "refresh_token": refresh_token,
         }
 
         headers = {
@@ -57,16 +62,57 @@ class MauticOAuthService(models.AbstractModel):
         url = f"{company.mautic_api_url.rstrip('/')}/oauth/v2/token"
 
         response = requests.post(url, headers=headers, data=payload, timeout=30)
+
         if response.status_code != 200:
-            raise ValidationError(f"Erro ao renovar token do Mautic: {response.text}")
+            raise ValidationError(
+                f"Erro ao renovar token do Mautic: {response.text}"
+            )
+
         data = response.json()
-        values = {
-            "mautic_access_token": data["access_token"],
-        }
-        if data.get("refresh_token"):
-            values["mautic_refresh_token"] = data["refresh_token"]
+
+        expires_at = None
         if data.get("expires_in"):
-            values["mautic_token_expires_at"] = fields.Datetime.now() + relativedelta(
+            expires_at = fields.Datetime.now() + relativedelta(
                 seconds=data["expires_in"]
             )
-        company.sudo().write(values)
+
+        new_access_token = data["access_token"]
+        new_refresh_token = data.get("refresh_token") or refresh_token
+
+        # 🔥 Transação isolada
+        new_cr = self.env.registry.cursor()
+        try:
+            new_cr.execute(
+                """
+                UPDATE res_company
+                   SET mautic_access_token     = %s,
+                       mautic_refresh_token    = %s,
+                       mautic_token_expires_at = %s
+                 WHERE id = %s
+                """,
+                [
+                    new_access_token,
+                    new_refresh_token,
+                    expires_at,
+                    company.id,
+                ],
+            )
+            new_cr.commit()
+
+            _logger.info(
+                "[Mautic] Token salvo em transação independente. "
+                "Company %s, expira em %s",
+                company.id,
+                expires_at,
+            )
+        except Exception:
+            new_cr.rollback()
+            _logger.exception("[Mautic] Falha ao salvar token.")
+            raise
+        finally:
+            new_cr.close()
+
+        # 🔥 limpa cache do ORM
+        self.env.invalidate_all()
+
+        return new_access_token
